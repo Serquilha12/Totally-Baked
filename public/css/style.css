@@ -640,6 +640,79 @@ html.tb-is-transitioning .tb-top-progress {
   transition: transform 280ms var(--ease-out), opacity 220ms ease;
 }
 
+/* ================== MOBILE-NATIVE POP-UPS, SHEETS & TOASTS ================== */
+.tb-toast-notification {
+  position: fixed;
+  top: calc(0.85rem + env(safe-area-inset-top, 0px));
+  left: 0.85rem;
+  right: 0.85rem;
+  max-width: 24rem;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 95;
+  background: rgba(24, 17, 20, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #FFFFFF;
+  padding: 0.7rem 0.9rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 38px -8px rgba(24, 17, 20, 0.36);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  transform: translate3d(0, -18px, 0) scale(0.96);
+  opacity: 0;
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+  will-change: transform, opacity;
+}
+
+.tb-toast-notification.tb-toast-visible {
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+}
+
+.tb-sheet-safe-bottom {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}
+
+.tb-modal-panel {
+  transform: translate3d(0, 28px, 0);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+@media (min-width: 640px) {
+  .tb-modal-panel {
+    transform: translate3d(0, 12px, 0) scale(0.98);
+  }
+}
+
+.tb-modal-open .tb-modal-panel {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Previne auto-zoom indesejado no iOS/Android ao focar inputs em modais mobile */
+@media (max-width: 639px) {
+  #checkoutModal input[type="text"],
+  #checkoutModal input[type="tel"],
+  #checkoutModal input[type="number"],
+  #checkoutModal select,
+  #checkoutModal textarea,
+  #cateringModal input[type="text"],
+  #cateringModal input[type="tel"],
+  #cateringModal input[type="date"],
+  #cateringModal select,
+  #cateringModal textarea,
+  #productDetailSheet input[type="text"],
+  #newProductModal input,
+  #newProductModal select,
+  #newProductModal textarea {
+    font-size: 16px !important;
+  }
+}
+
 #quickCartPill.hidden-dock {
   transform: translate(-50%, 130%);
   opacity: 0;

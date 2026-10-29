@@ -685,26 +685,31 @@
 
 </div>
 
-<!-- Modal: Detalhes do Pedido (Inspeção Completa) -->
-<div id="orderDetailsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
-  <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-[#FFC4DE] max-h-[90vh] overflow-y-auto">
-    <button onclick="window.Admin.closeOrderDetails()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] text-stone-500 hover:text-[#1E1218] flex items-center justify-center transition">
-      <i class="fa-solid fa-xmark text-sm"></i>
-    </button>
+<!-- Modal: Detalhes do Pedido (Inspeção Completa — Bottom-Sheet Mobile / Modal Desktop) -->
+<div id="orderDetailsModal" class="fixed inset-0 bg-[#181114]/55 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden opacity-0 transition-opacity duration-200">
+  <div class="tb-modal-panel bg-white rounded-t-[28px] sm:rounded-3xl max-w-lg w-full shadow-2xl border-t sm:border border-[#FFC4DE] max-h-[92dvh] sm:max-h-[90vh] flex flex-col overflow-hidden">
+    
+    <!-- Cabeçalho Fixo -->
+    <div class="px-5 pt-3 pb-3.5 sm:px-7 sm:pt-6 sm:pb-4 border-b border-[#F0DEE7] bg-[#FFFBFD] flex-shrink-0 relative">
+      <div class="w-11 h-1.5 rounded-full bg-[#E5CEDB] mx-auto mb-2.5 sm:hidden"></div>
+      <button onclick="window.Admin.closeOrderDetails()" class="absolute top-3.5 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] text-stone-500 hover:text-[#1E1218] flex items-center justify-center transition border border-[#F0DEE7]">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
 
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFECF5] border border-[#FFC4DE] mb-2 text-[#FF70B0] text-[10px] font-bold">
-      <span id="modalOrderNumber">#TB-0000</span>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFECF5] border border-[#FFC4DE] mb-1.5 text-[#FF70B0] text-[10px] font-bold">
+        <span id="modalOrderNumber">#TB-0000</span>
+      </div>
+      <h3 class="font-moret text-xl sm:text-2xl font-bold text-[#1E1218] leading-tight pr-10" id="modalCustomerName">Nome do Cliente</h3>
+      <p class="text-[11px] sm:text-xs text-[#7D6570] mt-0.5" id="modalOrderCreatedAt">Data e Hora</p>
     </div>
-    <h3 class="font-moret text-2xl font-bold text-[#1E1218] mb-1" id="modalCustomerName">Nome do Cliente</h3>
-    <p class="text-xs text-[#7D6570] mb-4" id="modalOrderCreatedAt">Data e Hora</p>
 
-    <div class="space-y-4 text-xs">
+    <div class="p-4 sm:p-7 space-y-4 text-xs overflow-y-auto flex-grow overscroll-contain tb-sheet-safe-bottom">
       <div class="bg-[#FAF7F9] p-3.5 rounded-2xl border border-[#F0DEE7] space-y-1.5">
         <div class="text-[10px] uppercase font-bold tracking-wider text-[#7D6570]">Dados de Contacto & Entrega</div>
-        <div class="flex justify-between"><span class="text-[#7D6570]">Telefone:</span> <span class="font-bold text-[#1E1218]" id="modalCustomerPhone">-</span></div>
-        <div class="flex justify-between"><span class="text-[#7D6570]">Bairro:</span> <span class="font-bold text-[#1E1218]" id="modalNeighborhood">-</span></div>
-        <div class="flex justify-between"><span class="text-[#7D6570]">Morada:</span> <span class="font-bold text-[#1E1218]" id="modalDeliveryAddress">-</span></div>
-        <div class="flex justify-between"><span class="text-[#7D6570]">Pagamento:</span> <span class="font-bold text-[#FF70B0]" id="modalPayment">-</span></div>
+        <div class="flex justify-between gap-2"><span class="text-[#7D6570]">Telefone:</span> <span class="font-bold text-[#1E1218] text-right" id="modalCustomerPhone">-</span></div>
+        <div class="flex justify-between gap-2"><span class="text-[#7D6570]">Bairro:</span> <span class="font-bold text-[#1E1218] text-right" id="modalNeighborhood">-</span></div>
+        <div class="flex justify-between gap-2"><span class="text-[#7D6570]">Morada:</span> <span class="font-bold text-[#1E1218] text-right" id="modalDeliveryAddress">-</span></div>
+        <div class="flex justify-between gap-2"><span class="text-[#7D6570]">Pagamento:</span> <span class="font-bold text-[#FF70B0] text-right" id="modalPayment">-</span></div>
       </div>
 
       <div class="bg-[#FAF7F9] p-3.5 rounded-2xl border border-[#F0DEE7] space-y-2">
@@ -718,7 +723,7 @@
         <div class="flex justify-between text-base font-bold text-[#1E1218] pt-1 border-t border-[#F0DEE7]"><span>Total a Cobrar:</span> <span id="modalTotal" class="text-[#FF70B0]">0 MZN</span></div>
       </div>
 
-      <div class="pt-2 flex items-center gap-2">
+      <div class="pt-1 flex items-center gap-2">
         <a id="modalTrackingLink" href="#" target="_blank" class="flex-1 py-3 rounded-full bg-[#1E1218] hover:bg-black text-white text-center text-xs font-bold transition shadow-sm">
           <i class="fa-solid fa-location-dot mr-1"></i> Abrir Rastreio GPS
         </a>
@@ -730,17 +735,22 @@
   </div>
 </div>
 
-<!-- Modal: Adicionar Produto -->
-<div id="newProductModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
-  <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-[#FFC4DE]">
-    <button id="closeNewProductModalBtn" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] text-stone-500 hover:text-[#1E1218] flex items-center justify-center transition">
-      <i class="fa-solid fa-xmark text-sm"></i>
-    </button>
+<!-- Modal: Adicionar Produto (Bottom-Sheet Mobile / Modal Desktop) -->
+<div id="newProductModal" class="fixed inset-0 bg-[#181114]/55 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden opacity-0 transition-opacity duration-200">
+  <div class="tb-modal-panel bg-white rounded-t-[28px] sm:rounded-3xl max-w-lg w-full shadow-2xl border-t sm:border border-[#FFC4DE] max-h-[92dvh] sm:max-h-[90vh] flex flex-col overflow-hidden">
     
-    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7D6570] block mb-1">Novo Item</span>
-    <h3 class="font-moret text-2xl font-bold text-[#1E1218] mb-4">Adicionar à Carta de Pemba</h3>
+    <!-- Cabeçalho Fixo -->
+    <div class="px-5 pt-3 pb-3.5 sm:px-7 sm:pt-6 sm:pb-4 border-b border-[#F0DEE7] bg-[#FFFBFD] flex-shrink-0 relative">
+      <div class="w-11 h-1.5 rounded-full bg-[#E5CEDB] mx-auto mb-2.5 sm:hidden"></div>
+      <button id="closeNewProductModalBtn" class="absolute top-3.5 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] text-stone-500 hover:text-[#1E1218] flex items-center justify-center transition border border-[#F0DEE7]">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+      
+      <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7D6570] block mb-0.5">Novo Item</span>
+      <h3 class="font-moret text-xl sm:text-2xl font-bold text-[#1E1218] pr-10">Adicionar à Carta de Pemba</h3>
+    </div>
 
-    <form id="newProductForm" class="space-y-4">
+    <form id="newProductForm" class="p-4 sm:p-7 space-y-4 overflow-y-auto flex-grow overscroll-contain tb-sheet-safe-bottom">
       <div>
         <label class="block text-[11px] font-bold uppercase text-[#1E1218] mb-1">Designação da Receita *</label>
         <input type="text" name="name" required placeholder="Ex: Tarte Tatin de Maçã Caramelizada" class="w-full px-3.5 py-2.5 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0]">
@@ -786,6 +796,6 @@
   </div>
 </div>
 
-<script src="/js/admin.js"></script>
+<script src="/js/admin.js?v=20261029-v5"></script>
 
 <%- include('partials/footer') %>

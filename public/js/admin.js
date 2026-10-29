@@ -126,14 +126,16 @@
       if (trackingLink) trackingLink.href = `/rastreio/${order.id}`;
 
       modal.classList.remove('hidden');
+      requestAnimationFrame(() => modal.classList.add('tb-modal-open'));
       setTimeout(() => modal.classList.remove('opacity-0'), 10);
     },
 
     closeOrderDetails() {
       const modal = document.getElementById('orderDetailsModal');
       if (!modal) return;
+      modal.classList.remove('tb-modal-open');
       modal.classList.add('opacity-0');
-      setTimeout(() => modal.classList.add('hidden'), 200);
+      setTimeout(() => modal.classList.add('hidden'), 240);
       currentViewingOrder = null;
     },
 
@@ -376,14 +378,16 @@
       if (openModalBtn && modal) {
         openModalBtn.addEventListener('click', () => {
           modal.classList.remove('hidden');
+          requestAnimationFrame(() => modal.classList.add('tb-modal-open'));
           setTimeout(() => modal.classList.remove('opacity-0'), 10);
         });
       }
 
       if (closeModalBtn && modal) {
         closeModalBtn.addEventListener('click', () => {
+          modal.classList.remove('tb-modal-open');
           modal.classList.add('opacity-0');
-          setTimeout(() => modal.classList.add('hidden'), 200);
+          setTimeout(() => modal.classList.add('hidden'), 240);
         });
       }
 

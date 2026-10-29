@@ -3,55 +3,58 @@
   <!-- =====================================================================
        MODAL SHEET GLOBAL DE PERSONALIZAÇÃO DE PRODUTO (HOME & MENU)
        ===================================================================== -->
-  <div id="productDetailSheetBackdrop" class="fixed inset-0 bg-[#181114]/45 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <div id="productDetailSheetBackdrop" class="fixed inset-0 bg-[#181114]/50 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
-  <aside id="productDetailSheet" class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto light-glass-sheet bg-white rounded-t-[32px] z-50 transform translate-y-full transition-transform duration-300 ease-out max-h-[92vh] overflow-y-auto border-x border-t border-[#F0DEE7]">
+  <aside id="productDetailSheet" class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto light-glass-sheet bg-white rounded-t-[28px] sm:rounded-t-[32px] z-50 transform translate-y-full transition-transform duration-300 ease-out max-h-[92dvh] flex flex-col overflow-hidden border-x border-t border-[#F0DEE7]">
     
-    <!-- Imagem de Destaque com Botão Fechar e Favorito -->
-    <div class="relative h-60 sm:h-68 w-full overflow-hidden bg-[#FAF7F9] rounded-t-[32px]">
+    <!-- Imagem de Destaque Compacta em Mobile com Pílula de Arraste -->
+    <div class="relative h-44 sm:h-60 w-full flex-shrink-0 overflow-hidden bg-[#FAF7F9] rounded-t-[28px] sm:rounded-t-[32px]">
+      <!-- Grab Handle Mobile -->
+      <div class="w-11 h-1.5 rounded-full bg-white/85 backdrop-blur-md shadow-sm absolute top-2.5 left-1/2 -translate-x-1/2 z-20 sm:hidden pointer-events-none"></div>
+
       <img id="sheetProductImg" src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=800&q=80" alt="Produto" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/25"></div>
 
       <button 
         type="button" 
         onclick="window.closeProductCustomizer()" 
-        class="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-[#F0DEE7] flex items-center justify-center text-[#181114] text-sm hover:bg-[#FF70B0] hover:text-white transition-all shadow-sm active:scale-95"
+        class="absolute top-3.5 left-3.5 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/95 backdrop-blur-md border border-[#F0DEE7] flex items-center justify-center text-[#181114] text-sm hover:bg-[#FF70B0] hover:text-white transition-all shadow-sm active:scale-95"
         aria-label="Voltar">
-        <i class="fa-solid fa-chevron-left"></i>
+        <i class="fa-solid fa-xmark"></i>
       </button>
 
       <button 
         type="button" 
         onclick="window.toggleFavorite(this)" 
-        class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-[#F0DEE7] flex items-center justify-center text-[#FF70B0] hover:scale-105 transition-transform shadow-sm active:scale-95"
+        class="absolute top-3.5 right-3.5 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/95 backdrop-blur-md border border-[#F0DEE7] flex items-center justify-center text-[#FF70B0] hover:scale-105 transition-transform shadow-sm active:scale-95"
         aria-label="Guardar nos favoritos">
         <i class="fa-regular fa-heart text-sm"></i>
       </button>
 
-      <div class="absolute bottom-3 left-5">
+      <div class="absolute bottom-2.5 left-4 sm:left-5">
         <span class="badge-spicy font-semibold">Produção Fresca · Pemba</span>
       </div>
     </div>
 
-    <!-- Corpo do Sheet em Tema Branco -->
-    <div class="p-6 sm:p-7 space-y-5 bg-white">
+    <!-- Corpo Rolável do Sheet em Tema Branco -->
+    <div class="p-4 sm:p-6 space-y-4 bg-white overflow-y-auto flex-grow overscroll-contain">
       
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <span class="font-feline text-xl text-[#D93883] block -mb-0.5">Escolha artesanal</span>
-          <h2 id="sheetProductName" class="font-moret text-2xl sm:text-3xl font-bold text-[#181114]">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <span class="font-feline text-lg sm:text-xl text-[#D93883] block -mb-0.5">Escolha artesanal</span>
+          <h2 id="sheetProductName" class="font-moret text-xl sm:text-3xl font-bold text-[#181114] leading-tight">
             Produto Totally Baked
           </h2>
-          <div class="flex items-center gap-2 mt-1.5 text-xs">
-            <span class="text-[#D93883] font-semibold flex items-center gap-1 bg-[#FFECF5] px-2.5 py-0.5 rounded-full border border-[#FFC4DE]">
+          <div class="flex items-center gap-2 mt-1 text-xs">
+            <span class="text-[#D93883] font-semibold flex items-center gap-1 bg-[#FFECF5] px-2 py-0.5 rounded-full border border-[#FFC4DE]">
               <i class="fa-solid fa-star text-[10px]"></i> 4.9
             </span>
-            <span class="text-[#85707A]">Rua da ANE, Alto Gingone</span>
+            <span class="text-[#85707A] truncate">Rua da ANE, Alto Gingone</span>
           </div>
         </div>
         <div class="text-right flex-shrink-0">
           <span class="text-[10px] uppercase tracking-wider text-[#85707A] font-semibold block">Unitário</span>
-          <span id="sheetProductPrice" class="text-2xl font-bold text-[#D93883] tabular-nums">
+          <span id="sheetProductPrice" class="text-xl sm:text-2xl font-bold text-[#D93883] tabular-nums">
             0 MZN
           </span>
         </div>
@@ -62,27 +65,27 @@
       </p>
 
       <!-- Seção de Customização -->
-      <div class="space-y-4 pt-4 border-t border-[#F0DEE7]">
-        <h3 class="text-xs uppercase tracking-wider text-[#85707A] font-bold">
+      <div class="space-y-3.5 pt-3.5 border-t border-[#F0DEE7]">
+        <h3 class="text-[11px] uppercase tracking-wider text-[#85707A] font-bold">
           Personalizar Pedido
         </h3>
 
         <!-- 1. Formato / Porção -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <span class="text-xs text-[#181114] font-semibold">Formato / Porção</span>
-          <div class="flex items-center gap-1 bg-[#FAF7F9] p-1 rounded-full border border-[#F0DEE7]">
-            <button type="button" onclick="window.selectSize(this, 1, 'Individual')" class="segmented-pill active">Individual</button>
-            <button type="button" onclick="window.selectSize(this, 1.4, 'Duplo (+40%)')" class="segmented-pill">Duplo (+40%)</button>
-            <button type="button" onclick="window.selectSize(this, 1.8, 'Caixa Partilha')" class="segmented-pill">Partilha</button>
+          <div class="grid grid-cols-3 sm:flex items-center gap-1 bg-[#FAF7F9] p-1 rounded-full border border-[#F0DEE7]">
+            <button type="button" onclick="window.selectSize(this, 1, 'Individual')" class="segmented-pill active text-center">Individual</button>
+            <button type="button" onclick="window.selectSize(this, 1.4, 'Duplo (+40%)')" class="segmented-pill text-center">Duplo (+40%)</button>
+            <button type="button" onclick="window.selectSize(this, 1.8, 'Caixa Partilha')" class="segmented-pill text-center">Partilha</button>
           </div>
         </div>
 
         <!-- 2. Opções Rápidas -->
-        <div class="space-y-2.5 pt-1">
-          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
-            <div class="flex items-center gap-2.5">
-              <i class="fa-solid fa-temperature-arrow-up text-[#D93883] text-xs"></i>
-              <span class="text-xs text-[#181114] font-medium">Servir / embalar quentinho ao sair</span>
+        <div class="space-y-2 pt-0.5">
+          <div class="flex items-center justify-between p-3 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
+            <div class="flex items-center gap-2.5 pr-2">
+              <i class="fa-solid fa-temperature-arrow-up text-[#D93883] text-xs flex-shrink-0"></i>
+              <span class="text-xs text-[#181114] font-medium leading-snug">Servir / embalar quentinho ao sair</span>
             </div>
             <label class="ios-switch">
               <input type="checkbox" id="addonWarm" checked>
@@ -90,10 +93,10 @@
             </label>
           </div>
 
-          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
-            <div class="flex items-center gap-2.5">
-              <i class="fa-solid fa-sparkles text-[#D93883] text-xs"></i>
-              <span class="text-xs text-[#181114] font-medium">Extra manteiga, calda ou acompanhamento (+30 MZN)</span>
+          <div class="flex items-center justify-between p-3 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
+            <div class="flex items-center gap-2.5 pr-2">
+              <i class="fa-solid fa-sparkles text-[#D93883] text-xs flex-shrink-0"></i>
+              <span class="text-xs text-[#181114] font-medium leading-snug">Extra manteiga, calda ou acompanhamento (+30 MZN)</span>
             </div>
             <label class="ios-switch">
               <input type="checkbox" id="addonButter" onchange="window.updateCustomizerTotal()">
@@ -115,46 +118,45 @@
             class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114] placeholder:text-[#85707A] transition-colors">
         </div>
       </div>
+    </div>
 
-      <!-- Barra de Ação Inferior com Stepper e Botão Adicionar -->
-      <div class="pt-4 border-t border-[#F0DEE7] flex items-center gap-3.5">
-        <div class="stepper-pill">
-          <button type="button" onclick="window.adjustSheetQty(-1)" class="stepper-btn" aria-label="Diminuir quantidade">-</button>
-          <span id="sheetQtyDisplay" class="tabular-nums text-sm font-bold w-6 text-center text-[#181114]">1</span>
-          <button type="button" onclick="window.adjustSheetQty(1)" class="stepper-btn" aria-label="Aumentar quantidade">+</button>
-        </div>
-
-        <button 
-          type="button" 
-          onclick="window.confirmCustomizedAdd()"
-          class="flex-grow btn-rose-glow min-h-[48px] py-3 px-5 text-xs sm:text-sm font-semibold flex items-center justify-between">
-          <span>Adicionar à Cesta</span>
-          <span id="sheetBtnPrice" class="tabular-nums bg-white/20 px-2.5 py-0.5 rounded-full font-bold">140 MZN</span>
-        </button>
+    <!-- Barra de Ação Inferior Fixa (Sticky Bottom com Safe Area Mobile) -->
+    <div class="px-4 pt-3 sm:px-6 bg-[#FFFBFD] border-t border-[#F0DEE7] flex items-center gap-3 flex-shrink-0 tb-sheet-safe-bottom">
+      <div class="stepper-pill">
+        <button type="button" onclick="window.adjustSheetQty(-1)" class="stepper-btn" aria-label="Diminuir quantidade">-</button>
+        <span id="sheetQtyDisplay" class="tabular-nums text-sm font-bold w-6 text-center text-[#181114]">1</span>
+        <button type="button" onclick="window.adjustSheetQty(1)" class="stepper-btn" aria-label="Aumentar quantidade">+</button>
       </div>
 
+      <button 
+        type="button" 
+        onclick="window.confirmCustomizedAdd()"
+        class="flex-grow btn-rose-glow min-h-[48px] py-3 px-4 sm:px-5 text-xs sm:text-sm font-semibold flex items-center justify-between gap-2">
+        <span>Adicionar à Cesta</span>
+        <span id="sheetBtnPrice" class="tabular-nums bg-white/20 px-2.5 py-0.5 rounded-full font-bold">140 MZN</span>
+      </button>
     </div>
   </aside>
 
   <!-- =====================================================================
        DRAWER LATERAL DO CARRINHO (TEMA BRANCO EDITORIAL)
        ===================================================================== -->
-  <div id="cartDrawerBackdrop" class="fixed inset-0 bg-[#181114]/45 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <div id="cartDrawerBackdrop" class="fixed inset-0 bg-[#181114]/50 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
   
-  <aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-out flex flex-col border-l border-[#F0DEE7]">
+  <aside id="cartDrawer" class="fixed top-0 right-0 h-[100dvh] w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-out flex flex-col border-l border-[#F0DEE7]">
     <!-- Header Carrinho -->
-    <div class="p-6 border-b border-[#F0DEE7] flex items-center justify-between bg-[#FFFBFD]">
+    <div class="px-5 py-4 sm:p-6 border-b border-[#F0DEE7] flex items-center justify-between bg-[#FFFBFD] flex-shrink-0">
       <div>
-        <span class="font-feline text-xl text-[#D93883] block -mb-1">O seu pedido</span>
-        <h3 class="font-moret text-2xl font-bold text-[#181114]">Resumo da Cesta</h3>
+        <span class="font-feline text-lg sm:text-xl text-[#D93883] block -mb-1">O seu pedido</span>
+        <h3 class="font-moret text-xl sm:text-2xl font-bold text-[#181114]">Resumo da Cesta</h3>
       </div>
-      <button id="closeCartBtn" type="button" class="w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FF70B0] text-[#181114] hover:text-white flex items-center justify-center transition-colors border border-[#F0DEE7]" aria-label="Fechar cesta">
+      <button id="closeCartBtn" type="button" class="w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FF70B0] text-[#181114] hover:text-white flex items-center justify-center transition-colors border border-[#F0DEE7] active:scale-95" aria-label="Fechar cesta">
         <i class="fa-solid fa-xmark text-sm"></i>
       </button>
     </div>
 
     <!-- Barra de Entrega Cortesia (Meta: 1.500 MZN) -->
-    <div class="px-6 py-3.5 bg-[#FFECF5]/55 border-b border-[#F0DEE7]">
+    <div class="px-5 py-3 sm:px-6 sm:py-3.5 bg-[#FFECF5]/55 border-b border-[#F0DEE7] flex-shrink-0">
       <div class="flex justify-between items-center text-xs mb-1.5">
         <span id="freeShippingText" class="text-[#524149] font-medium">Entrega grátis em Pemba acima de 1.500 MZN</span>
         <span id="freeShippingPercent" class="tabular-nums text-[#D93883] font-bold">0%</span>
@@ -165,7 +167,7 @@
     </div>
 
     <!-- Lista de Itens do Carrinho -->
-    <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-6 space-y-3.5 bg-white">
+    <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-4 sm:p-6 space-y-3 bg-white overscroll-contain">
       <div class="text-center py-14 text-[#85707A]">
         <div class="w-14 h-14 rounded-2xl bg-[#FFECF5] text-[#D93883] flex items-center justify-center mx-auto mb-3 border border-[#FFC4DE]">
           <i class="fa-solid fa-bag-shopping text-lg"></i>
@@ -176,7 +178,7 @@
     </div>
 
     <!-- Rodapé do Carrinho com Totais & Botão Finalizar -->
-    <div class="p-6 border-t border-[#F0DEE7] bg-[#FFFBFD] space-y-3">
+    <div class="px-5 pt-4 sm:p-6 border-t border-[#F0DEE7] bg-[#FFFBFD] space-y-2.5 flex-shrink-0 tb-sheet-safe-bottom">
       <div class="flex justify-between text-xs text-[#524149]">
         <span>Subtotal dos Produtos</span>
         <span id="cartSubtotal" class="tabular-nums text-[#181114] text-sm font-bold">0 MZN</span>
@@ -185,7 +187,7 @@
         <span>Entrega ou Levantamento</span>
         <span id="cartDeliveryEst" class="font-medium text-[#85707A]">Calculada a seguir</span>
       </div>
-      <div class="border-t border-[#F0DEE7] pt-3 flex justify-between items-baseline text-sm text-[#181114]">
+      <div class="border-t border-[#F0DEE7] pt-2.5 flex justify-between items-baseline text-sm text-[#181114]">
         <span class="font-bold">Total Estimado</span>
         <span id="cartTotal" class="tabular-nums text-xl font-bold text-[#D93883]">0 MZN</span>
       </div>
@@ -198,21 +200,27 @@
   </aside>
 
   <!-- =====================================================================
-       MODAL DE CHECKOUT DE PRODUÇÃO (ENTREGA AO DOMICÍLIO OU LEVANTAMENTO)
+       MODAL DE CHECKOUT DE PRODUÇÃO (BOTTOM-SHEET EM MOBILE / MODAL EM DESKTOP)
        ===================================================================== -->
-  <div id="checkoutModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#181114]/50 backdrop-blur-sm p-3 sm:p-4 hidden opacity-0 transition-opacity duration-200">
-    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-[#F0DEE7] p-5 sm:p-7 relative text-[#181114]">
-      <button id="closeCheckoutModalBtn" type="button" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FF70B0] text-[#181114] hover:text-white flex items-center justify-center transition-colors border border-[#F0DEE7]" aria-label="Fechar checkout">
-        <i class="fa-solid fa-xmark text-sm"></i>
-      </button>
+  <div id="checkoutModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#181114]/55 backdrop-blur-sm p-0 sm:p-4 hidden opacity-0 transition-opacity duration-200">
+    <div class="tb-modal-panel bg-white rounded-t-[28px] sm:rounded-3xl max-w-lg w-full max-h-[92dvh] sm:max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border-t sm:border border-[#F0DEE7] text-[#181114]">
+      
+      <!-- Cabeçalho Fixo do Checkout -->
+      <div class="px-5 pt-3 pb-3.5 sm:px-7 sm:pt-6 sm:pb-4 border-b border-[#F0DEE7] bg-[#FFFBFD] flex-shrink-0 relative">
+        <div class="w-11 h-1.5 rounded-full bg-[#E5CEDB] mx-auto mb-2.5 sm:hidden"></div>
+        <button id="closeCheckoutModalBtn" type="button" class="absolute top-3.5 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FF70B0] text-[#181114] hover:text-white flex items-center justify-center transition-colors border border-[#F0DEE7] active:scale-95" aria-label="Fechar checkout">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
 
-      <div class="mb-5 pr-10">
-        <span class="font-feline text-xl text-[#D93883] block -mb-0.5">Confirmação rápida</span>
-        <h2 class="font-moret text-2xl sm:text-3xl font-bold text-[#181114]">Concluir Pedido em Pemba</h2>
-        <p class="text-xs text-[#524149] mt-1">Escolha entre entrega na sua porta com rastreio GPS ou levantamento grátis na Rua da ANE.</p>
+        <div class="pr-10">
+          <span class="font-feline text-lg sm:text-xl text-[#D93883] block -mb-0.5">Confirmação rápida</span>
+          <h2 class="font-moret text-xl sm:text-3xl font-bold text-[#181114] leading-tight">Concluir Pedido em Pemba</h2>
+          <p class="text-[11px] sm:text-xs text-[#524149] mt-0.5">Escolha entre entrega na sua porta com rastreio GPS ou levantamento grátis na Rua da ANE.</p>
+        </div>
       </div>
 
-      <form id="checkoutForm" class="space-y-4">
+      <!-- Corpo Rolável do Formulário -->
+      <form id="checkoutForm" class="p-4 sm:p-7 space-y-4 overflow-y-auto flex-grow overscroll-contain tb-sheet-safe-bottom">
         
         <!-- Seletor de Modalidade: Entrega vs Levantamento na Loja -->
         <div class="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
@@ -220,17 +228,17 @@
             type="button" 
             data-fulfillment-btn="delivery"
             onclick="window.Cart.setFulfillmentType('delivery')"
-            class="min-h-[42px] py-2 px-3 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-2 bg-[#181114] text-white border-[#181114]">
+            class="min-h-[42px] py-2 px-3 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-1.5 bg-[#181114] text-white border-[#181114]">
             <i class="fa-solid fa-motorcycle text-[11px]"></i>
-            <span>Entrega ao Domicílio</span>
+            <span>Entrega Domicílio</span>
           </button>
           <button 
             type="button" 
             data-fulfillment-btn="pickup"
             onclick="window.Cart.setFulfillmentType('pickup')"
-            class="min-h-[42px] py-2 px-3 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-2 bg-white text-[#524149] border-[#F0DEE7]">
+            class="min-h-[42px] py-2 px-3 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-1.5 bg-white text-[#524149] border-[#F0DEE7]">
             <i class="fa-solid fa-store text-[11px]"></i>
-            <span>Levantar na Loja (0 MZN)</span>
+            <span>Levantar (0 MZN)</span>
           </button>
         </div>
 
@@ -371,21 +379,26 @@
   </div>
 
   <!-- =====================================================================
-       MODAL DE CATERING CORPORATIVO & BOLOS DE CELEBRAÇÃO (PRODUÇÃO)
+       MODAL DE CATERING CORPORATIVO & BOLOS DE CELEBRAÇÃO (BOTTOM-SHEET MOBILE)
        ===================================================================== -->
-  <div id="cateringModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#181114]/50 backdrop-blur-sm p-3 sm:p-4 hidden opacity-0 transition-opacity duration-200">
-    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-[#F0DEE7] p-5 sm:p-7 relative text-[#181114]">
-      <button type="button" onclick="window.closeCateringModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FF70B0] text-[#181114] hover:text-white flex items-center justify-center transition-colors border border-[#F0DEE7]" aria-label="Fechar janela de catering">
-        <i class="fa-solid fa-xmark text-sm"></i>
-      </button>
+  <div id="cateringModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#181114]/55 backdrop-blur-sm p-0 sm:p-4 hidden opacity-0 transition-opacity duration-200">
+    <div class="tb-modal-panel bg-white rounded-t-[28px] sm:rounded-3xl max-w-lg w-full max-h-[92dvh] sm:max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border-t sm:border border-[#F0DEE7] text-[#181114]">
+      
+      <!-- Cabeçalho Fixo de Catering -->
+      <div class="px-5 pt-3 pb-3.5 sm:px-7 sm:pt-6 sm:pb-4 border-b border-[#F0DEE7] bg-[#FFFBFD] flex-shrink-0 relative">
+        <div class="w-11 h-1.5 rounded-full bg-[#E5CEDB] mx-auto mb-2.5 sm:hidden"></div>
+        <button type="button" onclick="window.closeCateringModal()" class="absolute top-3.5 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FF70B0] text-[#181114] hover:text-white flex items-center justify-center transition-colors border border-[#F0DEE7] active:scale-95" aria-label="Fechar janela de catering">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
 
-      <div class="mb-5 pr-10">
-        <span class="font-feline text-xl text-[#D93883] block -mb-0.5">Eventos & Celebrações em Pemba</span>
-        <h2 class="font-moret text-2xl sm:text-3xl font-bold text-[#181114]">Catering & Bolos por Encomenda</h2>
-        <p class="text-xs text-[#524149] mt-1">Preencha os detalhes do seu evento ou bolo personalizado. Receberá atendimento imediato da nossa equipa.</p>
+        <div class="pr-10">
+          <span class="font-feline text-lg sm:text-xl text-[#D93883] block -mb-0.5">Eventos & Celebrações em Pemba</span>
+          <h2 class="font-moret text-xl sm:text-3xl font-bold text-[#181114] leading-tight">Catering & Bolos por Encomenda</h2>
+          <p class="text-[11px] sm:text-xs text-[#524149] mt-0.5">Preencha os detalhes do seu evento ou bolo personalizado. Atendimento imediato.</p>
+        </div>
       </div>
 
-      <form id="cateringForm" class="space-y-3.5">
+      <form id="cateringForm" class="p-4 sm:p-7 space-y-3.5 overflow-y-auto flex-grow overscroll-contain tb-sheet-safe-bottom">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Nome ou Empresa *</label>
@@ -571,8 +584,8 @@
   </div>
 
   <!-- Scripts Globais (I18n PT/EN + Carrinho + Motor GSAP de Transição Contextual) -->
-  <script src="/js/i18n.js?v=20261029-v4"></script>
-  <script src="/js/cart.js?v=20261029-v4"></script>
-  <script src="/js/gsap-transitions.js?v=20261029-v4" defer></script>
+  <script src="/js/i18n.js?v=20261029-v5"></script>
+  <script src="/js/cart.js?v=20261029-v5"></script>
+  <script src="/js/gsap-transitions.js?v=20261029-v5" defer></script>
 </body>
 </html>

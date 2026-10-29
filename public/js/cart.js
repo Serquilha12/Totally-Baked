@@ -268,12 +268,12 @@
           container.innerHTML = this.items
             .map(
               (item, idx) => `
-            <div class="flex items-center gap-3.5 bg-[#FAF7F9] p-3.5 rounded-2xl border border-[#F0DEE7] transition-colors">
+            <div class="flex items-start gap-3 bg-[#FAF7F9] p-3.5 rounded-2xl border border-[#F0DEE7] transition-colors">
               <img src="${item.imageUrl}" alt="${item.name}" class="w-14 h-14 rounded-xl object-cover bg-[#FFECF5] flex-shrink-0 border border-[#F0DEE7]">
               <div class="flex-grow min-w-0">
-                <h4 class="font-moret text-sm font-bold text-[#181114] truncate">${item.name}</h4>
-                ${item.notes ? `<p class="text-[11px] text-[#85707A] truncate">${item.notes}</p>` : ''}
-                <span class="text-xs tabular-nums text-[#D93883] font-semibold block mt-0.5">${item.price * item.quantity} MZN <span class="text-[11px] text-[#85707A] font-normal">(${item.price} un.)</span></span>
+                <h4 class="font-moret text-sm font-bold text-[#181114] leading-snug line-clamp-2">${item.name}</h4>
+                ${item.notes ? `<p class="text-[11px] text-[#85707A] line-clamp-1 mt-0.5">${item.notes}</p>` : ''}
+                <span class="text-xs tabular-nums text-[#D93883] font-semibold block mt-1">${item.price * item.quantity} MZN <span class="text-[11px] text-[#85707A] font-normal">(${item.price} un.)</span></span>
                 
                 <div class="flex items-center gap-2 mt-2">
                   <button 
@@ -292,7 +292,7 @@
               <button 
                 type="button"
                 onclick="window.Cart.removeItemByIndex(${idx})" 
-                class="w-8 h-8 rounded-full hover:bg-red-50 text-[#85707A] hover:text-red-500 flex items-center justify-center text-xs transition-colors" 
+                class="w-8 h-8 rounded-full hover:bg-red-50 text-[#85707A] hover:text-red-500 flex items-center justify-center text-xs transition-colors flex-shrink-0" 
                 aria-label="Remover item">
                 <i class="fa-solid fa-trash-can"></i>
               </button>
@@ -359,29 +359,61 @@
       const modal = document.getElementById('checkoutModal');
       if (modal) {
         modal.classList.remove('hidden');
-        requestAnimationFrame(() => modal.classList.remove('opacity-0'));
+        requestAnimationFrame(() => {
+          modal.classList.remove('opacity-0');
+          modal.classList.add('tb-modal-open');
+        });
       }
     },
 
     closeCheckout() {
       const modal = document.getElementById('checkoutModal');
       if (modal) {
+        modal.classList.remove('tb-modal-open');
         modal.classList.add('opacity-0');
         setTimeout(() => modal.classList.add('hidden'), 240);
       }
     },
 
     showToast(message) {
+      // Remove qualquer toast anterior para evitar empilhamento no mobile
+      document.querySelectorAll('.tb-toast-notification').forEach((el) => el.remove());
+
       const toast = document.createElement('div');
-      toast.className =
-        'fixed bottom-20 md:bottom-7 left-1/2 -translate-x-1/2 z-[60] bg-[#181114] text-white px-5 py-3 rounded-full shadow-xl text-xs font-medium flex items-center gap-2.5 transition-all duration-200';
-      toast.innerHTML = `<span class="w-5 h-5 rounded-full bg-[#FF70B0] text-white flex items-center justify-center text-[10px] flex-shrink-0"><i class="fa-solid fa-check"></i></span> <span>${message}</span>`;
+      toast.className = 'tb-toast-notification';
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+
+      toast.innerHTML = `
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="w-6 h-6 rounded-full bg-[#FF70B0] text-white flex items-center justify-center text-[10px] flex-shrink-0 shadow-sm">
+            <i class="fa-solid fa-check"></i>
+          </span>
+          <span class="text-xs font-medium leading-snug line-clamp-2 text-white/95">${message}</span>
+        </div>
+        <button type="button" class="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-white/75 flex items-center justify-center text-[10px] flex-shrink-0 transition-colors" aria-label="Fechar aviso">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      `;
+
+      const closeBtn = toast.querySelector('button');
+      const dismissToast = () => {
+        toast.classList.remove('tb-toast-visible');
+        setTimeout(() => {
+          if (toast.parentNode) toast.remove();
+        }, 220);
+      };
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', dismissToast);
+      }
+
       document.body.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translate(-50%, 10px) scale(0.96)';
-        setTimeout(() => toast.remove(), 240);
-      }, 2500);
+      requestAnimationFrame(() => {
+        toast.classList.add('tb-toast-visible');
+      });
+
+      setTimeout(dismissToast, 2200);
     },
 
     setupListeners() {
@@ -406,6 +438,13 @@
       if (cateringBackdrop) {
         cateringBackdrop.addEventListener('click', (e) => {
           if (e.target === cateringBackdrop) window.closeCateringModal();
+        });
+      }
+
+      const checkoutBackdrop = document.getElementById('checkoutModal');
+      if (checkoutBackdrop) {
+        checkoutBackdrop.addEventListener('click', (e) => {
+          if (e.target === checkoutBackdrop) this.closeCheckout();
         });
       }
 
@@ -752,13 +791,17 @@
     }
     if (modal) {
       modal.classList.remove('hidden');
-      requestAnimationFrame(() => modal.classList.remove('opacity-0'));
+      requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        modal.classList.add('tb-modal-open');
+      });
     }
   };
 
   window.closeCateringModal = function () {
     const modal = document.getElementById('cateringModal');
     if (modal) {
+      modal.classList.remove('tb-modal-open');
       modal.classList.add('opacity-0');
       setTimeout(() => modal.classList.add('hidden'), 240);
     }
