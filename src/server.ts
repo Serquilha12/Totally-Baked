@@ -163,6 +163,8 @@ function adminGuard(req: express.Request, res: express.Response, next: express.N
 app.get('/admin', adminGuard, AdminController.getDashboard);
 app.get('/api/admin/stats', adminGuard, AdminController.getStatsApi);
 app.get('/api/admin/orders', adminGuard, AdminController.getOrdersApi);
+app.get('/api/admin/reports/sales', adminGuard, AdminController.getSalesReportApi);
+app.get('/api/admin/reports/sales/export', adminGuard, AdminController.exportSalesReportCsv);
 app.post('/api/admin/orders/:id/status', adminGuard, AdminController.updateOrderStatus);
 app.post('/api/admin/products/:id/toggle', adminGuard, AdminController.toggleProductAvailability);
 app.post('/api/admin/products', adminGuard, AdminController.createProduct);

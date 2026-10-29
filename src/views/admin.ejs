@@ -1,18 +1,18 @@
 <%- include('partials/header') %>
 
-<div class="bg-gradient-to-b from-[#FFECF5]/70 to-white text-[#1E1218] py-10 border-b border-[#FFC4DE]">
+<div class="bg-gradient-to-b from-[#FFECF5]/70 to-white text-[#1E1218] py-8 border-b border-[#FFC4DE]">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#FFC4DE] mb-2 shadow-sm">
-          <span class="font-feline text-lg text-[#FF70B0] leading-none">Feline</span>
-          <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#4A3540]">• Consola Operacional</span>
+          <span class="font-feline text-lg text-[#FF70B0] leading-none">Totally Baked</span>
+          <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#4A3540]">• Consola Operacional & Gestão</span>
         </div>
         <h1 class="font-moret text-3xl sm:text-4xl font-extrabold text-[#1E1218]">
-          Totally Baked • Gestão do Atelier & Despacho
+          Atelier de Gestão de Pedidos & Vendas
         </h1>
         <p class="text-xs text-[#4A3540] mt-1 font-normal">
-          Monitorização de encomendas em tempo real, despacho telemétrico com GPS e controle de stock em Pemba.
+          Controle centralizado de encomendas, fluxo logístico, auditoria financeira e catálogo gastronômico de Pemba.
         </p>
       </div>
 
@@ -23,93 +23,125 @@
           <span id="audioStatusText">Chime: Ligado</span>
         </button>
 
-        <button onclick="window.Admin.playAlert()" class="px-4 py-2 rounded-full btn-rose-glow text-white text-xs font-bold flex items-center gap-1.5">
+        <button onclick="window.Admin.playAlert()" class="px-4 py-2 rounded-full btn-rose-glow text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
           <i class="fa-solid fa-volume-high text-[11px]"></i>
           <span>Testar Sinal</span>
         </button>
       </div>
     </div>
 
-    <!-- Indicadores Chave de Desempenho (KPIs em Cartões Brancos) -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+    <!-- Indicadores Rápidos do Topo -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
       <div class="bg-white border border-[#FFC4DE] rounded-2xl p-4 shadow-sm">
-        <span class="text-[10px] uppercase tracking-wider text-[#7D6570] block font-bold">Faturamento Diário</span>
-        <span class="font-moret text-2xl font-extrabold text-[#1E1218] mt-1 block"><%= stats.totalRevenue %> <span class="text-xs font-sans text-[#FF70B0] font-bold">MZN</span></span>
-        <span class="text-[10px] text-emerald-600 font-semibold mt-1 block"><%= stats.deliveredOrders %> encomendas concluídas</span>
+        <span class="text-[10px] uppercase tracking-wider text-[#7D6570] block font-bold">Faturamento Acumulado</span>
+        <span class="font-moret text-2xl font-extrabold text-[#1E1218] mt-1 block" id="headerTotalRevenue"><%= salesReport.totalRevenue %> <span class="text-xs font-sans text-[#FF70B0] font-bold">MZN</span></span>
+        <span class="text-[10px] text-emerald-600 font-semibold mt-1 block" id="headerDeliveredCount"><%= salesReport.completedOrdersCount %> encomendas concluídas</span>
       </div>
 
       <div class="bg-white border border-[#FFC4DE] rounded-2xl p-4 shadow-sm">
-        <span class="text-[10px] uppercase tracking-wider text-[#7D6570] block font-bold">Total de Pedidos</span>
-        <span class="font-moret text-2xl font-extrabold text-[#1E1218] mt-1 block"><%= stats.totalOrders %></span>
-        <span class="text-[10px] text-[#7D6570] mt-1 block">Registados hoje</span>
+        <span class="text-[10px] uppercase tracking-wider text-[#7D6570] block font-bold">Total de Encomendas</span>
+        <span class="font-moret text-2xl font-extrabold text-[#1E1218] mt-1 block" id="headerOrdersCount"><%= salesReport.ordersCount %></span>
+        <span class="text-[10px] text-[#7D6570] mt-1 block">Pedidos no histórico</span>
       </div>
 
       <div class="bg-white border border-[#FFC4DE] rounded-2xl p-4 shadow-sm">
         <span class="text-[10px] uppercase tracking-wider text-[#7D6570] block font-bold">Em Produção / Rota</span>
-        <span class="font-moret text-2xl font-extrabold text-[#FF70B0] mt-1 block"><%= stats.activeOrders %></span>
-        <span class="text-[10px] text-[#4A3540] font-medium mt-1 block">Requerem atenção</span>
+        <span class="font-moret text-2xl font-extrabold text-[#FF70B0] mt-1 block"><%= kanban.pending.length + kanban.preparing.length + kanban.in_transit.length %></span>
+        <span class="text-[10px] text-[#4A3540] font-medium mt-1 block">Pedidos ativos na cozinha</span>
       </div>
 
       <div class="bg-white border border-[#FFC4DE] rounded-2xl p-4 shadow-sm">
-        <span class="text-[10px] uppercase tracking-wider text-[#7D6570] block font-bold">Disponibilidade da Carta</span>
-        <span class="font-moret text-2xl font-extrabold text-[#1E1218] mt-1 block"><%= products.filter(p => p.isAvailable).length %> / <%= products.length %></span>
-        <span class="text-[10px] text-[#7D6570] mt-1 block">Itens ativos</span>
+        <span class="text-[10px] uppercase tracking-wider text-[#7D6570] block font-bold">Ticket Médio</span>
+        <span class="font-moret text-2xl font-extrabold text-[#1E1218] mt-1 block" id="headerAverageTicket"><%= salesReport.averageTicket %> <span class="text-xs font-sans text-[#FF70B0] font-bold">MZN</span></span>
+        <span class="text-[10px] text-[#7D6570] mt-1 block">Média por pedido</span>
       </div>
+    </div>
+
+    <!-- Navegação em Abas (Tabs) -->
+    <div class="flex items-center gap-2 mt-8 border-b border-[#FFC4DE] overflow-x-auto pb-px">
+      <button onclick="window.Admin.switchTab('kanban')" id="tabBtn-kanban" class="admin-tab-btn active px-5 py-2.5 rounded-t-xl text-xs font-bold border-b-2 border-[#FF70B0] text-[#1E1218] bg-white flex items-center gap-2 transition whitespace-nowrap shadow-sm">
+        <i class="fa-solid fa-list-check text-[#FF70B0]"></i>
+        <span>Kanban Operacional</span>
+        <span class="px-2 py-0.5 rounded-full bg-[#FFECF5] text-[10px] text-[#FF70B0] font-bold"><%= orders.length %></span>
+      </button>
+
+      <button onclick="window.Admin.switchTab('orders')" id="tabBtn-orders" class="admin-tab-btn px-5 py-2.5 rounded-t-xl text-xs font-semibold text-[#7D6570] hover:text-[#1E1218] hover:bg-white/60 flex items-center gap-2 transition whitespace-nowrap">
+        <i class="fa-solid fa-receipt text-stone-400"></i>
+        <span>Gestão de Pedidos (Lista & Filtros)</span>
+      </button>
+
+      <button onclick="window.Admin.switchTab('reports')" id="tabBtn-reports" class="admin-tab-btn px-5 py-2.5 rounded-t-xl text-xs font-semibold text-[#7D6570] hover:text-[#1E1218] hover:bg-white/60 flex items-center gap-2 transition whitespace-nowrap">
+        <i class="fa-solid fa-chart-line text-stone-400"></i>
+        <span>Relatórios de Vendas & Exportação</span>
+      </button>
+
+      <button onclick="window.Admin.switchTab('products')" id="tabBtn-products" class="admin-tab-btn px-5 py-2.5 rounded-t-xl text-xs font-semibold text-[#7D6570] hover:text-[#1E1218] hover:bg-white/60 flex items-center gap-2 transition whitespace-nowrap">
+        <i class="fa-solid fa-bread-slice text-stone-400"></i>
+        <span>Gestão da Carta & Stock</span>
+      </button>
     </div>
 
   </div>
 </div>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
-  
-  <!-- Seção 1: Kanban de Pedidos em Tempo Real -->
-  <section>
-    <div class="flex items-center justify-between mb-6">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- ================= ABA 1: KANBAN OPERACIONAL ================= -->
+  <section id="tab-kanban" class="admin-tab-content space-y-6">
+    <div class="flex items-center justify-between">
       <div>
-        <h2 class="font-serif text-2xl font-normal text-brand-dark">Fluxo Operacional de Encomendas</h2>
-        <p class="text-xs text-brand-muted font-light">Progresso sequencial desde a entrada do pedido até a entrega final.</p>
+        <h2 class="font-moret text-2xl font-bold text-[#1E1218]">Fluxo Operacional de Despacho</h2>
+        <p class="text-xs text-[#7D6570]">Acompanhe as fases de preparação e envio em tempo real.</p>
       </div>
 
-      <span class="text-[11px] text-emerald-800 bg-emerald-50 px-3 py-1 rounded-md border border-emerald-200 font-mono flex items-center gap-1.5">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+      <span class="text-[11px] text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 font-mono flex items-center gap-1.5 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
         Sincronização Ativa (5s)
       </span>
     </div>
 
     <!-- 4 Colunas do Kanban -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-      
-      <!-- Coluna: 1. Pendentes -->
-      <div class="bg-brand-surface rounded-xl p-4 border border-brand-dark/10 flex flex-col">
-        <div class="flex items-center justify-between pb-3 mb-3 border-b border-brand-dark/5">
-          <span class="text-xs font-semibold uppercase tracking-wider text-brand-dark flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-[#FF70B0]"></span>
-            Recebido (<%= kanban.pending.length %>)
+
+      <!-- Coluna: 1. Novos / Pendentes -->
+      <div class="bg-white rounded-2xl p-4 border border-[#FFC4DE] shadow-sm flex flex-col">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#FFECF5]">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#1E1218] flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+            Recebidos (<%= kanban.pending.length %>)
           </span>
-          <span class="text-[9px] uppercase tracking-wider text-stone-500 font-mono">Fase 1</span>
+          <span class="text-[10px] uppercase font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">Fase 1</span>
         </div>
 
-        <div class="space-y-3 flex-grow overflow-y-auto max-h-[500px]">
+        <div class="space-y-3 flex-grow overflow-y-auto max-h-[580px]">
           <% if (kanban.pending.length === 0) { %>
-            <p class="text-xs text-stone-400 text-center py-8 font-light">Sem pedidos pendentes.</p>
+            <div class="text-center py-12 px-4">
+              <i class="fa-solid fa-mug-hot text-[#FFC4DE] text-2xl mb-2"></i>
+              <p class="text-xs text-[#7D6570]">Sem novos pedidos pendentes no momento.</p>
+            </div>
           <% } %>
           <% kanban.pending.forEach(order => { %>
-            <div class="bg-brand-surfaceSoft rounded-lg p-3.5 border border-brand-dark/10 text-xs">
+            <div class="bg-[#FAF7F9] rounded-xl p-3.5 border border-[#F0DEE7] text-xs hover:border-[#FF70B0] transition shadow-sm">
               <div class="flex justify-between items-start">
-                <span class="font-mono text-[11px] font-bold text-brand-accent">#<%= order.id %></span>
-                <span class="text-[10px] text-stone-400"><%= new Date(order.createdAt).toLocaleTimeString('pt-MZ', { hour: '2-digit', minute: '2-digit' }) %></span>
+                <span class="font-mono text-[11px] font-bold text-[#FF70B0]"><%= order.orderNumber || ('#' + order.id) %></span>
+                <span class="text-[10px] bg-white px-2 py-0.5 rounded-md border border-[#F0DEE7] text-[#7D6570] font-medium"><%= order.createdAt ? new Date(order.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Agora' %></span>
               </div>
-              <h4 class="font-medium text-brand-dark mt-1"><%= order.customerName %></h4>
-              <p class="text-[11px] text-brand-muted"><%= order.neighborhood %></p>
+              <h4 class="font-bold text-[#1E1218] mt-1.5"><%= order.customerName %></h4>
+              <p class="text-[11px] text-[#7D6570]"><%= order.neighborhood %></p>
               
-              <div class="mt-2 text-[11px] text-stone-600 font-light border-t border-brand-dark/5 pt-1.5">
-                <%= order.items.map(i => `${i.quantity}x ${i.name}`).join(', ') %>
+              <div class="my-2.5 py-2 border-y border-[#F0DEE7] space-y-1">
+                <% (order.items || []).forEach(item => { %>
+                  <div class="flex justify-between text-[11px] text-[#4A3540]">
+                    <span><%= item.quantity %>x <%= item.name %></span>
+                    <span class="font-semibold"><%= item.price * item.quantity %> MZN</span>
+                  </div>
+                <% }) %>
               </div>
 
-              <div class="mt-3 pt-2 border-t border-brand-dark/5 flex items-center justify-between">
-                <span class="font-serif text-xs text-brand-dark"><%= order.total %> MZN</span>
-                <button onclick="window.Admin.updateStatus('<%= order.id %>', 'preparing')" class="px-2.5 py-1 rounded bg-brand-dark hover:bg-brand-accent text-white text-[10px] uppercase tracking-wider transition-colors">
-                  Preparar &rarr;
+              <div class="flex items-center justify-between pt-1">
+                <span class="font-bold text-xs text-[#1E1218]"><%= order.total %> MZN</span>
+                <button onclick="window.Admin.updateStatus('<%= order.id %>', 'preparing')" class="px-3 py-1.5 rounded-full bg-[#FF70B0] hover:bg-[#E85295] text-white text-[10px] font-bold transition shadow-sm">
+                  Iniciar Preparo &rarr;
                 </button>
               </div>
             </div>
@@ -117,36 +149,35 @@
         </div>
       </div>
 
-      <!-- Coluna: 2. Preparando -->
-      <div class="bg-brand-surface rounded-xl p-4 border border-brand-dark/10 flex flex-col">
-        <div class="flex items-center justify-between pb-3 mb-3 border-b border-brand-dark/5">
-          <span class="text-xs font-semibold uppercase tracking-wider text-brand-dark flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-            Em Forno (<%= kanban.preparing.length %>)
+      <!-- Coluna: 2. No Forno / Em Preparo -->
+      <div class="bg-white rounded-2xl p-4 border border-[#FFC4DE] shadow-sm flex flex-col">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#FFECF5]">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#1E1218] flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#FF70B0]"></span>
+            No Forno / Preparo (<%= kanban.preparing.length %>)
           </span>
-          <span class="text-[9px] uppercase tracking-wider text-stone-500 font-mono">Fase 2</span>
+          <span class="text-[10px] uppercase font-bold text-[#FF70B0] bg-[#FFECF5] px-2 py-0.5 rounded-full border border-[#FFC4DE]">Fase 2</span>
         </div>
 
-        <div class="space-y-3 flex-grow overflow-y-auto max-h-[500px]">
+        <div class="space-y-3 flex-grow overflow-y-auto max-h-[580px]">
           <% if (kanban.preparing.length === 0) { %>
-            <p class="text-xs text-stone-400 text-center py-8 font-light">Nenhum item em forno.</p>
+            <div class="text-center py-12 px-4">
+              <i class="fa-solid fa-kitchen-set text-[#FFC4DE] text-2xl mb-2"></i>
+              <p class="text-xs text-[#7D6570]">Nenhum pedido no forno ou bancada.</p>
+            </div>
           <% } %>
           <% kanban.preparing.forEach(order => { %>
-            <div class="bg-brand-surfaceSoft rounded-lg p-3.5 border border-brand-dark/10 text-xs">
+            <div class="bg-[#FAF7F9] rounded-xl p-3.5 border border-[#F0DEE7] text-xs shadow-sm">
               <div class="flex justify-between items-start">
-                <span class="font-mono text-[11px] font-bold text-blue-700">#<%= order.id %></span>
-                <span class="text-[10px] text-stone-400"><%= new Date(order.createdAt).toLocaleTimeString('pt-MZ', { hour: '2-digit', minute: '2-digit' }) %></span>
+                <span class="font-mono text-[11px] font-bold text-[#1E1218]"><%= order.orderNumber || ('#' + order.id) %></span>
+                <span class="text-[10px] text-[#7D6570]"><%= order.fulfillmentType === 'pickup' ? 'Levantamento' : 'Entrega' %></span>
               </div>
-              <h4 class="font-medium text-brand-dark mt-1"><%= order.customerName %></h4>
-              <p class="text-[11px] text-brand-muted"><%= order.neighborhood %></p>
-              
-              <div class="mt-2 text-[11px] text-stone-600 font-light border-t border-brand-dark/5 pt-1.5">
-                <%= order.items.map(i => `${i.quantity}x ${i.name}`).join(', ') %>
-              </div>
+              <h4 class="font-bold text-[#1E1218] mt-1"><%= order.customerName %></h4>
+              <p class="text-[11px] text-[#7D6570] truncate"><%= order.deliveryAddress %></p>
 
-              <div class="mt-3 pt-2 border-t border-brand-dark/5 flex items-center justify-between">
-                <span class="font-serif text-xs text-brand-dark"><%= order.total %> MZN</span>
-                <button onclick="window.Admin.updateStatus('<%= order.id %>', 'in_transit')" class="px-2.5 py-1 rounded bg-brand-accent hover:bg-brand-accentHover text-white text-[10px] uppercase tracking-wider transition-colors">
+              <div class="mt-3 pt-2 border-t border-[#F0DEE7] flex items-center justify-between">
+                <span class="font-bold text-xs text-[#1E1218]"><%= order.total %> MZN</span>
+                <button onclick="window.Admin.updateStatus('<%= order.id %>', 'in_transit')" class="px-3 py-1.5 rounded-full bg-[#1E1218] hover:bg-black text-white text-[10px] font-bold transition shadow-sm">
                   Despachar GPS
                 </button>
               </div>
@@ -155,36 +186,39 @@
         </div>
       </div>
 
-      <!-- Coluna: 3. Em Rota -->
-      <div class="bg-brand-surface rounded-xl p-4 border border-brand-accent/30 flex flex-col">
-        <div class="flex items-center justify-between pb-3 mb-3 border-b border-brand-dark/5">
-          <span class="text-xs font-semibold uppercase tracking-wider text-brand-dark flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+      <!-- Coluna: 3. Em Rota GPS -->
+      <div class="bg-white rounded-2xl p-4 border border-[#FFC4DE] shadow-sm flex flex-col">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#FFECF5]">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#1E1218] flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
             Em Rota GPS (<%= kanban.in_transit.length %>)
           </span>
-          <span class="text-[9px] uppercase tracking-wider text-brand-accent font-mono">Fase 3</span>
+          <span class="text-[10px] uppercase font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">Fase 3</span>
         </div>
 
-        <div class="space-y-3 flex-grow overflow-y-auto max-h-[500px]">
+        <div class="space-y-3 flex-grow overflow-y-auto max-h-[580px]">
           <% if (kanban.in_transit.length === 0) { %>
-            <p class="text-xs text-stone-400 text-center py-8 font-light">Nenhum estafeta em trânsito.</p>
+            <div class="text-center py-12 px-4">
+              <i class="fa-solid fa-motorcycle text-[#FFC4DE] text-2xl mb-2"></i>
+              <p class="text-xs text-[#7D6570]">Nenhum estafeta em trânsito.</p>
+            </div>
           <% } %>
           <% kanban.in_transit.forEach(order => { %>
-            <div class="bg-brand-surfaceSoft rounded-lg p-3.5 border border-brand-accent/40 text-xs">
+            <div class="bg-[#FAF7F9] rounded-xl p-3.5 border border-blue-200 text-xs shadow-sm">
               <div class="flex justify-between items-start">
-                <span class="font-mono text-[11px] font-bold text-brand-accent">#<%= order.id %></span>
-                <a href="/rastreio/<%= order.id %>" target="_blank" class="text-[10px] font-medium text-brand-accent hover:underline">
-                  Ver Mapa &rarr;
+                <span class="font-mono text-[11px] font-bold text-blue-700"><%= order.orderNumber || ('#' + order.id) %></span>
+                <a href="/rastreio/<%= order.id %>" target="_blank" class="text-[10px] font-bold text-[#FF70B0] hover:underline flex items-center gap-1">
+                  <span>GPS</span> <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
-              <h4 class="font-medium text-brand-dark mt-1"><%= order.customerName %></h4>
-              <p class="text-[11px] text-brand-muted"><%= order.neighborhood %> (<%= order.deliveryAddress %>)</p>
-              <p class="text-[10px] text-stone-400 mt-1"><%= order.customerPhone %></p>
+              <h4 class="font-bold text-[#1E1218] mt-1"><%= order.customerName %></h4>
+              <p class="text-[11px] text-[#7D6570]"><%= order.neighborhood %></p>
+              <p class="text-[10px] text-[#8A757F] mt-0.5"><%= order.customerPhone %></p>
 
-              <div class="mt-3 pt-2 border-t border-brand-dark/5 flex items-center justify-between">
-                <span class="font-serif text-xs text-brand-dark"><%= order.total %> MZN</span>
-                <button onclick="window.Admin.updateStatus('<%= order.id %>', 'delivered')" class="px-2.5 py-1 rounded bg-emerald-700 hover:bg-emerald-800 text-white text-[10px] uppercase tracking-wider transition-colors">
-                  Concluir
+              <div class="mt-3 pt-2 border-t border-[#F0DEE7] flex items-center justify-between">
+                <span class="font-bold text-xs text-[#1E1218]"><%= order.total %> MZN</span>
+                <button onclick="window.Admin.updateStatus('<%= order.id %>', 'delivered')" class="px-3 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold transition shadow-sm">
+                  Concluir &radic;
                 </button>
               </div>
             </div>
@@ -192,30 +226,33 @@
         </div>
       </div>
 
-      <!-- Coluna: 4. Entregues -->
-      <div class="bg-brand-surface rounded-xl p-4 border border-brand-dark/10 flex flex-col">
-        <div class="flex items-center justify-between pb-3 mb-3 border-b border-brand-dark/5">
-          <span class="text-xs font-semibold uppercase tracking-wider text-brand-dark flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+      <!-- Coluna: 4. Entregues / Concluídos -->
+      <div class="bg-white rounded-2xl p-4 border border-[#FFC4DE] shadow-sm flex flex-col">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#FFECF5]">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#1E1218] flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             Entregues (<%= kanban.delivered.length %>)
           </span>
-          <span class="text-[9px] uppercase tracking-wider text-stone-500 font-mono">Concluído</span>
+          <span class="text-[10px] uppercase font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Sucesso</span>
         </div>
 
-        <div class="space-y-3 flex-grow overflow-y-auto max-h-[500px]">
+        <div class="space-y-3 flex-grow overflow-y-auto max-h-[580px]">
           <% if (kanban.delivered.length === 0) { %>
-            <p class="text-xs text-stone-400 text-center py-8 font-light">Sem encomendas concluídas hoje.</p>
+            <div class="text-center py-12 px-4">
+              <i class="fa-solid fa-circle-check text-[#FFC4DE] text-2xl mb-2"></i>
+              <p class="text-xs text-[#7D6570]">Sem encomendas concluídas hoje.</p>
+            </div>
           <% } %>
           <% kanban.delivered.forEach(order => { %>
-            <div class="bg-brand-surfaceSoft rounded-lg p-3.5 border border-brand-dark/5 text-xs opacity-75">
+            <div class="bg-[#FAF7F9] rounded-xl p-3.5 border border-[#F0DEE7] text-xs opacity-90 shadow-sm">
               <div class="flex justify-between items-start">
-                <span class="font-mono text-[11px] text-stone-500">#<%= order.id %></span>
-                <span class="text-[10px] text-emerald-700 font-medium">Entregue</span>
+                <span class="font-mono text-[11px] text-[#7D6570] font-bold"><%= order.orderNumber || ('#' + order.id) %></span>
+                <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Entregue</span>
               </div>
-              <h4 class="font-medium text-brand-dark mt-1"><%= order.customerName %></h4>
-              <p class="text-[11px] text-stone-400"><%= order.neighborhood %></p>
-              <div class="mt-2 text-xs font-serif text-brand-dark">
-                <%= order.total %> MZN • <span class="uppercase text-[9px] font-sans text-stone-500"><%= order.paymentMethod %></span>
+              <h4 class="font-bold text-[#1E1218] mt-1"><%= order.customerName %></h4>
+              <p class="text-[11px] text-[#7D6570]"><%= order.neighborhood %></p>
+              <div class="mt-2 text-xs font-bold text-[#1E1218]">
+                <%= order.total %> MZN • <span class="uppercase text-[9px] text-[#8A757F]"><%= order.paymentMethod %></span>
               </div>
             </div>
           <% }) %>
@@ -225,63 +262,370 @@
     </div>
   </section>
 
-  <!-- Seção 2: Gestão de Carta & Stock -->
-  <section class="pt-8 border-t border-brand-dark/10">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-      <div>
-        <h2 class="font-serif text-2xl font-normal text-brand-dark">Catálogo & Disponibilidade da Carta</h2>
-        <p class="text-xs text-brand-muted font-light">Controle em tempo real da disponibilidade de cada receita no site de Pemba.</p>
+  <!-- ================= ABA 2: GESTÃO DETALHADA DE PEDIDOS ================= -->
+  <section id="tab-orders" class="admin-tab-content hidden space-y-6">
+    <div class="bg-white rounded-2xl p-6 border border-[#FFC4DE] shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div>
+          <h2 class="font-moret text-2xl font-bold text-[#1E1218]">Gestão Centralizada de Pedidos</h2>
+          <p class="text-xs text-[#7D6570]">Filtre, audite detalhes de entrega, altere estados ou cancele encomendas.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="window.Admin.resetOrdersFilter()" class="px-3 py-1.5 rounded-full border border-[#FFC4DE] text-xs text-[#4A3540] hover:bg-[#FFECF5] transition">
+            Limpar Filtros
+          </button>
+        </div>
       </div>
 
-      <button id="openNewProductModalBtn" class="btn-editorial px-4 py-2.5 rounded-lg bg-brand-dark hover:bg-brand-accent text-brand-bg text-xs font-medium uppercase tracking-wider transition-colors flex items-center gap-2">
+      <!-- Barra de Filtros Rápidos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7D6570] mb-1">Pesquisar</label>
+          <div class="relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-stone-400 text-xs"></i>
+            <input type="text" id="orderSearchInput" placeholder="Nº pedido, nome ou telefone..." class="w-full pl-8 pr-3 py-2 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0]">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7D6570] mb-1">Estado / Status</label>
+          <select id="orderStatusFilter" class="w-full px-3 py-2 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0] bg-white">
+            <option value="all">Todos os Estados</option>
+            <option value="pending">Recebido / Pendente</option>
+            <option value="preparing">Em Preparação</option>
+            <option value="in_transit">Em Rota GPS</option>
+            <option value="delivered">Entregue</option>
+            <option value="cancelled">Cancelado</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7D6570] mb-1">Bairro / Destino</label>
+          <select id="orderNeighborhoodFilter" class="w-full px-3 py-2 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0] bg-white">
+            <option value="all">Todos os Bairros</option>
+            <% (neighborhoods || []).forEach(n => { %>
+              <option value="<%= n %>"><%= n %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#7D6570] mb-1">Método de Pagamento</label>
+          <select id="orderPaymentFilter" class="w-full px-3 py-2 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0] bg-white">
+            <option value="all">Todos os Métodos</option>
+            <option value="mpesa">M-Pesa</option>
+            <option value="emola">E-Mola</option>
+            <option value="pos">POS / Cartão</option>
+            <option value="dinheiro">Dinheiro Físico</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela de Pedidos -->
+    <div class="bg-white rounded-2xl border border-[#FFC4DE] shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs" id="ordersMainTable">
+          <thead>
+            <tr class="bg-[#FAF7F9] border-b border-[#FFC4DE] text-[#7D6570] font-bold uppercase tracking-wider text-[10px]">
+              <th class="p-3.5">Pedido</th>
+              <th class="p-3.5">Data & Hora</th>
+              <th class="p-3.5">Cliente</th>
+              <th class="p-3.5">Bairro / Destino</th>
+              <th class="p-3.5">Valor Total</th>
+              <th class="p-3.5">Pagamento</th>
+              <th class="p-3.5">Estado</th>
+              <th class="p-3.5 text-right">Ações de Gestão</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#F0DEE7]" id="ordersTableBody">
+            <% orders.forEach(order => { %>
+              <tr class="hover:bg-[#FFECF5]/30 transition order-row" 
+                  data-id="<%= order.id %>"
+                  data-number="<%= order.orderNumber || '' %>"
+                  data-customer="<%= (order.customerName || '').toLowerCase() %>"
+                  data-phone="<%= order.customerPhone || '' %>"
+                  data-status="<%= order.status %>"
+                  data-neighborhood="<%= order.neighborhood || '' %>"
+                  data-payment="<%= order.paymentMethod || '' %>">
+                <td class="p-3.5 font-mono font-bold text-[#FF70B0]">
+                  <%= order.orderNumber || ('#' + order.id) %>
+                </td>
+                <td class="p-3.5 text-[#7D6570] whitespace-nowrap">
+                  <%= order.createdAt ? new Date(order.createdAt).toLocaleString('pt-MZ', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '-' %>
+                </td>
+                <td class="p-3.5">
+                  <div class="font-bold text-[#1E1218]"><%= order.customerName %></div>
+                  <div class="text-[10px] text-[#7D6570]"><%= order.customerPhone %></div>
+                </td>
+                <td class="p-3.5">
+                  <div class="text-[#1E1218] font-medium"><%= order.neighborhood %></div>
+                  <div class="text-[10px] text-[#8A757F] truncate max-w-xs"><%= order.deliveryAddress %></div>
+                </td>
+                <td class="p-3.5 font-bold text-[#1E1218] whitespace-nowrap">
+                  <%= order.total %> MZN
+                </td>
+                <td class="p-3.5">
+                  <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-stone-100 text-stone-700">
+                    <%= order.paymentLabel || order.paymentMethod %>
+                  </span>
+                </td>
+                <td class="p-3.5 whitespace-nowrap">
+                  <% if (order.status === 'delivered' || order.status === 'entregue') { %>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Entregue</span>
+                  <% } else if (order.status === 'in_transit' || order.status === 'em_rota') { %>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">Em Rota GPS</span>
+                  <% } else if (order.status === 'preparing') { %>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FFECF5] text-[#FF70B0] border border-[#FFC4DE]">Em Preparo</span>
+                  <% } else if (order.status === 'cancelled') { %>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">Cancelado</span>
+                  <% } else { %>
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Pendente</span>
+                  <% } %>
+                </td>
+                <td class="p-3.5 text-right whitespace-nowrap">
+                  <div class="inline-flex items-center gap-1.5">
+                    <button onclick='window.Admin.openOrderDetails(<%- JSON.stringify(order).replace(/'/g, "&#39;") %>)' class="px-2.5 py-1 rounded-lg border border-[#FFC4DE] hover:bg-[#FFECF5] text-[11px] font-bold text-[#1E1218] transition" title="Ver Detalhes">
+                      <i class="fa-solid fa-eye text-[#FF70B0]"></i>
+                    </button>
+
+                    <select onchange="window.Admin.updateStatus('<%= order.id %>', this.value)" class="text-[10px] font-bold py-1 px-2 rounded-lg border border-[#FFC4DE] bg-white text-[#1E1218] outline-none">
+                      <option value="" disabled selected>Alterar...</option>
+                      <option value="pending" <%= order.status === 'pending' ? 'disabled' : '' %>>Recebido</option>
+                      <option value="preparing" <%= order.status === 'preparing' ? 'disabled' : '' %>>Preparo</option>
+                      <option value="in_transit" <%= order.status === 'in_transit' ? 'disabled' : '' %>>Despachar</option>
+                      <option value="delivered" <%= order.status === 'delivered' ? 'disabled' : '' %>>Entregue</option>
+                      <option value="cancelled" <%= order.status === 'cancelled' ? 'disabled' : '' %>>Cancelar</option>
+                    </select>
+
+                    <a href="/rastreio/<%= order.id %>" target="_blank" class="px-2.5 py-1 rounded-lg bg-[#FAF7F9] hover:bg-[#FFECF5] border border-[#F0DEE7] text-[11px] text-[#7D6570] transition" title="Rastreio GPS">
+                      <i class="fa-solid fa-location-dot text-[#FF70B0]"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABA 3: RELATÓRIOS DE VENDAS & AUDITORIA ================= -->
+  <section id="tab-reports" class="admin-tab-content hidden space-y-6">
+    
+    <!-- Filtros de Período e Botões de Exportação -->
+    <div class="bg-white rounded-2xl p-6 border border-[#FFC4DE] shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h2 class="font-moret text-2xl font-bold text-[#1E1218]">Relatórios Financeiros & Vendas</h2>
+        <p class="text-xs text-[#7D6570]">Métricas agregadas, produtos campeões e distribuição de pagamentos em Pemba.</p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="window.Admin.filterReportPeriod('today')" class="px-3 py-1.5 rounded-full border border-[#FFC4DE] text-xs font-semibold hover:bg-[#FFECF5] transition">Hoje</button>
+        <button onclick="window.Admin.filterReportPeriod('7d')" class="px-3 py-1.5 rounded-full border border-[#FFC4DE] text-xs font-semibold hover:bg-[#FFECF5] transition">Últimos 7 dias</button>
+        <button onclick="window.Admin.filterReportPeriod('30d')" class="px-3 py-1.5 rounded-full border border-[#FFC4DE] text-xs font-semibold hover:bg-[#FFECF5] transition">Este Mês</button>
+        <button onclick="window.Admin.filterReportPeriod('all')" class="px-3 py-1.5 rounded-full border border-[#FF70B0] bg-[#FFECF5] text-[#FF70B0] text-xs font-bold transition">Todo o Histórico</button>
+
+        <a href="/api/admin/reports/sales/export" target="_blank" class="px-4 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition shadow-sm ml-2">
+          <i class="fa-solid fa-file-csv"></i>
+          <span>Exportar CSV (Excel)</span>
+        </a>
+
+        <button onclick="window.print()" class="px-4 py-1.5 rounded-full bg-[#1E1218] hover:bg-black text-white text-xs font-bold flex items-center gap-1.5 transition shadow-sm">
+          <i class="fa-solid fa-print"></i>
+          <span>Imprimir</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards de Métricas Principais -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="reportKpiGrid">
+      <div class="bg-white rounded-2xl p-5 border border-[#FFC4DE] shadow-sm">
+        <span class="text-[10px] uppercase font-bold tracking-wider text-[#7D6570] block">Receita Bruta Total</span>
+        <div class="font-moret text-3xl font-extrabold text-[#1E1218] mt-1" id="kpiTotalRevenue"><%= salesReport.totalRevenue %> <span class="text-xs font-sans text-[#FF70B0] font-bold">MZN</span></div>
+        <div class="text-[11px] text-[#7D6570] mt-1" id="kpiProductsRevenue">Produtos: <%= salesReport.productsRevenue %> MZN</div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-[#FFC4DE] shadow-sm">
+        <span class="text-[10px] uppercase font-bold tracking-wider text-[#7D6570] block">Volume de Pedidos</span>
+        <div class="font-moret text-3xl font-extrabold text-[#1E1218] mt-1" id="kpiOrdersCount"><%= salesReport.ordersCount %></div>
+        <div class="text-[11px] text-emerald-600 font-semibold mt-1" id="kpiCompletedRate">
+          <%= salesReport.completedOrdersCount %> entregues • <%= salesReport.cancelledOrdersCount %> cancelados
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-[#FFC4DE] shadow-sm">
+        <span class="text-[10px] uppercase font-bold tracking-wider text-[#7D6570] block">Ticket Médio</span>
+        <div class="font-moret text-3xl font-extrabold text-[#1E1218] mt-1" id="kpiAverageTicket"><%= salesReport.averageTicket %> <span class="text-xs font-sans text-[#FF70B0] font-bold">MZN</span></div>
+        <div class="text-[11px] text-[#7D6570] mt-1">Por encomenda faturada</div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-[#FFC4DE] shadow-sm">
+        <span class="text-[10px] uppercase font-bold tracking-wider text-[#7D6570] block">Total Taxas de Entrega</span>
+        <div class="font-moret text-3xl font-extrabold text-[#FF70B0] mt-1" id="kpiDeliveryFees"><%= salesReport.deliveryFeesRevenue %> <span class="text-xs font-sans text-[#FF70B0] font-bold">MZN</span></div>
+        <div class="text-[11px] text-[#7D6570] mt-1">Repasse de estafetas / logística</div>
+      </div>
+    </div>
+
+    <!-- Gráficos e Tabelas de Repartição -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Vendas por Método de Pagamento -->
+      <div class="bg-white rounded-2xl p-6 border border-[#FFC4DE] shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-[#FFECF5] pb-3">
+          <h3 class="font-moret text-lg font-bold text-[#1E1218]">Vendas por Método de Pagamento</h3>
+          <span class="text-[10px] uppercase tracking-wider text-[#7D6570] font-bold">M-Pesa / E-Mola / POS</span>
+        </div>
+
+        <div class="space-y-3" id="reportPaymentMethodList">
+          <% salesReport.salesByPaymentMethod.forEach(pm => { %>
+            <div class="p-3 rounded-xl bg-[#FAF7F9] border border-[#F0DEE7]">
+              <div class="flex justify-between items-center mb-1 text-xs">
+                <span class="font-bold text-[#1E1218]"><%= pm.method %></span>
+                <span class="font-bold text-[#FF70B0]"><%= pm.total %> MZN <span class="text-[10px] font-normal text-[#7D6570]">(<%= pm.count %> pedidos)</span></span>
+              </div>
+              <div class="w-full bg-white h-2 rounded-full overflow-hidden border border-[#F0DEE7]">
+                <div class="bg-[#FF70B0] h-full rounded-full" style="width: <%= salesReport.totalRevenue > 0 ? ((pm.total / salesReport.totalRevenue) * 100).toFixed(0) : 0 %>%"></div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Top Bairros de Pemba -->
+      <div class="bg-white rounded-2xl p-6 border border-[#FFC4DE] shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-[#FFECF5] pb-3">
+          <h3 class="font-moret text-lg font-bold text-[#1E1218]">Distribuição Geográfica (Pemba)</h3>
+          <span class="text-[10px] uppercase tracking-wider text-[#7D6570] font-bold">Bairros com Mais Pedidos</span>
+        </div>
+
+        <div class="space-y-3" id="reportNeighborhoodList">
+          <% salesReport.salesByNeighborhood.slice(0, 5).forEach(nb => { %>
+            <div class="p-3 rounded-xl bg-[#FAF7F9] border border-[#F0DEE7]">
+              <div class="flex justify-between items-center mb-1 text-xs">
+                <span class="font-bold text-[#1E1218]"><%= nb.neighborhood %></span>
+                <span class="font-bold text-[#1E1218]"><%= nb.total %> MZN <span class="text-[10px] font-normal text-[#7D6570]">(<%= nb.count %> entregas)</span></span>
+              </div>
+              <div class="w-full bg-white h-2 rounded-full overflow-hidden border border-[#F0DEE7]">
+                <div class="bg-emerald-500 h-full rounded-full" style="width: <%= salesReport.totalRevenue > 0 ? ((nb.total / salesReport.totalRevenue) * 100).toFixed(0) : 0 %>%"></div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Top Produtos Mais Vendidos -->
+    <div class="bg-white rounded-2xl p-6 border border-[#FFC4DE] shadow-sm space-y-4">
+      <div class="flex items-center justify-between border-b border-[#FFECF5] pb-3">
+        <div>
+          <h3 class="font-moret text-lg font-bold text-[#1E1218]">Ranking de Produtos Mais Vendidos</h3>
+          <p class="text-xs text-[#7D6570]">Receitas com maior saída e contribuição para a faturação da Totally Baked Pemba.</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="bg-[#FAF7F9] border-b border-[#FFC4DE] text-[#7D6570] font-bold uppercase tracking-wider text-[10px]">
+              <th class="p-3.5">Posição</th>
+              <th class="p-3.5">Produto Gastronômico</th>
+              <th class="p-3.5 text-center">Unidades Vendidas</th>
+              <th class="p-3.5 text-right">Faturação Total (MZN)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#F0DEE7]" id="reportTopProductsTable">
+            <% salesReport.topSellingProducts.forEach((prod, idx) => { %>
+              <tr class="hover:bg-[#FFECF5]/30 transition">
+                <td class="p-3.5 font-bold text-[#7D6570]">
+                  #<%= idx + 1 %>
+                </td>
+                <td class="p-3.5 font-bold text-[#1E1218]">
+                  <%= prod.name %>
+                </td>
+                <td class="p-3.5 text-center font-semibold text-[#1E1218]">
+                  <span class="inline-block px-2.5 py-0.5 rounded-full bg-[#FFECF5] text-[#FF70B0] font-bold">
+                    <%= prod.quantity %> un
+                  </span>
+                </td>
+                <td class="p-3.5 text-right font-bold text-[#1E1218]">
+                  <%= prod.revenue %> MZN
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= ABA 4: GESTÃO DA CARTA & STOCK ================= -->
+  <section id="tab-products" class="admin-tab-content hidden space-y-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h2 class="font-moret text-2xl font-bold text-[#1E1218]">Catálogo & Disponibilidade da Carta</h2>
+        <p class="text-xs text-[#7D6570]">Controle em tempo real da disponibilidade de cada receita no site de Pemba.</p>
+      </div>
+
+      <button id="openNewProductModalBtn" class="px-5 py-2.5 rounded-full btn-rose-glow text-white text-xs font-bold transition shadow-sm flex items-center gap-2">
         <i class="fa-solid fa-plus text-[10px]"></i>
         <span>Adicionar Produto à Carta</span>
       </button>
     </div>
 
     <!-- Tabela de Produtos -->
-    <div class="bg-brand-surface rounded-xl border border-brand-dark/10 overflow-hidden shadow-sm">
+    <div class="bg-white rounded-2xl border border-[#FFC4DE] overflow-hidden shadow-sm">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse text-xs">
           <thead>
-            <tr class="bg-brand-surfaceSoft border-b border-brand-dark/10 text-stone-500 font-medium uppercase tracking-wider text-[10px]">
+            <tr class="bg-[#FAF7F9] border-b border-[#FFC4DE] text-[#7D6570] font-bold uppercase tracking-wider text-[10px]">
               <th class="p-3.5">Item da Carta</th>
               <th class="p-3.5">Categoria</th>
               <th class="p-3.5">Preço (MZN)</th>
+              <th class="p-3.5">Destaque</th>
               <th class="p-3.5">Disponibilidade</th>
-              <th class="p-3.5 text-right">Ação</th>
+              <th class="p-3.5 text-right">Ações</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-brand-dark/5">
-            <% products.forEach(prod => { %>
-              <tr class="hover:bg-brand-surfaceSoft/60 transition-colors">
+          <tbody class="divide-y divide-[#F0DEE7]">
+            <% products.forEach(product => { %>
+              <tr class="hover:bg-[#FFECF5]/30 transition">
                 <td class="p-3.5 flex items-center gap-3">
-                  <img src="<%= prod.imageUrl || prod.image %>" alt="<%= prod.name %>" class="w-9 h-9 rounded-md object-cover bg-stone-100 flex-shrink-0">
+                  <img src="<%= product.image || product.imageUrl %>" alt="<%= product.name %>" class="w-10 h-10 rounded-lg object-cover border border-[#F0DEE7]" onerror="this.src='https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=100&q=80'">
                   <div>
-                    <span class="font-medium text-brand-dark block"><%= prod.name %></span>
-                    <span class="text-[10px] text-stone-400 line-clamp-1 font-light"><%= prod.description %></span>
+                    <h4 class="font-bold text-[#1E1218]"><%= product.name %></h4>
+                    <p class="text-[10px] text-[#7D6570] line-clamp-1"><%= product.description %></p>
                   </div>
                 </td>
-                <td class="p-3.5">
-                  <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-600 text-[10px] uppercase font-mono">
-                    <%= prod.category %>
+                <td class="p-3.5 text-[#7D6570]">
+                  <span class="px-2 py-0.5 rounded-full bg-white border border-[#FFC4DE] text-[10px] font-semibold">
+                    <%= product.categoryLabel || product.category %>
                   </span>
                 </td>
-                <td class="p-3.5 font-serif text-brand-dark text-sm">
-                  <%= prod.price %> MZN
+                <td class="p-3.5 font-bold text-[#1E1218]">
+                  <%= product.price %> MZN
                 </td>
                 <td class="p-3.5">
-                  <button 
-                    onclick="window.Admin.toggleAvailability('<%= prod.id %>')"
-                    class="px-2.5 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider transition-all <%= prod.isAvailable ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-red-50 text-red-800 border border-red-200' %>">
-                    <%= prod.isAvailable ? 'Disponível' : 'Esgotado' %>
+                  <% if (product.isFeatured) { %>
+                    <span class="text-[10px] text-[#FF70B0] font-bold flex items-center gap-1">
+                      <i class="fa-solid fa-star text-[9px]"></i> Sim
+                    </span>
+                  <% } else { %>
+                    <span class="text-[10px] text-stone-400">Não</span>
+                  <% } %>
+                </td>
+                <td class="p-3.5">
+                  <button onclick="window.Admin.toggleAvailability('<%= product.id %>')" class="px-3 py-1 rounded-full text-[10px] font-bold transition flex items-center gap-1.5 <%= product.isAvailable ? 'bg-emerald-100 text-emerald-800 hover:bg-rose-100 hover:text-rose-800' : 'bg-rose-100 text-rose-800 hover:bg-emerald-100 hover:text-emerald-800' %>">
+                    <span class="w-1.5 h-1.5 rounded-full <%= product.isAvailable ? 'bg-emerald-600' : 'bg-rose-600' %>"></span>
+                    <span><%= product.isAvailable ? 'Disponível' : 'Esgotado' %></span>
                   </button>
                 </td>
                 <td class="p-3.5 text-right">
-                  <button 
-                    onclick="window.Admin.deleteProduct('<%= prod.id %>')" 
-                    class="p-1.5 text-stone-400 hover:text-red-700 transition-colors rounded" 
-                    title="Remover Item">
+                  <button onclick="window.Admin.deleteProduct('<%= product.id %>')" class="text-stone-400 hover:text-rose-600 transition p-1" title="Remover da Carta">
                     <i class="fa-solid fa-trash-can text-xs"></i>
                   </button>
                 </td>
@@ -295,30 +639,75 @@
 
 </div>
 
-<!-- Modal Adicionar Novo Produto -->
-<div id="newProductModal" class="fixed inset-0 z-50 flex items-center justify-center bg-brand-dark/50 backdrop-blur-sm p-4 hidden opacity-0 transition-opacity">
-  <div class="bg-brand-surface rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-brand-dark/10">
-    <button id="closeNewProductModalBtn" class="absolute top-5 right-5 text-stone-400 hover:text-brand-dark">
+<!-- Modal: Detalhes do Pedido (Inspeção Completa) -->
+<div id="orderDetailsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+  <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-[#FFC4DE] max-h-[90vh] overflow-y-auto">
+    <button onclick="window.Admin.closeOrderDetails()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] text-stone-500 hover:text-[#1E1218] flex items-center justify-center transition">
+      <i class="fa-solid fa-xmark text-sm"></i>
+    </button>
+
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFECF5] border border-[#FFC4DE] mb-2 text-[#FF70B0] text-[10px] font-bold">
+      <span id="modalOrderNumber">#TB-0000</span>
+    </div>
+    <h3 class="font-moret text-2xl font-bold text-[#1E1218] mb-1" id="modalCustomerName">Nome do Cliente</h3>
+    <p class="text-xs text-[#7D6570] mb-4" id="modalOrderCreatedAt">Data e Hora</p>
+
+    <div class="space-y-4 text-xs">
+      <div class="bg-[#FAF7F9] p-3.5 rounded-2xl border border-[#F0DEE7] space-y-1.5">
+        <div class="text-[10px] uppercase font-bold tracking-wider text-[#7D6570]">Dados de Contacto & Entrega</div>
+        <div class="flex justify-between"><span class="text-[#7D6570]">Telefone:</span> <span class="font-bold text-[#1E1218]" id="modalCustomerPhone">-</span></div>
+        <div class="flex justify-between"><span class="text-[#7D6570]">Bairro:</span> <span class="font-bold text-[#1E1218]" id="modalNeighborhood">-</span></div>
+        <div class="flex justify-between"><span class="text-[#7D6570]">Morada:</span> <span class="font-bold text-[#1E1218]" id="modalDeliveryAddress">-</span></div>
+        <div class="flex justify-between"><span class="text-[#7D6570]">Pagamento:</span> <span class="font-bold text-[#FF70B0]" id="modalPayment">-</span></div>
+      </div>
+
+      <div class="bg-[#FAF7F9] p-3.5 rounded-2xl border border-[#F0DEE7] space-y-2">
+        <div class="text-[10px] uppercase font-bold tracking-wider text-[#7D6570]">Itens Encomendados</div>
+        <div id="modalOrderItemsList" class="space-y-1.5 divide-y divide-[#F0DEE7]/60"></div>
+      </div>
+
+      <div class="bg-white p-3.5 rounded-2xl border border-[#FFC4DE] space-y-1 font-semibold">
+        <div class="flex justify-between text-[#7D6570]"><span>Subtotal:</span> <span id="modalSubtotal">0 MZN</span></div>
+        <div class="flex justify-between text-[#7D6570]"><span>Taxa de Entrega:</span> <span id="modalDeliveryFee">0 MZN</span></div>
+        <div class="flex justify-between text-base font-bold text-[#1E1218] pt-1 border-t border-[#F0DEE7]"><span>Total a Cobrar:</span> <span id="modalTotal" class="text-[#FF70B0]">0 MZN</span></div>
+      </div>
+
+      <div class="pt-2 flex items-center gap-2">
+        <a id="modalTrackingLink" href="#" target="_blank" class="flex-1 py-3 rounded-full bg-[#1E1218] hover:bg-black text-white text-center text-xs font-bold transition shadow-sm">
+          <i class="fa-solid fa-location-dot mr-1"></i> Abrir Rastreio GPS
+        </a>
+        <button onclick="window.Admin.cancelOrderFromModal()" class="py-3 px-4 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition border border-rose-200">
+          Cancelar Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Adicionar Produto -->
+<div id="newProductModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+  <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-[#FFC4DE]">
+    <button id="closeNewProductModalBtn" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] text-stone-500 hover:text-[#1E1218] flex items-center justify-center transition">
       <i class="fa-solid fa-xmark text-sm"></i>
     </button>
     
-    <span class="text-[10px] font-semibold uppercase tracking-[0.2em] text-brand-muted block mb-1">Novo Item</span>
-    <h3 class="font-serif text-2xl font-normal text-brand-dark mb-4">Adicionar à Carta de Pemba</h3>
+    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7D6570] block mb-1">Novo Item</span>
+    <h3 class="font-moret text-2xl font-bold text-[#1E1218] mb-4">Adicionar à Carta de Pemba</h3>
 
     <form id="newProductForm" class="space-y-4">
       <div>
-        <label class="block text-[11px] font-semibold uppercase text-brand-dark mb-1">Designação da Receita *</label>
-        <input type="text" name="name" required placeholder="Ex: Tarte Tatin de Maçã Caramelizada" class="w-full px-3.5 py-2.5 rounded-lg border border-brand-dark/15 text-xs bg-brand-bg">
+        <label class="block text-[11px] font-bold uppercase text-[#1E1218] mb-1">Designação da Receita *</label>
+        <input type="text" name="name" required placeholder="Ex: Tarte Tatin de Maçã Caramelizada" class="w-full px-3.5 py-2.5 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0]">
       </div>
 
       <div class="grid grid-cols-2 gap-3.5">
         <div>
-          <label class="block text-[11px] font-semibold uppercase text-brand-dark mb-1">Preço em MZN *</label>
-          <input type="number" name="price" required placeholder="Ex: 320" class="w-full px-3.5 py-2.5 rounded-lg border border-brand-dark/15 text-xs bg-brand-bg">
+          <label class="block text-[11px] font-bold uppercase text-[#1E1218] mb-1">Preço em MZN *</label>
+          <input type="number" name="price" required placeholder="Ex: 320" class="w-full px-3.5 py-2.5 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0]">
         </div>
         <div>
-          <label class="block text-[11px] font-semibold uppercase text-brand-dark mb-1">Categoria *</label>
-          <select name="category" required class="w-full px-3.5 py-2.5 rounded-lg border border-brand-dark/15 text-xs bg-brand-bg">
+          <label class="block text-[11px] font-bold uppercase text-[#1E1218] mb-1">Categoria *</label>
+          <select name="category" required class="w-full px-3.5 py-2.5 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0] bg-white">
             <option value="paes">Pães Artesanais</option>
             <option value="bolos">Bolos & Tortas</option>
             <option value="pastelaria">Pastelaria Fina</option>
@@ -330,21 +719,21 @@
       </div>
 
       <div>
-        <label class="block text-[11px] font-semibold uppercase text-brand-dark mb-1">URL da Imagem</label>
-        <input type="url" name="imageUrl" placeholder="https://images.unsplash.com/..." class="w-full px-3.5 py-2.5 rounded-lg border border-brand-dark/15 text-xs bg-brand-bg">
+        <label class="block text-[11px] font-bold uppercase text-[#1E1218] mb-1">URL da Imagem</label>
+        <input type="url" name="imageUrl" placeholder="https://images.unsplash.com/..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0]">
       </div>
 
       <div>
-        <label class="block text-[11px] font-semibold uppercase text-brand-dark mb-1">Descrição Gastronômica</label>
-        <textarea name="description" rows="2" placeholder="Detalhes dos ingredientes nobres e modo de preparo..." class="w-full px-3.5 py-2.5 rounded-lg border border-brand-dark/15 text-xs bg-brand-bg"></textarea>
+        <label class="block text-[11px] font-bold uppercase text-[#1E1218] mb-1">Descrição Gastronômica</label>
+        <textarea name="description" rows="2" placeholder="Detalhes dos ingredientes nobres e modo de preparo..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#FFC4DE] text-xs outline-none focus:border-[#FF70B0]"></textarea>
       </div>
 
       <div class="flex items-center gap-2">
-        <input type="checkbox" name="isFeatured" id="featuredCheck" class="rounded text-brand-dark focus:ring-brand-dark">
-        <label for="featuredCheck" class="text-xs text-brand-dark font-normal cursor-pointer">Incluir na Seleção em Destaque da Página Inicial</label>
+        <input type="checkbox" name="isFeatured" id="featuredCheck" class="rounded text-[#FF70B0] focus:ring-[#FF70B0]">
+        <label for="featuredCheck" class="text-xs text-[#1E1218] font-medium cursor-pointer">Incluir na Seleção em Destaque da Página Inicial</label>
       </div>
 
-      <button type="submit" class="btn-editorial w-full py-3.5 rounded-lg bg-brand-dark hover:bg-brand-accent text-brand-bg font-medium text-xs uppercase tracking-wider transition-colors shadow-sm mt-2">
+      <button type="submit" class="w-full py-3.5 rounded-full btn-rose-glow text-white font-bold text-xs uppercase tracking-wider transition shadow-sm mt-2">
         Registar na Carta Oficial
       </button>
     </form>

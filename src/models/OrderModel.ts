@@ -76,6 +76,29 @@ export interface CreateOrderInput {
   notes?: string;
 }
 
+export interface SalesReportOptions {
+  startDate?: string;
+  endDate?: string;
+  neighborhood?: string;
+  paymentMethod?: string;
+  status?: string;
+}
+
+export interface SalesReport {
+  period: { start: string; end: string };
+  totalRevenue: number;
+  deliveryFeesRevenue: number;
+  productsRevenue: number;
+  ordersCount: number;
+  completedOrdersCount: number;
+  cancelledOrdersCount: number;
+  averageTicket: number;
+  salesByPaymentMethod: { method: string; label: string; count: number; total: number }[];
+  salesByNeighborhood: { neighborhood: string; count: number; total: number }[];
+  topSellingProducts: { name: string; quantity: number; revenue: number }[];
+  orders: Order[];
+}
+
 const DEMO_ORDERS: Order[] = [
   {
     id: 'ord-01',
@@ -416,6 +439,104 @@ class OrderManager {
       activeOrders,
       deliveredOrders,
       topNeighborhood,
+    };
+  }
+
+  /**
+   * Gera relatório detalhado de vendas com filtros por período e agrupamentos
+   */
+  public getSalesReport(options?: SalesReportOptions): SalesReport {
+    let orders = this.getAll();
+
+    if (options?.startDate) {
+      const start = new Date(options.startDate).getTime();
+      orders = orders.filter((o) => new Date(o.createdAt).getTime() >= start);
+    }
+    if (options?.endDate) {
+      const end = new Date(options.endDate).getTime();
+      orders = orders.filter((o) => new Date(o.createdAt).getTime() <= end);
+    }
+    if (options?.neighborhood && options.neighborhood !== 'todos') {
+      orders = orders.filter((o) => o.neighborhood === options.neighborhood);
+    }
+    if (options?.paymentMethod && options.paymentMethod !== 'todos') {
+      orders = orders.filter((o) => o.paymentMethod === options.paymentMethod);
+    }
+    if (options?.status && options.status !== 'todos') {
+      orders = orders.filter((o) => o.status === options.status);
+    }
+
+    const validOrders = orders.filter((o) => o.status !== 'cancelled');
+    const totalRevenue = validOrders.reduce((sum, o) => sum + o.total, 0);
+    const deliveryFeesRevenue = validOrders.reduce((sum, o) => sum + (o.deliveryFee || 0), 0);
+    const productsRevenue = validOrders.reduce((sum, o) => sum + (o.subtotal || 0), 0);
+    const completedOrdersCount = orders.filter((o) => o.status === 'delivered' || o.status === 'entregue').length;
+    const cancelledOrdersCount = orders.filter((o) => o.status === 'cancelled').length;
+    const averageTicket = validOrders.length > 0 ? Math.round(totalRevenue / validOrders.length) : 0;
+
+    // Vendas por método de pagamento
+    const payMap = new Map<string, { label: string; count: number; total: number }>();
+    validOrders.forEach((o) => {
+      const current = payMap.get(o.paymentMethod) || { label: o.paymentLabel || o.paymentMethod, count: 0, total: 0 };
+      current.count += 1;
+      current.total += o.total;
+      payMap.set(o.paymentMethod, current);
+    });
+    const salesByPaymentMethod = Array.from(payMap.entries()).map(([method, data]) => ({
+      method,
+      label: data.label,
+      count: data.count,
+      total: data.total,
+    })).sort((a, b) => b.total - a.total);
+
+    // Vendas por bairro / modalidade
+    const neighMap = new Map<string, { count: number; total: number }>();
+    validOrders.forEach((o) => {
+      const neigh = o.neighborhood || 'Outro';
+      const current = neighMap.get(neigh) || { count: 0, total: 0 };
+      current.count += 1;
+      current.total += o.total;
+      neighMap.set(neigh, current);
+    });
+    const salesByNeighborhood = Array.from(neighMap.entries()).map(([neighborhood, data]) => ({
+      neighborhood,
+      count: data.count,
+      total: data.total,
+    })).sort((a, b) => b.total - a.total);
+
+    // Produtos mais vendidos
+    const prodMap = new Map<string, { quantity: number; revenue: number }>();
+    validOrders.forEach((o) => {
+      (o.items || []).forEach((item) => {
+        const current = prodMap.get(item.name) || { quantity: 0, revenue: 0 };
+        current.quantity += item.quantity;
+        current.revenue += item.price * item.quantity;
+        prodMap.set(item.name, current);
+      });
+    });
+    const topSellingProducts = Array.from(prodMap.entries()).map(([name, data]) => ({
+      name,
+      quantity: data.quantity,
+      revenue: data.revenue,
+    })).sort((a, b) => b.quantity - a.quantity);
+
+    const now = new Date();
+    const periodStart = options?.startDate || (orders.length > 0 ? orders[orders.length - 1].createdAt : now.toISOString());
+    const periodEnd = options?.endDate || now.toISOString();
+
+    return {
+      period: { start: periodStart, end: periodEnd },
+      totalRevenue,
+      deliveryFeesRevenue,
+      productsRevenue,
+      ordersCount: orders.length,
+      completedOrdersCount,
+      cancelledOrdersCount,
+      averageTicket,
+      salesByPaymentMethod,
+      salesByNeighborhood,
+      topSellingProducts,
+      orders,
     };
   }
 
