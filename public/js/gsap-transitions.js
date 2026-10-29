@@ -1,11 +1,10 @@
 /**
- * Totally Baked Pemba — Motor GSAP de Transições de Página Contextuais & Revelações Cinéticas
+ * Totally Baked Pemba — Motor GSAP 3 de Coreografia de Entrada, Transições de Página & Micro-Interações
  * Arquitetura:
- *  - Barra de Progresso Superior Instantânea (Top Progress Bar)
- *  - Selo Contextual Inteligente de Destino (Mostra o nome e ícone exato da página de destino)
- *  - Preservação Síncrona sem FOUC via `html.tb-is-transitioning`
- *  - Prefetch Automático no Hover/Touchstart para carregamento instantâneo
- *  - Curvas Físicas Calibradas (Expo/Quart Out & InOut)
+ *  1. Preloader Cinematográfico GSAP (Desenho de Traço SVG + Odómetro Numérico + Clip-Path Reveal)
+ *  2. Timeline Mestre de Entrada (Navbar + Word Masks + Clip-Path Reveal de Imagens + Stagger Cards)
+ *  3. Botões Magnéticos Suaves no Desktop (gsap.quickTo)
+ *  4. Transição Contextual de Página Sem FOUC + Prefetch Automático
  */
 
 (function () {
@@ -51,7 +50,6 @@
       return { label: 'Consola de Gestão & Vendas', icon: 'fa-solid fa-chart-line' };
     }
 
-    // Fallback inteligente a partir do texto do link clicado
     const rawText = linkEl ? (linkEl.innerText || linkEl.getAttribute('aria-label') || '').trim() : '';
     const cleanText = rawText.replace(/\s+/g, ' ').slice(0, 28);
     return {
@@ -69,19 +67,23 @@
   }
 
   /* =========================================================================
-     1. ENTRADA DA PÁGINA (CONTINUAÇÃO CONTÍNUA DA CORTINA OU PRELOADER 1X)
+     1. ENTRADA DA PÁGINA (CONTINUAÇÃO CONTÍNUA DA CORTINA OU PRELOADER GSAP)
      ========================================================================= */
   function runInitialEntrance() {
     const preloader = document.getElementById('tbPreloader');
+    const preloaderCard = document.getElementById('tbPreloaderCard');
+    const preloaderEmblem = document.getElementById('tbPreloaderEmblem');
+    const preloaderScript = document.getElementById('tbPreloaderScript');
+    const preloaderSub = document.getElementById('tbPreloaderSub');
     const counterEl = document.getElementById('tbPreloaderCounter');
     const preloaderBar = document.getElementById('tbPreloaderBar');
-    const logoEl = document.getElementById('tbPreloaderLogo');
     const primaryLayer = document.getElementById('tbCurtainPrimary');
     const secondaryLayer = document.getElementById('tbCurtainSecondary');
     const backdropEl = document.getElementById('tbTransitionBackdrop');
     const contentBadge = document.getElementById('tbTransitionContent');
     const topProgress = document.getElementById('tbTopProgressBar');
     const mainEl = document.querySelector('main');
+    const headerEl = document.querySelector('header.light-glass-header');
 
     if (prefersReducedMotion || window.location.search.indexOf('skipPreloader=1') !== -1) {
       if (preloader) preloader.style.display = 'none';
@@ -111,9 +113,8 @@
       if (backdropEl) gsap.set(backdropEl, { opacity: 1 });
       if (contentBadge) gsap.set(contentBadge, { opacity: 1, scale: 1, y: 0 });
       if (topProgress) gsap.set(topProgress, { opacity: 1, scaleX: 0.72 });
-      if (mainEl) gsap.set(mainEl, { opacity: 0, y: 18 });
+      if (mainEl) gsap.set(mainEl, { opacity: 0, y: 20 });
 
-      // Remove a classe estática pois o GSAP assumiu o controle das coordenadas
       document.documentElement.classList.remove('tb-is-transitioning');
 
       const tl = gsap.timeline({
@@ -126,7 +127,6 @@
         }
       });
 
-      // 1. Concluir barra superior para 100%
       if (topProgress) {
         tl.to(topProgress, {
           scaleX: 1,
@@ -140,18 +140,16 @@
         }, 0.28);
       }
 
-      // 2. Selo central recolhe suavemente
       if (contentBadge) {
         tl.to(contentBadge, {
-          y: -12,
+          y: -14,
           opacity: 0,
-          scale: 0.96,
+          scale: 0.95,
           duration: 0.22,
           ease: 'power2.in'
         }, 0.02);
       }
 
-      // 3. Cortina desliza para o topo revelando a nova página
       tl.to(secondaryLayer, {
         yPercent: -104,
         duration: 0.48,
@@ -171,24 +169,23 @@
         }, 0.15);
       }
 
-      // 4. Conteúdo da página pousa no lugar com nitidez
       if (mainEl) {
         tl.to(mainEl, {
           opacity: 1,
           y: 0,
-          duration: 0.44,
+          duration: 0.46,
           ease: 'power3.out',
           clearProps: 'transform,opacity'
-        }, 0.16);
+        }, 0.14);
       }
 
-      initReveals(0.18);
+      initReveals(0.14);
       return;
     }
 
     document.documentElement.classList.remove('tb-is-transitioning');
 
-    // Caso 2: Primeira abertura da sessão -> Preloader Editorial Rápido
+    // Caso 2: Primeira abertura da sessão -> Preloader Cinematográfico GSAP + Entrada Coreografada
     if (!seenPreloader && preloader) {
       sessionStorage.setItem('tb_preloader_seen', '1');
       const countObj = { val: 0 };
@@ -200,49 +197,111 @@
         }
       });
 
-      if (logoEl) {
-        tl.fromTo(logoEl,
-          { y: 14, opacity: 0, scale: 0.97 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.34, ease: 'power3.out' },
+      // Preparar traços SVG do emblema do preloader
+      const svgPaths = preloader.querySelectorAll('.tb-preload-path');
+      svgPaths.forEach((p) => {
+        if (typeof p.getTotalLength === 'function') {
+          try {
+            const len = p.getTotalLength();
+            gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+          } catch {}
+        }
+      });
+
+      if (preloaderCard) {
+        tl.fromTo(preloaderCard,
+          { y: 24, opacity: 0, scale: 0.94 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.42, ease: 'expo.out' },
           0
+        );
+      }
+
+      if (preloaderEmblem) {
+        tl.fromTo(preloaderEmblem,
+          { scale: 0.75, rotate: -8 },
+          { scale: 1, rotate: 0, duration: 0.48, ease: 'back.out(1.8)' },
+          0.04
+        );
+      }
+
+      if (svgPaths.length) {
+        tl.to(svgPaths, {
+          strokeDashoffset: 0,
+          duration: 0.52,
+          stagger: 0.08,
+          ease: 'power2.inOut'
+        }, 0.06);
+      }
+
+      if (preloaderScript) {
+        tl.fromTo(preloaderScript,
+          { yPercent: 100, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 0.42, ease: 'power3.out' },
+          0.1
+        );
+      }
+
+      if (preloaderSub) {
+        tl.fromTo(preloaderSub,
+          { y: 10, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.36, ease: 'power2.out' },
+          0.18
         );
       }
 
       if (preloaderBar) {
         tl.to(preloaderBar, {
           width: '100%',
-          duration: 0.48,
-          ease: 'power2.inOut'
-        }, 0.04);
+          duration: 0.56,
+          ease: 'expo.inOut'
+        }, 0.08);
       }
 
       if (counterEl) {
         tl.to(countObj, {
           val: 100,
-          duration: 0.48,
-          ease: 'power2.inOut',
+          duration: 0.56,
+          ease: 'expo.inOut',
           onUpdate: () => {
             counterEl.textContent = String(Math.round(countObj.val)).padStart(2, '0') + '%';
           }
-        }, 0.04)
-        .to([counterEl, logoEl], {
-          scale: 0.94,
+        }, 0.08);
+      }
+
+      if (preloaderCard) {
+        tl.to(preloaderCard, {
+          y: -18,
+          scale: 0.95,
           opacity: 0,
-          y: -10,
-          duration: 0.22,
+          duration: 0.26,
           ease: 'power2.in'
-        }, 0.50);
+        }, 0.64);
       }
 
       tl.to(preloader, {
         yPercent: -103,
-        duration: 0.54,
+        duration: 0.6,
         ease: 'expo.inOut'
-      }, 0.54);
+      }, 0.68);
 
-      initReveals(0.62);
+      // Coreografia do cabeçalho simultânea à abertura da cortina
+      if (headerEl) {
+        tl.fromTo(headerEl,
+          { y: -24, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.52, ease: 'expo.out', clearProps: 'transform,opacity' },
+          0.78
+        );
+      }
+
+      initReveals(0.74);
     } else {
       if (preloader) preloader.style.display = 'none';
+      if (headerEl) {
+        gsap.fromTo(headerEl,
+          { y: -14, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.44, ease: 'power3.out', clearProps: 'transform,opacity' }
+        );
+      }
       initReveals(0.04);
     }
   }
@@ -264,7 +323,6 @@
     let isNavigating = false;
     const prefetchedUrls = new Set();
 
-    // Prefetch silencioso ao passar o rato ou tocar no link para resposta imediata do servidor
     const triggerPrefetch = (e) => {
       const link = e.target.closest('a');
       if (!link || !link.href) return;
@@ -295,7 +353,6 @@
       const href = link.getAttribute('href');
       if (!href) return;
 
-      // Ignorar âncoras na mesma página, protocolos externos, exportações ou novas abas
       if (
         href.startsWith('#') ||
         href.startsWith('mailto:') ||
@@ -325,7 +382,6 @@
       e.preventDefault();
       isNavigating = true;
 
-      // Resolver nome e ícone da página de destino
       const meta = resolveDestinationMeta(targetUrl, link);
       applyTransitionMeta(meta);
 
@@ -347,7 +403,6 @@
         }
       });
 
-      // 1. Barra de progresso superior dispara imediatamente dando feedback tátil instantâneo
       if (topProgress) {
         exitTl.to(topProgress, {
           scaleX: 0.72,
@@ -356,7 +411,6 @@
         }, 0);
       }
 
-      // 2. Backdrop suave e recuo subtil da página atual
       if (backdropEl) {
         exitTl.to(backdropEl, {
           opacity: 1,
@@ -376,7 +430,6 @@
         }, 0);
       }
 
-      // 3. Subida sedosa em dupla camada com curva exponencial
       exitTl.to(primaryLayer, {
         yPercent: 0,
         duration: 0.34,
@@ -388,7 +441,6 @@
         ease: 'expo.inOut'
       }, 0.06);
 
-      // 4. Selo de destino entra em foco no centro da cortina
       if (contentBadge) {
         exitTl.to(contentBadge, {
           opacity: 1,
@@ -400,7 +452,6 @@
       }
     });
 
-    // Garantir recuperação limpa caso o navegador restaure do bfcache (Botão Voltar)
     window.addEventListener('pageshow', (event) => {
       if (event.persisted) {
         isNavigating = false;
@@ -414,7 +465,7 @@
   }
 
   /* =========================================================================
-     3. COREOGRAFIA DE ENTRADA [data-ix-reveal] (WORDS, IMAGES, CARDS, SVG)
+     3. COREOGRAFIA DE ENTRADA GSAP [data-ix-reveal]
      ========================================================================= */
   function splitWordsIntoMasks(el) {
     if (el.dataset.ixSplitDone === '1') {
@@ -453,7 +504,7 @@
   }
 
   function initReveals(baseDelay) {
-    // A. Títulos com revelação de palavras mascaradas (data-ix-reveal="words")
+    // A. Títulos com revelação de palavras em 3D suave (data-ix-reveal="words")
     document.querySelectorAll('[data-ix-reveal="words"]').forEach((el) => {
       const words = splitWordsIntoMasks(el);
       if (!words.length) return;
@@ -461,12 +512,12 @@
       const extraDelay = parseFloat(el.getAttribute('data-ix-delay') || '0');
 
       const vars = {
-        yPercent: 108,
-        rotate: 1.5,
+        yPercent: 115,
+        rotateZ: 2.2,
         opacity: 0,
-        duration: 0.62,
-        stagger: 0.028,
-        ease: 'power3.out',
+        duration: 0.72,
+        stagger: 0.032,
+        ease: 'expo.out',
         clearProps: 'transform,opacity'
       };
 
@@ -482,9 +533,10 @@
       gsap.from(words, vars);
     });
 
-    // B. Revelação de Imagens com Escala & Clip Suave (data-ix-reveal="image")
+    // B. Revelação de Imagens com Clip-Path de Cortina & Zoom Out (data-ix-reveal="image")
     document.querySelectorAll('[data-ix-reveal="image"]').forEach((wrap) => {
       const img = wrap.querySelector('img');
+      const badges = wrap.querySelectorAll('[data-parallax-depth]');
       const isLoadTrigger = wrap.getAttribute('data-ix-trigger') === 'load';
       const extraDelay = parseFloat(wrap.getAttribute('data-ix-delay') || '0');
 
@@ -500,22 +552,48 @@
       const tl = gsap.timeline(tlVars);
       const startAt = isLoadTrigger ? baseDelay + extraDelay : 0;
 
-      tl.from(wrap, {
-        y: 22,
-        opacity: 0,
-        scale: 0.97,
-        duration: 0.65,
-        ease: 'power3.out',
-        clearProps: 'transform,opacity'
-      }, startAt);
+      tl.fromTo(wrap,
+        {
+          y: 28,
+          opacity: 0,
+          scale: 0.96,
+          clipPath: 'inset(12% 4% 12% 4% round 24px)'
+        },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          clipPath: 'inset(0% 0% 0% 0% round 24px)',
+          duration: 0.88,
+          ease: 'expo.out',
+          clearProps: 'transform,opacity,clipPath'
+        },
+        startAt
+      );
 
       if (img) {
-        tl.from(img, {
-          scale: 1.07,
-          duration: 0.85,
-          ease: 'power3.out',
-          clearProps: 'transform'
-        }, startAt);
+        tl.fromTo(img,
+          { scale: 1.14 },
+          {
+            scale: 1,
+            duration: 1.15,
+            ease: 'expo.out',
+            clearProps: 'transform'
+          },
+          startAt
+        );
+      }
+
+      if (badges.length) {
+        tl.from(badges, {
+          y: 12,
+          scale: 0.85,
+          opacity: 0,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: 'back.out(1.7)',
+          clearProps: 'transform,opacity'
+        }, startAt + 0.26);
       }
     });
 
@@ -533,12 +611,12 @@
       const isLoad = items[0].getAttribute('data-ix-trigger') === 'load';
 
       const vars = {
-        y: 24,
+        y: 28,
         opacity: 0,
-        scale: 0.98,
-        duration: 0.52,
-        stagger: 0.055,
-        ease: 'power3.out',
+        scale: 0.96,
+        duration: 0.62,
+        stagger: 0.06,
+        ease: 'expo.out',
         clearProps: 'transform,opacity'
       };
 
@@ -560,10 +638,10 @@
       const extraDelay = parseFloat(el.getAttribute('data-ix-delay') || '0');
 
       const vars = {
-        y: 18,
+        y: 20,
         opacity: 0,
-        duration: 0.5,
-        ease: 'power3.out',
+        duration: 0.58,
+        ease: 'expo.out',
         clearProps: 'transform,opacity'
       };
 
@@ -590,7 +668,7 @@
               gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
               gsap.to(p, {
                 strokeDashoffset: 0,
-                duration: 0.85,
+                duration: 0.9,
                 ease: 'power2.out',
                 scrollTrigger: typeof ScrollTrigger !== 'undefined' ? {
                   trigger: svg,
@@ -604,39 +682,73 @@
         }
       });
     });
+
+    // F. Flutuação Contínua Suave nos Badges do Hero (Ambient Float)
+    const floatingBadges = document.querySelectorAll('[data-parallax-scene] [data-parallax-depth]');
+    if (floatingBadges.length && !prefersReducedMotion) {
+      floatingBadges.forEach((badge, i) => {
+        gsap.to(badge, {
+          y: i % 2 === 0 ? -4 : 4,
+          duration: 2.4 + i * 0.3,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: baseDelay + 0.8
+        });
+      });
+    }
   }
 
   /* =========================================================================
-     4. PARALLAX SUAVE NO HERO DESKTOP ([data-parallax-scene])
+     4. PARALLAX SUAVE & BOTÕES MAGNÉTICOS NO DESKTOP
      ========================================================================= */
   function initHeroParallax() {
     if (prefersReducedMotion || !isFinePointer) return;
     const scene = document.querySelector('[data-parallax-scene]');
-    if (!scene) return;
+    if (scene) {
+      const layers = scene.querySelectorAll('[data-parallax-depth]');
+      if (layers.length) {
+        const quickToMap = Array.from(layers).map((el) => ({
+          depth: parseFloat(el.getAttribute('data-parallax-depth') || '12'),
+          xTo: gsap.quickTo(el, 'x', { duration: 0.6, ease: 'power3.out' }),
+          yTo: gsap.quickTo(el, 'y', { duration: 0.6, ease: 'power3.out' })
+        }));
 
-    const layers = scene.querySelectorAll('[data-parallax-depth]');
-    if (!layers.length) return;
+        scene.addEventListener('mousemove', (e) => {
+          const rect = scene.getBoundingClientRect();
+          const nx = (e.clientX - rect.left) / rect.width - 0.5;
+          const ny = (e.clientY - rect.top) / rect.height - 0.5;
+          quickToMap.forEach((item) => {
+            item.xTo(nx * item.depth);
+            item.yTo(ny * item.depth);
+          });
+        });
 
-    const quickToMap = Array.from(layers).map((el) => ({
-      depth: parseFloat(el.getAttribute('data-parallax-depth') || '12'),
-      xTo: gsap.quickTo(el, 'x', { duration: 0.6, ease: 'power3.out' }),
-      yTo: gsap.quickTo(el, 'y', { duration: 0.6, ease: 'power3.out' })
-    }));
+        scene.addEventListener('mouseleave', () => {
+          quickToMap.forEach((item) => {
+            item.xTo(0);
+            item.yTo(0);
+          });
+        });
+      }
+    }
 
-    scene.addEventListener('mousemove', (e) => {
-      const rect = scene.getBoundingClientRect();
-      const nx = (e.clientX - rect.left) / rect.width - 0.5;
-      const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      quickToMap.forEach((item) => {
-        item.xTo(nx * item.depth);
-        item.yTo(ny * item.depth);
+    // Efeito Magnético Suave nos Botões Principais (btn-rose-glow)
+    document.querySelectorAll('.btn-rose-glow').forEach((btn) => {
+      const xTo = gsap.quickTo(btn, 'x', { duration: 0.4, ease: 'power3.out' });
+      const yTo = gsap.quickTo(btn, 'y', { duration: 0.4, ease: 'power3.out' });
+
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const dx = (e.clientX - (rect.left + rect.width / 2)) * 0.16;
+        const dy = (e.clientY - (rect.top + rect.height / 2)) * 0.22;
+        xTo(dx);
+        yTo(dy);
       });
-    });
 
-    scene.addEventListener('mouseleave', () => {
-      quickToMap.forEach((item) => {
-        item.xTo(0);
-        item.yTo(0);
+      btn.addEventListener('mouseleave', () => {
+        xTo(0);
+        yTo(0);
       });
     });
   }

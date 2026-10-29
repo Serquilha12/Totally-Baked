@@ -208,7 +208,16 @@ body {
   align-items: center;
   justify-content: center;
   border-bottom: 3px solid var(--rose-primary);
-  will-change: transform, opacity;
+  will-change: transform, opacity, clip-path;
+}
+
+.tb-preloader-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-rose-soft);
+  border-radius: 32px;
+  box-shadow: 0 24px 60px -15px rgba(217, 56, 131, 0.14);
 }
 
 html.tb-skip-preloader .tb-preloader {

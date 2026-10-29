@@ -84,7 +84,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 
   <!-- Estilos Customizados -->
-  <link rel="stylesheet" href="/css/style.css?v=20261029-v2">
+  <link rel="stylesheet" href="/css/style.css?v=20261029-v3">
 
   <!-- Schema.org LocalBusiness Real de Pemba -->
   <script type="application/ld+json">
@@ -124,21 +124,24 @@
   <div id="tbTopProgressBar" class="tb-top-progress" aria-hidden="true"></div>
 
   <div id="tbPreloader" class="tb-preloader" aria-hidden="true">
-    <div id="tbPreloaderLogo" class="text-center px-6 flex flex-col items-center">
-      <div class="w-12 h-12 rounded-2xl bg-white border border-[#FFC4DE] shadow-sm flex items-center justify-center mb-3 text-[#FF70B0]">
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 3c-4.5 0-8 3-8 7 0 2.2 1.2 4 3 5.2V19a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-3.8c1.8-1.2 3-3 3-5.2 0-4-3.5-7-8-7Z"/>
-          <path d="M9 15h6"/>
+    <div id="tbPreloaderCard" class="tb-preloader-card text-center px-8 py-9 flex flex-col items-center relative">
+      <div id="tbPreloaderEmblem" class="w-16 h-16 rounded-2xl bg-white border border-[#FFC4DE] shadow-[0_14px_30px_-8px_rgba(255,112,176,0.28)] flex items-center justify-center mb-4 text-[#FF70B0] relative">
+        <svg class="w-8 h-8 tb-preloader-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path class="tb-preload-path" d="M12 3c-4.5 0-8 3-8 7 0 2.2 1.2 4 3 5.2V19a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-3.8c1.8-1.2 3-3 3-5.2 0-4-3.5-7-8-7Z"/>
+          <path class="tb-preload-path" d="M9 15h6"/>
+          <path class="tb-preload-path" d="M10 9.5c.8-.6 1.5-.6 2 0s1.2.6 2 0"/>
         </svg>
       </div>
-      <span class="font-feline text-4xl sm:text-5xl text-[#D93883] block leading-none mb-1.5">Totally Baked</span>
-      <span class="font-sans text-[10px] tracking-[0.22em] uppercase text-[#524149] font-bold">Padaria · Pastelaria · Catering · Pemba</span>
-    </div>
-    <div class="w-40 h-1 bg-[#F0DEE7] rounded-full overflow-hidden mt-6">
-      <div id="tbPreloaderBar" class="h-full bg-gradient-to-r from-[#FF70B0] to-[#D93883] w-0 rounded-full"></div>
-    </div>
-    <div id="tbPreloaderCounter" class="font-sans text-xs font-extrabold tracking-widest text-[#85707A] tabular-nums mt-2.5">
-      00%
+      <div id="tbPreloaderLogo" class="overflow-hidden">
+        <span id="tbPreloaderScript" class="font-feline text-4xl sm:text-5xl text-[#D93883] block leading-none mb-2">Totally Baked</span>
+        <span id="tbPreloaderSub" class="font-sans text-[10px] tracking-[0.24em] uppercase text-[#524149] font-bold block">Padaria · Pastelaria · Catering · Pemba</span>
+      </div>
+      <div class="w-48 h-1.5 bg-[#F0DEE7] rounded-full overflow-hidden mt-6 p-0.5">
+        <div id="tbPreloaderBar" class="h-full bg-gradient-to-r from-[#FF70B0] via-[#D93883] to-[#FFA0CA] w-0 rounded-full"></div>
+      </div>
+      <div id="tbPreloaderCounter" class="font-sans text-xs font-extrabold tracking-[0.2em] text-[#85707A] tabular-nums mt-2.5">
+        00%
+      </div>
     </div>
   </div>
 
