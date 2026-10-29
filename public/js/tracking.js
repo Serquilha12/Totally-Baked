@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollWheelZoom: false
   }).setView(courierCoords, 14);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap &copy; CARTO',
-    subdomains: 'abcd',
+  // Camada de Azulejos do Mapa (OpenStreetMap / Carto Voyager público com attribution e fallback)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
     maxZoom: 19
   }).addTo(map);
 

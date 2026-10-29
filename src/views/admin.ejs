@@ -577,62 +577,108 @@
       </button>
     </div>
 
-    <!-- Tabela de Produtos -->
-    <div class="bg-white rounded-2xl border border-[#FFC4DE] overflow-hidden shadow-sm">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-xs">
-          <thead>
-            <tr class="bg-[#FAF7F9] border-b border-[#FFC4DE] text-[#7D6570] font-bold uppercase tracking-wider text-[10px]">
-              <th class="p-3.5">Item da Carta</th>
-              <th class="p-3.5">Categoria</th>
-              <th class="p-3.5">Preço (MZN)</th>
-              <th class="p-3.5">Destaque</th>
-              <th class="p-3.5">Disponibilidade</th>
-              <th class="p-3.5 text-right">Ações</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-[#F0DEE7]">
-            <% products.forEach(product => { %>
-              <tr class="hover:bg-[#FFECF5]/30 transition">
-                <td class="p-3.5 flex items-center gap-3">
-                  <img src="<%= product.image || product.imageUrl %>" alt="<%= product.name %>" class="w-10 h-10 rounded-lg object-cover border border-[#F0DEE7]" onerror="this.src='https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=100&q=80'">
-                  <div>
-                    <h4 class="font-bold text-[#1E1218]"><%= product.name %></h4>
-                    <p class="text-[10px] text-[#7D6570] line-clamp-1"><%= product.description %></p>
-                  </div>
-                </td>
-                <td class="p-3.5 text-[#7D6570]">
-                  <span class="px-2 py-0.5 rounded-full bg-white border border-[#FFC4DE] text-[10px] font-semibold">
+    <!-- Tabela de Produtos Responsiva (Mobile & Desktop) -->
+    <div class="space-y-4">
+      
+      <!-- Visão Mobile (Cards Elegantes em Grade/Lista - Oculto em md+) -->
+      <div class="grid grid-cols-1 gap-3.5 md:hidden">
+        <% products.forEach(product => { %>
+          <div class="bg-white rounded-2xl p-4 border border-[#FFC4DE] shadow-sm flex flex-col justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <img src="<%= product.image || product.imageUrl %>" alt="<%= product.name %>" class="w-14 h-14 rounded-xl object-cover border border-[#F0DEE7] flex-shrink-0" onerror="this.src='https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=100&q=80'">
+              <div class="flex-grow min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="px-2 py-0.5 rounded-full bg-[#FFECF5] text-[#FF70B0] text-[10px] font-bold border border-[#FFC4DE] truncate">
                     <%= product.categoryLabel || product.category %>
                   </span>
-                </td>
-                <td class="p-3.5 font-bold text-[#1E1218]">
-                  <%= product.price %> MZN
-                </td>
-                <td class="p-3.5">
                   <% if (product.isFeatured) { %>
-                    <span class="text-[10px] text-[#FF70B0] font-bold flex items-center gap-1">
-                      <i class="fa-solid fa-star text-[9px]"></i> Sim
+                    <span class="text-[10px] text-[#FF70B0] font-bold flex items-center gap-1 flex-shrink-0">
+                      <i class="fa-solid fa-star text-[9px]"></i> Destaque
                     </span>
-                  <% } else { %>
-                    <span class="text-[10px] text-stone-400">Não</span>
                   <% } %>
-                </td>
-                <td class="p-3.5">
-                  <button onclick="window.Admin.toggleAvailability('<%= product.id %>')" class="px-3 py-1 rounded-full text-[10px] font-bold transition flex items-center gap-1.5 <%= product.isAvailable ? 'bg-emerald-100 text-emerald-800 hover:bg-rose-100 hover:text-rose-800' : 'bg-rose-100 text-rose-800 hover:bg-emerald-100 hover:text-emerald-800' %>">
-                    <span class="w-1.5 h-1.5 rounded-full <%= product.isAvailable ? 'bg-emerald-600' : 'bg-rose-600' %>"></span>
-                    <span><%= product.isAvailable ? 'Disponível' : 'Esgotado' %></span>
-                  </button>
-                </td>
-                <td class="p-3.5 text-right">
-                  <button onclick="window.Admin.deleteProduct('<%= product.id %>')" class="text-stone-400 hover:text-rose-600 transition p-1" title="Remover da Carta">
-                    <i class="fa-solid fa-trash-can text-xs"></i>
-                  </button>
-                </td>
+                </div>
+                <h4 class="font-bold text-[#1E1218] text-sm mt-1 leading-snug"><%= product.name %></h4>
+                <p class="text-[11px] text-[#7D6570] line-clamp-1 mt-0.5"><%= product.description %></p>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-[#F0DEE7] flex items-center justify-between">
+              <div>
+                <span class="text-[10px] text-[#7D6570] block uppercase tracking-wider font-semibold">Preço Unitário</span>
+                <span class="font-bold text-base text-[#1E1218] tabular-nums"><%= product.price %> <span class="text-xs font-normal text-[#7D6570]">MZN</span></span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="window.Admin.toggleAvailability('<%= product.id %>')" class="px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 <%= product.isAvailable ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800' %>">
+                  <span class="w-2 h-2 rounded-full <%= product.isAvailable ? 'bg-emerald-600' : 'bg-rose-600' %>"></span>
+                  <span><%= product.isAvailable ? 'Disponível' : 'Esgotado' %></span>
+                </button>
+                <button onclick="window.Admin.deleteProduct('<%= product.id %>')" class="w-8 h-8 rounded-full bg-[#FAF7F9] hover:bg-rose-50 text-stone-400 hover:text-rose-600 flex items-center justify-center transition border border-[#F0DEE7]" title="Excluir">
+                  <i class="fa-solid fa-trash-can text-xs"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <!-- Visão Desktop (Tabela Completa - Oculto em Mobile) -->
+      <div class="hidden md:block bg-white rounded-2xl border border-[#FFC4DE] overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-[#FAF7F9] border-b border-[#FFC4DE] text-[#7D6570] font-bold uppercase tracking-wider text-[10px]">
+                <th class="p-3.5">Item da Carta</th>
+                <th class="p-3.5">Categoria</th>
+                <th class="p-3.5">Preço (MZN)</th>
+                <th class="p-3.5">Destaque</th>
+                <th class="p-3.5">Disponibilidade</th>
+                <th class="p-3.5 text-right">Ações</th>
               </tr>
-            <% }) %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="divide-y divide-[#F0DEE7]">
+              <% products.forEach(product => { %>
+                <tr class="hover:bg-[#FFECF5]/30 transition">
+                  <td class="p-3.5 flex items-center gap-3">
+                    <img src="<%= product.image || product.imageUrl %>" alt="<%= product.name %>" class="w-10 h-10 rounded-lg object-cover border border-[#F0DEE7]" onerror="this.src='https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=100&q=80'">
+                    <div>
+                      <h4 class="font-bold text-[#1E1218]"><%= product.name %></h4>
+                      <p class="text-[10px] text-[#7D6570] line-clamp-1"><%= product.description %></p>
+                    </div>
+                  </td>
+                  <td class="p-3.5 text-[#7D6570]">
+                    <span class="px-2 py-0.5 rounded-full bg-white border border-[#FFC4DE] text-[10px] font-semibold whitespace-nowrap">
+                      <%= product.categoryLabel || product.category %>
+                    </span>
+                  </td>
+                  <td class="p-3.5 font-bold text-[#1E1218] whitespace-nowrap">
+                    <%= product.price %> MZN
+                  </td>
+                  <td class="p-3.5 whitespace-nowrap">
+                    <% if (product.isFeatured) { %>
+                      <span class="text-[10px] text-[#FF70B0] font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-star text-[9px]"></i> Sim
+                      </span>
+                    <% } else { %>
+                      <span class="text-[10px] text-stone-400">Não</span>
+                    <% } %>
+                  </td>
+                  <td class="p-3.5 whitespace-nowrap">
+                    <button onclick="window.Admin.toggleAvailability('<%= product.id %>')" class="px-3 py-1 rounded-full text-[10px] font-bold transition flex items-center gap-1.5 <%= product.isAvailable ? 'bg-emerald-100 text-emerald-800 hover:bg-rose-100 hover:text-rose-800' : 'bg-rose-100 text-rose-800 hover:bg-emerald-100 hover:text-emerald-800' %>">
+                      <span class="w-1.5 h-1.5 rounded-full <%= product.isAvailable ? 'bg-emerald-600' : 'bg-rose-600' %>"></span>
+                      <span><%= product.isAvailable ? 'Disponível' : 'Esgotado' %></span>
+                    </button>
+                  </td>
+                  <td class="p-3.5 text-right whitespace-nowrap">
+                    <button onclick="window.Admin.deleteProduct('<%= product.id %>')" class="text-stone-400 hover:text-rose-600 transition p-1" title="Remover da Carta">
+                      <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>

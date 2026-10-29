@@ -97,11 +97,23 @@ button, [role="button"], .category-pill, .segmented-pill {
 }
 
 /* Safe Areas Mobile (Notch / Home Indicator) */
-.safe-bottom-dock {
-  padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
+/* Dock flutuante mobile centralizado acima da barra de navegação nativa do Android/iOS */
+.mobile-safe-dock {
+  bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)) !important;
+  max-width: min(calc(100vw - 1.5rem), 420px);
+  margin-left: auto;
+  margin-right: auto;
 }
-.safe-bottom-sheet {
-  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+
+/* Espaçamento de respiro no fim do documento para o conteúdo não ficar sob o dock */
+body {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 0;
+  }
 }
 
 /* ================== TIPOGRAFIA DE MARCA ================== */
