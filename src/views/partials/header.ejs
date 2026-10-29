@@ -26,11 +26,14 @@
   <!-- Favicon SVG Oficial -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23FFECF5' stroke='%23FF70B0' stroke-width='4'/%3E%3Ctext x='50' y='58' font-family='Georgia,serif' font-weight='bold' font-size='44' fill='%23D93883' text-anchor='middle'%3ETB%3C/text%3E%3C/svg%3E">
 
-  <!-- Bypass imediato do preloader se já visto na sessão atual -->
+  <!-- Bypass imediato do preloader e preservação da cortina de transição entre páginas (Zero FOUC) -->
   <script>
     try {
       if (sessionStorage.getItem('tb_preloader_seen') === '1') {
         document.documentElement.classList.add('tb-skip-preloader');
+      }
+      if (sessionStorage.getItem('tb_page_enter') === '1') {
+        document.documentElement.classList.add('tb-is-transitioning');
       }
     } catch (e) {}
   </script>
@@ -81,7 +84,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 
   <!-- Estilos Customizados -->
-  <link rel="stylesheet" href="/css/style.css?v=20261028-henrietta">
+  <link rel="stylesheet" href="/css/style.css?v=20261029-v2">
 
   <!-- Schema.org LocalBusiness Real de Pemba -->
   <script type="application/ld+json">
@@ -116,24 +119,42 @@
 <body class="min-h-screen flex flex-col bg-white text-[#181114] antialiased">
 
   <!-- =====================================================================
-       PRELOADER DE ENTRADA & CORTINA DUPLA DE TRANSIÇÃO (HENRIETTA STYLE)
+       PRELOADER DE ENTRADA & TRANSIÇÃO DE PÁGINA INTUITIVA (ATELIER EDITORIAL)
        ===================================================================== -->
+  <div id="tbTopProgressBar" class="tb-top-progress" aria-hidden="true"></div>
+
   <div id="tbPreloader" class="tb-preloader" aria-hidden="true">
-    <div id="tbPreloaderLogo" class="text-center px-6">
-      <span class="font-feline text-4xl sm:text-5xl text-[#D93883] block leading-none mb-1">Totally Baked</span>
-      <span class="font-moret text-xs tracking-[0.22em] uppercase text-[#524149] font-semibold">Padaria · Pastelaria · Catering · Pemba</span>
+    <div id="tbPreloaderLogo" class="text-center px-6 flex flex-col items-center">
+      <div class="w-12 h-12 rounded-2xl bg-white border border-[#FFC4DE] shadow-sm flex items-center justify-center mb-3 text-[#FF70B0]">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3c-4.5 0-8 3-8 7 0 2.2 1.2 4 3 5.2V19a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-3.8c1.8-1.2 3-3 3-5.2 0-4-3.5-7-8-7Z"/>
+          <path d="M9 15h6"/>
+        </svg>
+      </div>
+      <span class="font-feline text-4xl sm:text-5xl text-[#D93883] block leading-none mb-1.5">Totally Baked</span>
+      <span class="font-sans text-[10px] tracking-[0.22em] uppercase text-[#524149] font-bold">Padaria · Pastelaria · Catering · Pemba</span>
     </div>
-    <div id="tbPreloaderCounter" class="font-moret text-3xl sm:text-4xl font-bold text-[#181114] tabular-nums mt-5">
+    <div class="w-40 h-1 bg-[#F0DEE7] rounded-full overflow-hidden mt-6">
+      <div id="tbPreloaderBar" class="h-full bg-gradient-to-r from-[#FF70B0] to-[#D93883] w-0 rounded-full"></div>
+    </div>
+    <div id="tbPreloaderCounter" class="font-sans text-xs font-extrabold tracking-widest text-[#85707A] tabular-nums mt-2.5">
       00%
     </div>
   </div>
 
   <div id="tbPageTransition" class="tb-transition-curtain" aria-hidden="true">
+    <div id="tbTransitionBackdrop" class="tb-transition-backdrop"></div>
     <div id="tbCurtainPrimary" class="tb-curtain-layer-primary"></div>
     <div id="tbCurtainSecondary" class="tb-curtain-layer-secondary">
-      <div class="text-center">
-        <span class="font-feline text-4xl text-[#D93883] block">Totally Baked</span>
-        <span class="text-[11px] tracking-[0.2em] uppercase text-[#524149] font-medium">Pemba · Cabo Delgado</span>
+      <div id="tbTransitionContent" class="tb-transition-badge">
+        <div class="tb-transition-seal">
+          <span class="tb-transition-seal-ring"></span>
+          <i id="tbTransitionIcon" class="fa-solid fa-utensils text-[#D93883] text-sm"></i>
+        </div>
+        <div class="text-left">
+          <span class="text-[10px] uppercase tracking-[0.2em] text-[#85707A] font-bold block leading-tight">A abrir destino</span>
+          <span id="tbTransitionLabel" class="font-moret text-xl sm:text-2xl font-bold text-[#181114] block leading-none mt-0.5">O Nosso Menu</span>
+        </div>
       </div>
     </div>
   </div>
