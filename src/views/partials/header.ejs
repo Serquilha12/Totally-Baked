@@ -205,24 +205,25 @@
           </a>
         </nav>
 
-        <!-- Ações Direita: Cesta com Ícone SVG Animado + Encomendar -->
+        <!-- Ações Direita: Seletor de Idioma (PT / EN) + Fazer Pedido (Sem botão de carrinho no cabeçalho) -->
         <div class="flex items-center gap-2 sm:gap-3">
-          <button 
-            id="cartDrawerBtn" 
-            type="button"
-            class="relative inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] border border-[#F0DEE7] hover:border-[#FFC4DE] text-[#181114] text-xs font-semibold transition-all active:scale-95" 
-            aria-label="Abrir a sua cesta">
-            <!-- Animated Bag SVG -->
-            <svg class="w-4 h-4 text-[#FF70B0]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <path d="M16 10a4 4 0 0 1-8 0"></path>
-            </svg>
-            <span>Cesta</span>
-            <span id="cartBadgeCount" class="min-w-[20px] h-5 px-1 rounded-full bg-[#FF70B0] text-white text-[11px] font-bold flex items-center justify-center scale-0 transition-transform tabular-nums">
-              0
-            </span>
-          </button>
+          <!-- Seletor de Idioma PT / EN -->
+          <div class="inline-flex items-center p-0.5 rounded-full bg-[#FAF7F9] border border-[#F0DEE7]" role="group" aria-label="Selecionar idioma">
+            <button 
+              type="button" 
+              data-lang-btn="pt" 
+              onclick="window.I18n && window.I18n.setLang('pt')" 
+              class="px-2.5 py-1 rounded-full text-[11px] font-bold transition-all bg-[#FF70B0] text-white shadow-sm">
+              PT
+            </button>
+            <button 
+              type="button" 
+              data-lang-btn="en" 
+              onclick="window.I18n && window.I18n.setLang('en')" 
+              class="px-2.5 py-1 rounded-full text-[11px] font-bold transition-all text-[#524149] hover:text-[#181114]">
+              EN
+            </button>
+          </div>
 
           <a href="/menu" class="hidden sm:inline-flex items-center gap-2 btn-rose-glow px-5 py-2.5 text-xs font-semibold">
             <span>Fazer Pedido</span>
