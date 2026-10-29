@@ -1,0 +1,30 @@
+{
+  "name": "totallybaked-pemba",
+  "version": "2.0.0",
+  "description": "Totally Baked Pemba - Padaria Artesanal, Pastelaria, Cafetaria, Sorvetes, Refeições & Catering em Cabo Delgado",
+  "main": "dist/server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "ts-node src/server.ts",
+    "build": "tsc -p tsconfig.build.json && node scripts/copy-views.js",
+    "start": "node dist/server.js",
+    "test": "node dist/test_verification.js"
+  },
+  "dependencies": {
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.13.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

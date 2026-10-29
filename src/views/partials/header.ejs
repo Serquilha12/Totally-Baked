@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-MZ" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FFFFFF">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181114">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <title><%= title %></title>
+  <meta name="description" content="Descubra a Totally Baked em Pemba (Rua da ANE, Alto Gingone): a sua pastelaria, padaria artesanal, cafetaria, sorvetes, refeições completas e serviço de catering para eventos com entrega ao domicílio.">
+  <meta name="keywords" content="Totally Baked Pemba, pastelaria Pemba, padaria Pemba, catering Pemba, sorvetes Pemba, cafetaria Pemba, bolos de aniversário Pemba, refeições Pemba, Cabo Delgado">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_MZ">
+  <meta property="og:site_name" content="Totally Baked Pemba">
+  <meta property="og:title" content="<%= title %>">
+  <meta property="og:description" content="Da pastelaria artesanal às refeições completas em Pemba. Pão fresco, bolos de celebração, sorvetes artesanais, cafetaria e catering em Cabo Delgado.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Favicon SVG Oficial -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23FFECF5' stroke='%23FF70B0' stroke-width='4'/%3E%3Ctext x='50' y='58' font-family='Georgia,serif' font-weight='bold' font-size='44' fill='%23D93883' text-anchor='middle'%3ETB%3C/text%3E%3C/svg%3E">
+
+  <!-- Bypass imediato do preloader se já visto na sessão atual -->
+  <script>
+    try {
+      if (sessionStorage.getItem('tb_preloader_seen') === '1') {
+        document.documentElement.classList.add('tb-skip-preloader');
+      }
+    } catch (e) {}
+  </script>
+
+  <!-- Google Fonts: Fraunces (Moret Editorial), Style Script (Feline) & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,600..800;1,9..144,500..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Style+Script&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Free -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: '#FFFFFF',
+              surface: '#FAF7F9',
+              surfaceSoft: '#FFECF5',
+              dark: '#181114',
+              muted: '#524149',
+              accent: '#FF70B0',
+              blossom: '#FFA0CA',
+              pastel: '#FFC4DE',
+              whisper: '#FFECF5',
+              editorial: '#D93883'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['Moret', 'Fraunces', '"DM Serif Display"', 'Georgia', 'serif'],
+            script: ['Feline', '"Style Script"', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Leaflet Map CSS (usado no rastreio GPS) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- GSAP 3.12.5 + ScrollTrigger (Transições Henrietta & Revelações Cinéticas) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+  <!-- Estilos Customizados -->
+  <link rel="stylesheet" href="/css/style.css?v=20261028-henrietta">
+
+  <!-- Schema.org LocalBusiness Real de Pemba -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Bakery",
+    "name": "Totally Baked",
+    "description": "Padaria artesanal, pastelaria fina, cafetaria, sorvetes, refeições completas e serviço de catering para eventos em Pemba.",
+    "telephone": "+258845958546",
+    "currenciesAccepted": "MZN",
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Rua da ANE, Bairro Alto Gingone",
+      "addressLocality": "Pemba",
+      "addressRegion": "Cabo Delgado",
+      "postalCode": "3200",
+      "addressCountry": "MZ"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": -12.9732,
+      "longitude": 40.5178
+    },
+    "sameAs": [
+      "https://www.instagram.com/totally_baked_1/",
+      "https://www.facebook.com/p/Totally-Baked-100060917605880/"
+    ]
+  }
+  </script>
+</head>
+<body class="min-h-screen flex flex-col bg-white text-[#181114] antialiased">
+
+  <!-- =====================================================================
+       PRELOADER DE ENTRADA & CORTINA DUPLA DE TRANSIÇÃO (HENRIETTA STYLE)
+       ===================================================================== -->
+  <div id="tbPreloader" class="tb-preloader" aria-hidden="true">
+    <div id="tbPreloaderLogo" class="text-center px-6">
+      <span class="font-feline text-4xl sm:text-5xl text-[#D93883] block leading-none mb-1">Totally Baked</span>
+      <span class="font-moret text-xs tracking-[0.22em] uppercase text-[#524149] font-semibold">Padaria · Pastelaria · Catering · Pemba</span>
+    </div>
+    <div id="tbPreloaderCounter" class="font-moret text-3xl sm:text-4xl font-bold text-[#181114] tabular-nums mt-5">
+      00%
+    </div>
+  </div>
+
+  <div id="tbPageTransition" class="tb-transition-curtain" aria-hidden="true">
+    <div id="tbCurtainPrimary" class="tb-curtain-layer-primary"></div>
+    <div id="tbCurtainSecondary" class="tb-curtain-layer-secondary">
+      <div class="text-center">
+        <span class="font-feline text-4xl text-[#D93883] block">Totally Baked</span>
+        <span class="text-[11px] tracking-[0.2em] uppercase text-[#524149] font-medium">Pemba · Cabo Delgado</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fita Superior de Confeitaria (3px) -->
+  <div class="patisserie-ribbon"></div>
+
+  <!-- Barra de Localização Real & Contacto Direto -->
+  <div class="bg-[#FAF7F9] text-[#524149] text-xs py-2 px-4 border-b border-[#F0DEE7]">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <span class="inline-flex items-center gap-1.5 font-medium text-[#181114] truncate">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
+          <span>Fornadas frescas hoje</span>
+        </span>
+        <span class="text-[#DEC8D3] hidden sm:inline">·</span>
+        <span class="hidden sm:inline text-[#85707A] truncate">Rua da ANE, Bairro Alto Gingone, Pemba</span>
+      </div>
+      <div class="flex items-center gap-3.5 text-xs ml-auto sm:ml-0">
+        <a href="tel:+258845958546" class="hover:text-[#181114] transition-colors tabular-nums font-medium">
+          +258 84 595 8546
+        </a>
+        <span class="text-[#DEC8D3]">·</span>
+        <a href="https://wa.me/258845958546?text=Ol%C3%A1%20Totally%20Baked!%20Gostaria%20de%20fazer%20uma%20encomenda%20em%20Pemba." target="_blank" rel="noopener noreferrer" class="text-[#D93883] hover:text-[#181114] font-semibold transition-colors">
+          WhatsApp Direto &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Principal Editorial com Links Cinéticos [stagger-link] -->
+  <header class="sticky top-0 z-40 light-glass-header">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16 sm:h-[74px]">
+        
+        <!-- Wordmark Oficial -->
+        <a href="/" class="flex flex-col group focus:outline-none">
+          <div class="flex items-baseline gap-1.5">
+            <span class="font-moret text-2xl sm:text-[27px] font-bold tracking-tight text-[#181114] leading-none">
+              Totally Baked
+            </span>
+            <span class="font-feline text-xl text-[#D93883] leading-none hidden sm:inline">
+              Pemba
+            </span>
+          </div>
+          <span class="text-[10px] text-[#85707A] tracking-[0.14em] uppercase font-medium mt-0.5 hidden sm:block">
+            Padaria · Pastelaria · Catering
+          </span>
+        </a>
+
+        <!-- Navegação Desktop com Efeito Stagger Roll (Henrietta Style) -->
+        <nav class="hidden lg:flex items-center gap-7 text-[13.5px] font-medium" aria-label="Navegação Principal">
+          <a href="/" stagger-link class="<%= (typeof activeNav !== 'undefined' && activeNav === 'home') ? 'text-[#181114] font-semibold border-b-2 border-[#FF70B0] pb-0.5' : 'text-[#524149]' %>">
+            <span stagger-link-text>Início</span>
+          </a>
+          <a href="/menu" stagger-link class="<%= (typeof activeNav !== 'undefined' && activeNav === 'menu') ? 'text-[#181114] font-semibold border-b-2 border-[#FF70B0] pb-0.5' : 'text-[#524149]' %>">
+            <span stagger-link-text>O Nosso Menu</span>
+          </a>
+          <a href="/#servicos" stagger-link class="text-[#524149]">
+            <span stagger-link-text>Serviços</span>
+          </a>
+          <a href="/#sobre" stagger-link class="text-[#524149]">
+            <span stagger-link-text>Sobre Nós</span>
+          </a>
+          <button type="button" onclick="window.openCateringModal()" stagger-link class="text-[#524149] cursor-pointer">
+            <span stagger-link-text>Catering & Festas</span>
+          </button>
+          <a href="/rastreio/ord-01" data-live-tracking-link stagger-link class="flex items-center gap-1.5 <%= (typeof activeNav !== 'undefined' && activeNav === 'tracking') ? 'text-[#181114] font-semibold border-b-2 border-[#FF70B0] pb-0.5' : 'text-[#524149]' %>">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span stagger-link-text>Rastreio GPS</span>
+          </a>
+        </nav>
+
+        <!-- Ações Direita: Cesta com Ícone SVG Animado + Encomendar -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button 
+            id="cartDrawerBtn" 
+            type="button"
+            class="relative inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] border border-[#F0DEE7] hover:border-[#FFC4DE] text-[#181114] text-xs font-semibold transition-all active:scale-95" 
+            aria-label="Abrir a sua cesta">
+            <!-- Animated Bag SVG -->
+            <svg class="w-4 h-4 text-[#FF70B0]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Cesta</span>
+            <span id="cartBadgeCount" class="min-w-[20px] h-5 px-1 rounded-full bg-[#FF70B0] text-white text-[11px] font-bold flex items-center justify-center scale-0 transition-transform tabular-nums">
+              0
+            </span>
+          </button>
+
+          <a href="/menu" class="hidden sm:inline-flex items-center gap-2 btn-rose-glow px-5 py-2.5 text-xs font-semibold">
+            <span>Fazer Pedido</span>
+          </a>
+
+          <!-- Botão Menu Mobile -->
+          <button id="mobileMenuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full bg-[#FAF7F9] border border-[#F0DEE7] flex items-center justify-center text-[#181114] text-sm active:scale-95" aria-label="Menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Menu Mobile Deslizante -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-[#F0DEE7] px-4 pt-2 pb-5 space-y-1 shadow-lg">
+      <a href="/" class="block py-2.5 px-3 rounded-xl text-sm font-semibold text-[#181114] hover:bg-[#FFECF5]">Início</a>
+      <a href="/menu" class="block py-2.5 px-3 rounded-xl text-sm font-medium text-[#524149] hover:bg-[#FFECF5]">Menu Completo & Preços</a>
+      <a href="/#servicos" onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="block py-2.5 px-3 rounded-xl text-sm font-medium text-[#524149] hover:bg-[#FFECF5]">Os Nossos Serviços</a>
+      <a href="/#sobre" onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="block py-2.5 px-3 rounded-xl text-sm font-medium text-[#524149] hover:bg-[#FFECF5]">A Nossa História</a>
+      <button type="button" onclick="document.getElementById('mobileMenu').classList.add('hidden'); window.openCateringModal();" class="w-full text-left py-2.5 px-3 rounded-xl text-sm font-semibold text-[#D93883] hover:bg-[#FFECF5]">
+        Pedir Catering ou Bolo de Festa
+      </button>
+      <a href="/rastreio/ord-01" data-live-tracking-link class="block py-2.5 px-3 rounded-xl text-sm font-medium text-[#524149] hover:bg-[#FFECF5]">Rastreio GPS de Encomenda</a>
+      <a href="/admin" class="block py-2.5 px-3 rounded-xl text-xs font-medium text-[#85707A] hover:bg-[#FAF7F9]">Consola da Cozinha (/admin)</a>
+    </div>
+  </header>
+
+  <main class="flex-grow">

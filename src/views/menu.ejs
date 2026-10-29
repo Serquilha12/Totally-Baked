@@ -1,0 +1,214 @@
+<%- include('partials/header') %>
+
+<!-- Header Editorial da Carta Oficial (White Gallery + GSAP Reveal) -->
+<div class="relative overflow-hidden pt-8 pb-8 sm:pt-10 bg-gradient-to-b from-[#FFFBFD] to-white border-b border-[#F0DEE7]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+      <div>
+        <div data-ix-reveal="fade-up" data-ix-trigger="load" class="flex items-center gap-2 text-xs text-[#85707A] mb-1.5">
+          <span class="font-feline text-2xl text-[#D93883] leading-none">O Nosso Menu</span>
+          <span>·</span>
+          <span>Rua da ANE, Alto Gingone · Pemba</span>
+        </div>
+        <h1 data-ix-reveal="words" data-ix-trigger="load" class="font-moret text-3xl sm:text-4xl lg:text-5xl font-bold text-[#181114] tracking-[-0.02em]">
+          Padaria, Pastelaria, Sorvetes & Refeições
+        </h1>
+        <p data-ix-reveal="fade-up" data-ix-trigger="load" data-ix-delay="0.12" class="text-sm text-[#524149] mt-2 font-normal max-w-2xl leading-relaxed">
+          Pães de fermentação natural, croissants amanteigados, bolos para celebrações, gelados artesanais, cafés e almoços preparados diariamente com frescura na nossa cozinha em Pemba.
+        </p>
+      </div>
+
+      <!-- Barra de Pesquisa em Alabastro com Filtro Instantâneo -->
+      <form action="/menu" method="GET" class="w-full md:w-80 relative group" role="search">
+        <div class="bg-[#FAF7F9] rounded-xl px-3.5 py-2.5 flex items-center justify-between border border-[#E5CEDB] focus-within:bg-white focus-within:border-[#FF70B0] transition-all">
+          <div class="flex items-center gap-2.5 flex-grow min-w-0">
+            <i class="fa-solid fa-magnifying-glass text-[#85707A] text-xs flex-shrink-0"></i>
+            <input 
+              id="menuLiveSearch"
+              type="text" 
+              name="q" 
+              enterkeyhint="search"
+              value="<%= searchQuery %>" 
+              placeholder="Procurar pão, bolo, sorvete, refeição..." 
+              class="w-full min-w-0 bg-transparent outline-none text-xs text-[#181114] placeholder:text-[#85707A] font-medium">
+          </div>
+          <button type="submit" class="w-7 h-7 rounded-lg bg-white hover:bg-[#FF70B0] text-[#524149] hover:text-white border border-[#F0DEE7] flex items-center justify-center transition-colors ml-1.5 flex-shrink-0" aria-label="Pesquisar">
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+        </div>
+        <% if (activeCategory && activeCategory !== 'todos') { %>
+          <input type="hidden" name="category" value="<%= activeCategory %>">
+        <% } %>
+      </form>
+    </div>
+
+    <!-- Navegação de Categorias -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none pt-1" role="tablist" aria-label="Categorias do menu">
+      <a href="/menu<%= searchQuery ? '?q=' + encodeURIComponent(searchQuery) : '' %>" 
+         class="category-pill <%= activeCategory === 'todos' ? 'active' : '' %> flex-shrink-0">
+        <span>Todo o Menu</span>
+        <span class="pill-count"><%= products.length %></span>
+      </a>
+      
+      <% categories.forEach(cat => { %>
+        <a href="/menu?category=<%= cat.id %><%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>" 
+           class="category-pill <%= activeCategory === cat.id ? 'active' : '' %> flex-shrink-0">
+          <span><%= cat.name %></span>
+        </a>
+      <% }) %>
+    </div>
+
+  </div>
+</div>
+
+<!-- Grid de Produtos em Fundo Branco Puro -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 bg-white space-y-14">
+  
+  <% if (products.length === 0) { %>
+    <div class="text-center py-16 bg-[#FAF7F9] rounded-3xl border border-[#F0DEE7] p-8 max-w-md mx-auto">
+      <div class="w-12 h-12 rounded-full bg-white text-[#D93883] flex items-center justify-center mx-auto mb-3 border border-[#F0DEE7]">
+        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+      </div>
+      <h3 class="font-moret text-xl font-bold text-[#181114]">Nenhuma receita encontrada</h3>
+      <p class="text-xs text-[#524149] mt-1.5 font-normal">
+        Não encontrámos itens correspondentes a esta pesquisa no menu de hoje.
+      </p>
+      <a href="/menu" class="btn-rose-glow inline-block mt-5 px-5 py-2.5 text-xs font-semibold">
+        Ver menu completo
+      </a>
+    </div>
+  <% } else { %>
+    <div id="menuProductsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <% products.forEach(prod => { %>
+        <article 
+          data-ix-group="menu-cards"
+          class="card-glass-product flex flex-col justify-between group <%= !prod.isAvailable ? 'opacity-60 grayscale-[30%]' : '' %>" 
+          data-title="<%= prod.name.toLowerCase() %>" 
+          data-desc="<%= (prod.description || '').toLowerCase() %>">
+          
+          <!-- Imagem do Produto -->
+          <div class="relative h-52 bg-[#FAF7F9] overflow-hidden cursor-pointer"
+               onclick="window.openProductCustomizer('<%= prod.id %>', '<%= prod.name.replace(/'/g, "\\'") %>', <%= prod.price %>, '<%= prod.imageUrl || prod.image %>', '<%= prod.description ? prod.description.replace(/'/g, "\\'") : '' %>')">
+            <img 
+              src="<%= prod.imageUrl || prod.image %>" 
+              alt="<%= prod.name %>" 
+              loading="lazy" 
+              decoding="async" 
+              class="food-img w-full h-full object-cover">
+
+            <div class="absolute top-3 left-3 z-10">
+              <span class="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-sm text-[#181114] text-[11px] font-medium border border-[#F0DEE7]">
+                <%= prod.badge || prod.categoryLabel || prod.category %>
+              </span>
+            </div>
+
+            <!-- Botão Favorito -->
+            <button 
+              type="button" 
+              onclick="event.stopPropagation(); window.toggleFavorite(this)" 
+              class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#F0DEE7] flex items-center justify-center text-[#85707A] hover:text-[#FF70B0] transition-colors z-10"
+              aria-label="Guardar nos favoritos">
+              <i class="fa-regular fa-heart text-xs"></i>
+            </button>
+
+            <% if (!prod.isAvailable) { %>
+              <div class="absolute inset-0 bg-white/80 backdrop-blur-[2px] flex items-center justify-center z-20">
+                <span class="px-3 py-1 rounded-full bg-[#181114] text-white text-[11px] font-medium">
+                  Esgotado hoje
+                </span>
+              </div>
+            <% } %>
+          </div>
+
+          <!-- Corpo Editorial -->
+          <div class="p-5 flex-grow flex flex-col justify-between space-y-4 bg-white">
+            <div>
+              <div class="flex items-center justify-between text-xs text-[#85707A] mb-1">
+                <span><%= prod.categoryLabel || 'Fornada do dia' %></span>
+                <span class="font-medium text-[#524149]">★ <%= prod.rating || '4.9' %></span>
+              </div>
+              <h3 
+                onclick="window.openProductCustomizer('<%= prod.id %>', '<%= prod.name.replace(/'/g, "\\'") %>', <%= prod.price %>, '<%= prod.imageUrl || prod.image %>', '<%= prod.description ? prod.description.replace(/'/g, "\\'") : '' %>')"
+                class="font-moret text-xl font-bold text-[#181114] group-hover:text-[#D93883] transition-colors cursor-pointer line-clamp-1">
+                <%= prod.name %>
+              </h3>
+              <p class="text-xs text-[#524149] mt-1 font-normal leading-relaxed line-clamp-2">
+                <%= prod.description %>
+              </p>
+            </div>
+
+            <!-- Rodapé do Card: Preço Tabular + Ações -->
+            <div class="pt-3.5 border-t border-[#F0DEE7] flex items-center justify-between">
+              <span class="text-base font-bold text-[#181114] tabular-nums">
+                <%= prod.price %> <span class="text-xs font-normal text-[#85707A]">MZN</span>
+              </span>
+
+              <% if (prod.isAvailable) { %>
+                <div class="flex items-center gap-1.5">
+                  <button 
+                    type="button"
+                    onclick="window.openProductCustomizer('<%= prod.id %>', '<%= prod.name.replace(/'/g, "\\'") %>', <%= prod.price %>, '<%= prod.imageUrl || prod.image %>', '<%= prod.description ? prod.description.replace(/'/g, "\\'") : '' %>')"
+                    class="px-3 py-1.5 rounded-lg bg-[#FAF7F9] hover:bg-[#FFECF5] text-[#524149] hover:text-[#181114] text-xs font-medium border border-[#F0DEE7] transition-colors"
+                    title="Personalizar">
+                    Opções
+                  </button>
+                  <button 
+                    type="button"
+                    onclick="window.Cart.addItem('<%= prod.id %>', '<%= prod.name.replace(/'/g, "\\'") %>', <%= prod.price %>, '<%= prod.imageUrl || prod.image %>')"
+                    class="w-9 h-9 rounded-lg bg-[#FF70B0] hover:bg-[#E85295] text-white flex items-center justify-center transition-colors active:scale-95"
+                    aria-label="Adicionar <%= prod.name %> à cesta">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                  </button>
+                </div>
+              <% } else { %>
+                <span class="text-xs text-[#85707A] font-medium">Indisponível</span>
+              <% } %>
+            </div>
+          </div>
+
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <!-- Banner de Catering & Bolos Personalizados na Carta -->
+  <section class="bg-gradient-to-r from-[#FFECF5]/70 via-[#FFFBFD] to-white rounded-3xl border border-[#FFC4DE] p-6 sm:p-9 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="flex items-start gap-4 max-w-xl">
+      <div class="anim-icon-wrap flex-shrink-0 !bg-white">
+        <svg class="w-6 h-6 anim-svg-icon svg-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <div>
+        <span class="font-feline text-xl text-[#D93883] block">Serviço por medida em Pemba</span>
+        <h2 class="font-moret text-2xl sm:text-3xl font-bold text-[#181114]">Procura um Bolo de Aniversário ou Catering para Evento?</h2>
+        <p class="text-xs sm:text-sm text-[#524149] mt-1 leading-relaxed">
+          Preparamos coffee-breaks empresariais, bandejas de salgados e bolos artísticos personalizados para casamentos, baptizados e festas.
+        </p>
+      </div>
+    </div>
+    <button type="button" onclick="window.openCateringModal()" class="btn-rose-glow min-h-[48px] px-6 py-3 text-xs sm:text-sm font-semibold flex items-center gap-2 flex-shrink-0">
+      <span>Solicitar Proposta Agora</span>
+      <i class="fa-solid fa-arrow-right text-xs"></i>
+    </button>
+  </section>
+
+</div>
+
+<script>
+  const liveInput = document.getElementById('menuLiveSearch');
+  if (liveInput) {
+    liveInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      document.querySelectorAll('#menuProductsGrid .card-glass-product').forEach(card => {
+        const title = card.getAttribute('data-title') || '';
+        const desc = card.getAttribute('data-desc') || '';
+        card.style.display = (!q || title.includes(q) || desc.includes(q)) ? '' : 'none';
+      });
+    });
+  }
+</script>
+
+<%- include('partials/footer') %>

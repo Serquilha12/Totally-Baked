@@ -1,0 +1,273 @@
+<%- include('partials/header') %>
+
+<div class="bg-gradient-to-b from-[#FFFBFD] to-white py-8 sm:py-10 border-b border-[#F0DEE7]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+
+    <% if (typeof isConfirmed !== 'undefined' && isConfirmed) { %>
+      <!-- Banner de Confirmação Pós-Checkout (Fluxo Real de Produção Moçambique) -->
+      <div data-ix-reveal="fade-up" data-ix-trigger="load" class="bg-[#FFECF5]/70 border border-[#FFC4DE] rounded-3xl p-5 sm:p-7 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 shadow-sm">
+        <div class="flex items-start gap-4">
+          <div class="w-11 h-11 rounded-2xl bg-[#FF70B0] text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+            <i class="fa-solid fa-check text-base"></i>
+          </div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-[#D93883] block">Encomenda Registada com Sucesso · <%= order.orderNumber %></span>
+            <h2 class="font-moret text-2xl sm:text-3xl font-bold text-[#181114] mt-0.5">
+              Obrigado, <%= order.customerName.split(' ')[0] %>! O seu pedido já está no sistema.
+            </h2>
+            <p class="text-xs sm:text-sm text-[#524149] mt-1 leading-relaxed max-w-2xl">
+              <% if (order.paymentMethod === 'mpesa' || order.paymentMethod === 'emola') { %>
+                Para agilizar a preparação na cozinha e confirmar o pagamento <strong><%= order.paymentMethod === 'mpesa' ? 'M-Pesa' : 'E-Mola' %> (<%= order.total %> MZN)</strong>, clique abaixo para abrir a nota pronta no nosso WhatsApp oficial (<strong>+258 84 595 8546</strong>).
+              <% } else { %>
+                Envie o resumo abaixo para o nosso WhatsApp oficial (<strong>+258 84 595 8546</strong>) para acompanhamento direto com a nossa equipa na Rua da ANE.
+              <% } %>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+          <a href="<%= whatsappUrl %>" target="_blank" rel="noopener noreferrer" class="flex-grow lg:flex-grow-0 min-h-[46px] px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold inline-flex items-center justify-center gap-2 shadow-sm transition-colors">
+            <i class="fa-brands fa-whatsapp text-base"></i>
+            <span>Confirmar no WhatsApp Oficial</span>
+          </a>
+          <button type="button" onclick="window.print()" class="min-h-[46px] px-4 py-2.5 rounded-full bg-white hover:bg-[#FAF7F9] border border-[#F0DEE7] text-[#181114] text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors">
+            <i class="fa-solid fa-print text-xs text-[#85707A]"></i>
+            <span>Recibo</span>
+          </button>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF7F9] text-[#181114] text-[11px] font-semibold border border-[#F0DEE7] mb-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span><%= order.fulfillmentType === 'pickup' ? 'Levantamento na Loja · Rua da ANE' : 'Rastreio GPS em Tempo Real · Pemba' %></span>
+        </div>
+        <h1 data-ix-reveal="words" data-ix-trigger="load" class="font-moret text-3xl sm:text-4xl font-bold text-[#181114]">
+          Pedido <%= order.orderNumber %> <span class="text-base font-sans font-normal text-[#85707A]">(#<%= order.id %>)</span>
+        </h1>
+        <p class="text-xs text-[#524149] mt-1">
+          Registado a <%= new Date(order.createdAt).toLocaleString('pt-MZ') %> · Cliente: <strong><%= order.customerName %></strong> (<%= order.fulfillmentType === 'pickup' ? 'Levantamento Rua da ANE' : order.neighborhood %>)
+        </p>
+      </div>
+
+      <!-- Ações Rápidas -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <a href="<%= whatsappUrl %>" target="_blank" rel="noopener noreferrer" class="btn-rose-glow px-5 py-2.5 text-xs font-semibold flex items-center gap-2">
+          <i class="fa-brands fa-whatsapp text-sm"></i>
+          <span>Falar com a Loja</span>
+        </a>
+        <a href="/menu" class="btn-outline-editorial px-4 py-2.5 text-xs font-semibold">
+          <span>Novo Pedido</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-white">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- Coluna Esquerda: Stepper e Mapa -->
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- Stepper / Status Timeline Editorial -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#F0DEE7] shadow-sm">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-[#85707A] block mb-6">Progresso do Pedido</span>
+        
+        <div class="relative flex items-center justify-between">
+          <!-- Linha de Fundo do Stepper -->
+          <div class="absolute left-6 right-6 top-5 h-0.5 bg-[#F0DEE7] z-0"></div>
+          
+          <% 
+            let progressWidth = '0%';
+            if (order.status === 'preparing') progressWidth = '33%';
+            if (order.status === 'in_transit') progressWidth = '66%';
+            if (order.status === 'delivered') progressWidth = '88%';
+          %>
+          <div id="stepProgressLine" class="absolute left-6 top-5 h-0.5 bg-[#FF70B0] z-0 transition-all duration-700" style="width: <%= progressWidth %>;"></div>
+
+          <!-- Step 1: Recebido -->
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <div class="w-10 h-10 rounded-full <%= ['pending', 'preparing', 'in_transit', 'delivered'].includes(order.status) ? 'bg-[#181114] text-white' : 'bg-[#FAF7F9] text-[#85707A]' %> flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm">
+              01
+            </div>
+            <span class="text-xs font-semibold text-[#181114] mt-2.5">Recebido</span>
+            <span class="text-[10px] text-[#85707A]">Registado</span>
+          </div>
+
+          <!-- Step 2: Em Preparação -->
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <div class="w-10 h-10 rounded-full <%= ['preparing', 'in_transit', 'delivered'].includes(order.status) ? 'bg-[#181114] text-white' : 'bg-[#FAF7F9] text-[#85707A]' %> flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm">
+              02
+            </div>
+            <span class="text-xs font-semibold text-[#181114] mt-2.5">Na Cozinha</span>
+            <span class="text-[10px] text-[#85707A]">Rua da ANE</span>
+          </div>
+
+          <!-- Step 3: Em Rota / Pronto -->
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <div id="stepInTransitIcon" class="w-10 h-10 rounded-full <%= ['in_transit', 'delivered'].includes(order.status) ? 'bg-[#FF70B0] text-white' : 'bg-[#FAF7F9] text-[#85707A]' %> flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm">
+              03
+            </div>
+            <span class="text-xs font-semibold text-[#181114] mt-2.5"><%= order.fulfillmentType === 'pickup' ? 'Pronto' : 'Em Rota' %></span>
+            <span id="stepRadarLiveSub" class="text-[10px] text-[#D93883] font-medium"><%= order.fulfillmentType === 'pickup' ? 'Balcão' : 'GPS Ativo' %></span>
+          </div>
+
+          <!-- Step 4: Concluído -->
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <div class="w-10 h-10 rounded-full <%= order.status === 'delivered' ? 'bg-emerald-600 text-white' : 'bg-[#FAF7F9] text-[#85707A]' %> flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm">
+              04
+            </div>
+            <span class="text-xs font-semibold text-[#181114] mt-2.5">Entregue</span>
+            <span class="text-[10px] text-[#85707A]">Concluído</span>
+          </div>
+
+        </div>
+
+        <!-- Banner de Estimativa -->
+        <div class="mt-7 p-4 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider font-bold text-[#85707A] block">Previsão Estimada</span>
+            <p id="liveEtaText" class="text-sm font-semibold text-[#181114] mt-0.5">
+              <%= order.fulfillmentType === 'pickup' ? `Pronto para levantamento em ~${order.estimatedMinutes} minutos` : `Entrega estimada em ~${order.estimatedMinutes} minutos` %>
+            </p>
+          </div>
+          <div class="sm:text-right">
+            <span class="text-[10px] uppercase tracking-wider font-bold text-[#85707A] block">Destino / Loja</span>
+            <span class="text-xs font-semibold text-[#D93883]"><%= order.fulfillmentType === 'pickup' ? 'Rua da ANE, Alto Gingone' : `${order.neighborhood}, Pemba` %></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Container do Mapa Leaflet -->
+      <div class="bg-white rounded-3xl p-4 border border-[#F0DEE7] shadow-sm overflow-hidden">
+        <div class="p-2 flex items-center justify-between text-xs border-b border-[#F0DEE7] mb-3">
+          <span class="font-semibold text-[#181114] flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-[#FF70B0]"></i>
+            <span>Mapa em Tempo Real · Rua da ANE, Alto Gingone, Pemba</span>
+          </span>
+          <span class="text-[11px] text-[#85707A] tabular-nums flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Atualização 5s</span>
+          </span>
+        </div>
+
+        <div id="trackingMap" class="w-full h-80 sm:h-[400px] rounded-2xl z-10 border border-[#F0DEE7]"></div>
+
+        <div class="pt-3 px-2 flex flex-wrap items-center justify-between text-xs text-[#524149] gap-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#181114]"></span>
+            <span>Totally Baked (Rua da ANE)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#FF70B0]"></span>
+            <span>Estafeta Totally Baked</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-sky-600"></span>
+            <span>Destino do Cliente</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Coluna Direita: Resumo Financeiro e Dados -->
+    <div class="lg:col-span-5 space-y-6">
+      
+      <!-- Card: Itens -->
+      <div class="bg-white rounded-3xl p-6 border border-[#F0DEE7] shadow-sm">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-[#85707A] block mb-4">Itens da Encomenda</span>
+
+        <div class="divide-y divide-[#F0DEE7] max-h-80 overflow-y-auto pr-1">
+          <% order.items.forEach(item => { %>
+            <div class="py-3 flex items-center gap-3.5">
+              <img src="<%= item.imageUrl || 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=200&q=80' %>" alt="<%= item.name %>" class="w-12 h-12 rounded-xl object-cover bg-[#FAF7F9] border border-[#F0DEE7] flex-shrink-0">
+              <div class="flex-grow min-w-0">
+                <h4 class="font-moret text-base font-bold text-[#181114] truncate"><%= item.name %></h4>
+                <% if (item.notes) { %>
+                  <p class="text-[11px] text-[#85707A] truncate"><%= item.notes %></p>
+                <% } %>
+                <span class="text-[11px] text-[#524149] tabular-nums"><%= item.quantity %>x · <%= item.price %> MZN</span>
+              </div>
+              <span class="text-xs font-bold text-[#181114] tabular-nums">
+                <%= item.price * item.quantity %> MZN
+              </span>
+            </div>
+          <% }) %>
+        </div>
+
+        <div class="pt-4 mt-4 border-t border-[#F0DEE7] space-y-2 text-xs">
+          <div class="flex justify-between text-[#524149]">
+            <span>Subtotal dos produtos</span>
+            <span class="tabular-nums font-semibold text-[#181114]"><%= order.subtotal %> MZN</span>
+          </div>
+          <div class="flex justify-between text-[#524149]">
+            <span><%= order.fulfillmentType === 'pickup' ? 'Levantamento na Loja' : `Entrega (${order.neighborhood})` %></span>
+            <span class="tabular-nums font-semibold text-[#181114]"><%= order.deliveryFee === 0 ? 'Grátis (0 MZN)' : `+${order.deliveryFee} MZN` %></span>
+          </div>
+          <div class="border-t border-[#F0DEE7] pt-2.5 flex justify-between items-baseline text-sm text-[#181114]">
+            <span class="font-bold">Total Geral</span>
+            <span class="tabular-nums font-bold text-[#D93883] text-lg"><%= order.total %> MZN</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Detalhes de Entrega & Pagamento -->
+      <div class="bg-[#FAF7F9] rounded-3xl p-6 border border-[#F0DEE7] space-y-3.5">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-[#85707A] block">Dados de Entrega & Contacto</span>
+        
+        <div class="space-y-3 text-xs">
+          <div>
+            <span class="font-semibold text-[#181114] block"><%= order.fulfillmentType === 'pickup' ? 'Local de Levantamento:' : 'Morada de Entrega:' %></span>
+            <p class="text-[#524149] mt-0.5 leading-relaxed"><%= order.deliveryAddress %></p>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-[#F0DEE7]">
+            <span class="font-semibold text-[#181114]">Contacto do Cliente:</span>
+            <span class="text-[#524149] tabular-nums font-medium"><%= order.customerPhone %></span>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-[#F0DEE7]">
+            <span class="font-semibold text-[#181114]">Método de Pagamento:</span>
+            <span class="uppercase font-bold text-[#D93883]">
+              <%= order.paymentMethod === 'mpesa' ? 'M-Pesa (Vodacom)' : order.paymentMethod === 'emola' ? 'E-Mola (Movitel)' : order.paymentMethod === 'pos' ? 'POS / Cartão' : 'Numerário' %>
+              <% if (order.changeFor) { %>
+                <span class="text-[#524149] font-normal lowercase">(troco p/ <%= order.changeFor %> MZN)</span>
+              <% } %>
+            </span>
+          </div>
+
+          <% if (order.notes) { %>
+            <div class="p-3 bg-white rounded-xl border border-[#F0DEE7] text-[#181114] text-xs">
+              <strong>Observações:</strong> <%= order.notes %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  window.TRACKING_DATA = {
+    orderId: "<%= order.id %>",
+    token: "<%= typeof orderToken !== 'undefined' ? orderToken : '' %>",
+    status: "<%= order.status %>",
+    fulfillmentType: "<%= order.fulfillmentType || 'delivery' %>",
+    store: <%- JSON.stringify(store) %>,
+    customerCoords: <%- JSON.stringify(order.coords) %>,
+    courierCoords: <%- JSON.stringify(order.courierCoords || store) %>,
+    customerName: <%- JSON.stringify(order.customerName) %>,
+    neighborhood: <%- JSON.stringify(order.neighborhood) %>
+  };
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="/js/tracking.js?v=20261028-henrietta"></script>
+
+<%- include('partials/footer') %>

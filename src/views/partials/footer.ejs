@@ -1,0 +1,577 @@
+  </main>
+
+  <!-- =====================================================================
+       MODAL SHEET GLOBAL DE PERSONALIZAÇÃO DE PRODUTO (HOME & MENU)
+       ===================================================================== -->
+  <div id="productDetailSheetBackdrop" class="fixed inset-0 bg-[#181114]/45 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <aside id="productDetailSheet" class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto light-glass-sheet bg-white rounded-t-[32px] z-50 transform translate-y-full transition-transform duration-300 ease-out max-h-[92vh] overflow-y-auto border-x border-t border-[#F0DEE7]">
+    
+    <!-- Imagem de Destaque com Botão Fechar e Favorito -->
+    <div class="relative h-60 sm:h-68 w-full overflow-hidden bg-[#FAF7F9] rounded-t-[32px]">
+      <img id="sheetProductImg" src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=800&q=80" alt="Produto" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20"></div>
+
+      <button 
+        type="button" 
+        onclick="window.closeProductCustomizer()" 
+        class="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-[#F0DEE7] flex items-center justify-center text-[#181114] text-sm hover:bg-[#FF70B0] hover:text-white transition-all shadow-sm active:scale-95"
+        aria-label="Voltar">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <button 
+        type="button" 
+        onclick="window.toggleFavorite(this)" 
+        class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-[#F0DEE7] flex items-center justify-center text-[#FF70B0] hover:scale-105 transition-transform shadow-sm active:scale-95"
+        aria-label="Guardar nos favoritos">
+        <i class="fa-regular fa-heart text-sm"></i>
+      </button>
+
+      <div class="absolute bottom-3 left-5">
+        <span class="badge-spicy font-semibold">Produção Fresca · Pemba</span>
+      </div>
+    </div>
+
+    <!-- Corpo do Sheet em Tema Branco -->
+    <div class="p-6 sm:p-7 space-y-5 bg-white">
+      
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <span class="font-feline text-xl text-[#D93883] block -mb-0.5">Escolha artesanal</span>
+          <h2 id="sheetProductName" class="font-moret text-2xl sm:text-3xl font-bold text-[#181114]">
+            Produto Totally Baked
+          </h2>
+          <div class="flex items-center gap-2 mt-1.5 text-xs">
+            <span class="text-[#D93883] font-semibold flex items-center gap-1 bg-[#FFECF5] px-2.5 py-0.5 rounded-full border border-[#FFC4DE]">
+              <i class="fa-solid fa-star text-[10px]"></i> 4.9
+            </span>
+            <span class="text-[#85707A]">Rua da ANE, Alto Gingone</span>
+          </div>
+        </div>
+        <div class="text-right flex-shrink-0">
+          <span class="text-[10px] uppercase tracking-wider text-[#85707A] font-semibold block">Unitário</span>
+          <span id="sheetProductPrice" class="text-2xl font-bold text-[#D93883] tabular-nums">
+            0 MZN
+          </span>
+        </div>
+      </div>
+
+      <p id="sheetProductDesc" class="text-xs sm:text-sm text-[#524149] font-normal leading-relaxed">
+        Preparado diariamente com ingredientes selecionados na nossa cozinha em Pemba.
+      </p>
+
+      <!-- Seção de Customização -->
+      <div class="space-y-4 pt-4 border-t border-[#F0DEE7]">
+        <h3 class="text-xs uppercase tracking-wider text-[#85707A] font-bold">
+          Personalizar Pedido
+        </h3>
+
+        <!-- 1. Formato / Porção -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <span class="text-xs text-[#181114] font-semibold">Formato / Porção</span>
+          <div class="flex items-center gap-1 bg-[#FAF7F9] p-1 rounded-full border border-[#F0DEE7]">
+            <button type="button" onclick="window.selectSize(this, 1, 'Individual')" class="segmented-pill active">Individual</button>
+            <button type="button" onclick="window.selectSize(this, 1.4, 'Duplo (+40%)')" class="segmented-pill">Duplo (+40%)</button>
+            <button type="button" onclick="window.selectSize(this, 1.8, 'Caixa Partilha')" class="segmented-pill">Partilha</button>
+          </div>
+        </div>
+
+        <!-- 2. Opções Rápidas -->
+        <div class="space-y-2.5 pt-1">
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-temperature-arrow-up text-[#D93883] text-xs"></i>
+              <span class="text-xs text-[#181114] font-medium">Servir / embalar quentinho ao sair</span>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" id="addonWarm" checked>
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-solid fa-sparkles text-[#D93883] text-xs"></i>
+              <span class="text-xs text-[#181114] font-medium">Extra manteiga, calda ou acompanhamento (+30 MZN)</span>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" id="addonButter" onchange="window.updateCustomizerTotal()">
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 3. Nota Especial (Dedicatória de Bolo / Ponto do Café / Sem Açúcar) -->
+        <div>
+          <label for="sheetCustomNote" class="block text-[11px] font-semibold text-[#524149] mb-1">
+            Nota especial ou dedicatória (opcional)
+          </label>
+          <input 
+            id="sheetCustomNote"
+            type="text"
+            maxlength="100"
+            placeholder="Ex: Escrever 'Parabéns Ana', sem canela, bem passado..."
+            class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114] placeholder:text-[#85707A] transition-colors">
+        </div>
+      </div>
+
+      <!-- Barra de Ação Inferior com Stepper e Botão Adicionar -->
+      <div class="pt-4 border-t border-[#F0DEE7] flex items-center gap-3.5">
+        <div class="stepper-pill">
+          <button type="button" onclick="window.adjustSheetQty(-1)" class="stepper-btn" aria-label="Diminuir quantidade">-</button>
+          <span id="sheetQtyDisplay" class="tabular-nums text-sm font-bold w-6 text-center text-[#181114]">1</span>
+          <button type="button" onclick="window.adjustSheetQty(1)" class="stepper-btn" aria-label="Aumentar quantidade">+</button>
+        </div>
+
+        <button 
+          type="button" 
+          onclick="window.confirmCustomizedAdd()"
+          class="flex-grow btn-rose-glow min-h-[48px] py-3 px-5 text-xs sm:text-sm font-semibold flex items-center justify-between">
+          <span>Adicionar à Cesta</span>
+          <span id="sheetBtnPrice" class="tabular-nums bg-white/20 px-2.5 py-0.5 rounded-full font-bold">140 MZN</span>
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- =====================================================================
+       DRAWER LATERAL DO CARRINHO (TEMA BRANCO EDITORIAL)
+       ===================================================================== -->
+  <div id="cartDrawerBackdrop" class="fixed inset-0 bg-[#181114]/45 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  
+  <aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-out flex flex-col border-l border-[#F0DEE7]">
+    <!-- Header Carrinho -->
+    <div class="p-6 border-b border-[#F0DEE7] flex items-center justify-between bg-[#FFFBFD]">
+      <div>
+        <span class="font-feline text-xl text-[#D93883] block -mb-1">O seu pedido</span>
+        <h3 class="font-moret text-2xl font-bold text-[#181114]">Resumo da Cesta</h3>
+      </div>
+      <button id="closeCartBtn" type="button" class="w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FF70B0] text-[#181114] hover:text-white flex items-center justify-center transition-colors border border-[#F0DEE7]" aria-label="Fechar cesta">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Barra de Entrega Cortesia (Meta: 1.500 MZN) -->
+    <div class="px-6 py-3.5 bg-[#FFECF5]/55 border-b border-[#F0DEE7]">
+      <div class="flex justify-between items-center text-xs mb-1.5">
+        <span id="freeShippingText" class="text-[#524149] font-medium">Entrega grátis em Pemba acima de 1.500 MZN</span>
+        <span id="freeShippingPercent" class="tabular-nums text-[#D93883] font-bold">0%</span>
+      </div>
+      <div class="w-full h-2 bg-white rounded-full overflow-hidden border border-[#FFC4DE]">
+        <div id="freeShippingBar" class="h-full bg-gradient-to-r from-[#FF70B0] to-[#FFA0CA] transition-all duration-500 rounded-full" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Lista de Itens do Carrinho -->
+    <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-6 space-y-3.5 bg-white">
+      <div class="text-center py-14 text-[#85707A]">
+        <div class="w-14 h-14 rounded-2xl bg-[#FFECF5] text-[#D93883] flex items-center justify-center mx-auto mb-3 border border-[#FFC4DE]">
+          <i class="fa-solid fa-bag-shopping text-lg"></i>
+        </div>
+        <p class="text-sm text-[#181114] font-semibold">A sua cesta está vazia</p>
+        <p class="text-xs mt-1 text-[#85707A]">Adicione pães frescos, bolos, sorvetes ou refeições do nosso menu.</p>
+      </div>
+    </div>
+
+    <!-- Rodapé do Carrinho com Totais & Botão Finalizar -->
+    <div class="p-6 border-t border-[#F0DEE7] bg-[#FFFBFD] space-y-3">
+      <div class="flex justify-between text-xs text-[#524149]">
+        <span>Subtotal dos Produtos</span>
+        <span id="cartSubtotal" class="tabular-nums text-[#181114] text-sm font-bold">0 MZN</span>
+      </div>
+      <div class="flex justify-between text-xs text-[#524149]">
+        <span>Entrega ou Levantamento</span>
+        <span id="cartDeliveryEst" class="font-medium text-[#85707A]">Calculada a seguir</span>
+      </div>
+      <div class="border-t border-[#F0DEE7] pt-3 flex justify-between items-baseline text-sm text-[#181114]">
+        <span class="font-bold">Total Estimado</span>
+        <span id="cartTotal" class="tabular-nums text-xl font-bold text-[#D93883]">0 MZN</span>
+      </div>
+
+      <button id="openCheckoutModalBtn" type="button" class="btn-rose-glow w-full min-h-[48px] py-3.5 px-4 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+        <span>Finalizar Encomenda</span>
+        <i class="fa-solid fa-arrow-right text-xs"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- =====================================================================
+       MODAL DE CHECKOUT DE PRODUÇÃO (ENTREGA AO DOMICÍLIO OU LEVANTAMENTO)
+       ===================================================================== -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#181114]/50 backdrop-blur-sm p-3 sm:p-4 hidden opacity-0 transition-opacity duration-200">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-[#F0DEE7] p-5 sm:p-7 relative text-[#181114]">
+      <button id="closeCheckoutModalBtn" type="button" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FF70B0] text-[#181114] hover:text-white flex items-center justify-center transition-colors border border-[#F0DEE7]" aria-label="Fechar checkout">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <div class="mb-5 pr-10">
+        <span class="font-feline text-xl text-[#D93883] block -mb-0.5">Confirmação rápida</span>
+        <h2 class="font-moret text-2xl sm:text-3xl font-bold text-[#181114]">Concluir Pedido em Pemba</h2>
+        <p class="text-xs text-[#524149] mt-1">Escolha entre entrega na sua porta com rastreio GPS ou levantamento grátis na Rua da ANE.</p>
+      </div>
+
+      <form id="checkoutForm" class="space-y-4">
+        
+        <!-- Seletor de Modalidade: Entrega vs Levantamento na Loja -->
+        <div class="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
+          <button 
+            type="button" 
+            data-fulfillment-btn="delivery"
+            onclick="window.Cart.setFulfillmentType('delivery')"
+            class="min-h-[42px] py-2 px-3 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-2 bg-[#181114] text-white border-[#181114]">
+            <i class="fa-solid fa-motorcycle text-[11px]"></i>
+            <span>Entrega ao Domicílio</span>
+          </button>
+          <button 
+            type="button" 
+            data-fulfillment-btn="pickup"
+            onclick="window.Cart.setFulfillmentType('pickup')"
+            class="min-h-[42px] py-2 px-3 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-2 bg-white text-[#524149] border-[#F0DEE7]">
+            <i class="fa-solid fa-store text-[11px]"></i>
+            <span>Levantar na Loja (0 MZN)</span>
+          </button>
+        </div>
+
+        <!-- Nome e Telefone -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Nome Completo *</label>
+            <input type="text" name="customerName" required autocomplete="name" placeholder="Ex: Anabela Mondlane" class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114] placeholder:text-[#85707A]">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Telemóvel / WhatsApp *</label>
+            <input type="tel" name="customerPhone" required autocomplete="tel" placeholder="+258 84 / 85 / 86 / 87..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114] placeholder:text-[#85707A]">
+          </div>
+        </div>
+
+        <!-- Bloco A: Dados de Entrega ao Domicílio -->
+        <div id="deliveryAddressSection" class="space-y-3.5">
+          <div>
+            <label for="checkoutNeighborhood" class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Bairro em Pemba *</label>
+            <select id="checkoutNeighborhood" name="neighborhood" required class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114] font-medium">
+              <option value="">Selecione o seu bairro...</option>
+              <option value="Alto Gingone">Alto Gingone (100 MZN · ~20 min)</option>
+              <option value="Centro">Centro / Cimento (80 MZN · ~20 min)</option>
+              <option value="Wimbi">Praia do Wimbi (150 MZN · ~32 min)</option>
+              <option value="Expansão">Expansão (120 MZN · ~25 min)</option>
+              <option value="Cariacó">Cariacó (100 MZN · ~25 min)</option>
+              <option value="Natite">Natite (120 MZN · ~28 min)</option>
+              <option value="Paquitequete">Paquitequete (130 MZN · ~30 min)</option>
+              <option value="Maringanha">Maringanha (180 MZN · ~38 min)</option>
+              <option value="Chuiba">Chuiba (200 MZN · ~42 min)</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="checkoutAddressInput" class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Morada ou Ponto de Referência *</label>
+            <textarea id="checkoutAddressInput" name="deliveryAddress" required rows="2" placeholder="Ex: Próximo à Escola / Avenida / Cor do portão..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114] placeholder:text-[#85707A]"></textarea>
+          </div>
+
+          <!-- GPS Geolocation Capture -->
+          <div class="p-3.5 rounded-2xl bg-[#FFECF5]/60 border border-[#FFC4DE]">
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="text-[11px] font-bold text-[#181114] flex items-center gap-1.5">
+                <i class="fa-solid fa-location-dot text-[#D93883]"></i>
+                <span>Localização GPS (Opcional)</span>
+              </span>
+              <button type="button" id="captureGpsBtn" class="text-[11px] px-3 py-1.5 rounded-full bg-white hover:bg-[#FF70B0] text-[#181114] hover:text-white border border-[#FFC4DE] font-semibold flex items-center gap-1.5 transition-colors shadow-sm">
+                <i class="fa-solid fa-crosshairs text-[10px]"></i>
+                <span>Usar meu GPS</span>
+              </button>
+            </div>
+            <p id="gpsStatusText" class="text-[11px] text-[#524149]">
+              Ajuda o nosso estafeta a chegar diretamente à sua porta em Pemba.
+            </p>
+            <input type="hidden" name="latitude" id="inputLatitude" value="">
+            <input type="hidden" name="longitude" id="inputLongitude" value="">
+          </div>
+        </div>
+
+        <!-- Bloco B: Levantamento na Loja (Rua da ANE) -->
+        <div id="pickupStoreInfo" class="hidden p-4 rounded-2xl bg-[#FFECF5]/65 border border-[#FFC4DE] space-y-2">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="text-xs font-bold text-[#181114] flex items-center gap-1.5">
+                <i class="fa-solid fa-store text-[#D93883]"></i>
+                <span>Levantamento na Loja Totally Baked</span>
+              </span>
+              <p class="text-xs text-[#524149] mt-1 leading-relaxed">
+                <strong>Rua da ANE, Bairro Alto Gingone</strong>, Pemba (3200).<br>
+                Preparação prioritária em cerca de <strong>15 a 20 minutos</strong> — sem taxa de entrega.
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold flex-shrink-0">Grátis</span>
+          </div>
+        </div>
+
+        <!-- Forma de Pagamento Moçambicana -->
+        <div>
+          <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-2">Método de Pagamento *</label>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <label class="flex items-center gap-2 p-3 rounded-xl bg-[#FAF7F9] border border-[#F0DEE7] cursor-pointer hover:border-[#FF70B0] transition-colors">
+              <input type="radio" name="paymentMethod" value="mpesa" checked class="accent-[#FF70B0]">
+              <span class="font-semibold text-[#181114]">M-Pesa (Vodacom)</span>
+            </label>
+            <label class="flex items-center gap-2 p-3 rounded-xl bg-[#FAF7F9] border border-[#F0DEE7] cursor-pointer hover:border-[#FF70B0] transition-colors">
+              <input type="radio" name="paymentMethod" value="emola" class="accent-[#FF70B0]">
+              <span class="font-semibold text-[#181114]">E-Mola (Movitel)</span>
+            </label>
+            <label class="flex items-center gap-2 p-3 rounded-xl bg-[#FAF7F9] border border-[#F0DEE7] cursor-pointer hover:border-[#FF70B0] transition-colors">
+              <input type="radio" name="paymentMethod" value="pos" class="accent-[#FF70B0]">
+              <span class="font-medium text-[#181114]">POS / Cartão</span>
+            </label>
+            <label class="flex items-center gap-2 p-3 rounded-xl bg-[#FAF7F9] border border-[#F0DEE7] cursor-pointer hover:border-[#FF70B0] transition-colors">
+              <input type="radio" name="paymentMethod" value="cash" class="accent-[#FF70B0]">
+              <span class="font-medium text-[#181114]">Numerário</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Orientação Transparente M-Pesa / E-Mola -->
+        <div id="mobileMoneyHint" class="p-3 rounded-xl bg-[#FAF7F9] border border-[#F0DEE7] text-[11px] text-[#524149] flex items-start gap-2">
+          <i class="fa-solid fa-shield-halved text-[#D93883] mt-0.5"></i>
+          <span>Ao confirmar, verá a referência da encomenda e o atalho direto para enviar o comprovativo M-Pesa / E-Mola pelo nosso WhatsApp oficial (<strong>+258 84 595 8546</strong>).</span>
+        </div>
+
+        <div id="changeForContainer" class="hidden">
+          <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Precisa de troco para quanto? (MZN)</label>
+          <input type="number" name="changeFor" placeholder="Ex: 1000" class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] text-[#181114]">
+        </div>
+
+        <!-- Observações do Pedido -->
+        <div>
+          <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Observações (Opcional)</label>
+          <input type="text" name="notes" maxlength="240" placeholder="Ex: Ligar ao chegar ao portão, guardanapos extra..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114] placeholder:text-[#85707A]">
+        </div>
+
+        <!-- Resumo Financeiro Final -->
+        <div class="p-4 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7] space-y-1.5 text-xs">
+          <div class="flex justify-between text-[#524149]">
+            <span>Subtotal dos itens</span>
+            <span id="modalSubtotal" class="tabular-nums font-semibold text-[#181114]">0 MZN</span>
+          </div>
+          <div class="flex justify-between text-[#524149]">
+            <span>Taxa de entrega</span>
+            <span id="modalDeliveryFee" class="tabular-nums font-semibold text-[#181114]">100 MZN</span>
+          </div>
+          <div class="border-t border-[#F0DEE7] pt-2 flex justify-between items-baseline font-bold text-sm text-[#181114]">
+            <span>Total a Pagar</span>
+            <span id="modalFinalTotal" class="tabular-nums text-[#D93883] text-lg font-bold">0 MZN</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-rose-glow w-full min-h-[48px] py-3.5 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Confirmar Encomenda Agora</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL DE CATERING CORPORATIVO & BOLOS DE CELEBRAÇÃO (PRODUÇÃO)
+       ===================================================================== -->
+  <div id="cateringModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#181114]/50 backdrop-blur-sm p-3 sm:p-4 hidden opacity-0 transition-opacity duration-200">
+    <div class="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-[#F0DEE7] p-5 sm:p-7 relative text-[#181114]">
+      <button type="button" onclick="window.closeCateringModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#FAF7F9] hover:bg-[#FF70B0] text-[#181114] hover:text-white flex items-center justify-center transition-colors border border-[#F0DEE7]" aria-label="Fechar janela de catering">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <div class="mb-5 pr-10">
+        <span class="font-feline text-xl text-[#D93883] block -mb-0.5">Eventos & Celebrações em Pemba</span>
+        <h2 class="font-moret text-2xl sm:text-3xl font-bold text-[#181114]">Catering & Bolos por Encomenda</h2>
+        <p class="text-xs text-[#524149] mt-1">Preencha os detalhes do seu evento ou bolo personalizado. Receberá atendimento imediato da nossa equipa.</p>
+      </div>
+
+      <form id="cateringForm" class="space-y-3.5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Nome ou Empresa *</label>
+            <input type="text" name="customerName" required placeholder="Ex: Carlos Mendes / ONG" class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114]">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Telefone / WhatsApp *</label>
+            <input type="tel" name="customerPhone" required placeholder="+258 84..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114]">
+          </div>
+        </div>
+
+        <div>
+          <label for="cateringEventType" class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Tipo de Serviço *</label>
+          <select id="cateringEventType" name="eventType" required class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114] font-medium">
+            <option value="Bolo de Aniversário / Celebração Personalizado">Bolo de Aniversário / Celebração Personalizado</option>
+            <option value="Catering Corporativo / Coffee-Break">Catering Corporativo / Coffee-Break</option>
+            <option value="Casamento / Baptizado / Evento Privado">Casamento / Baptizado / Evento Privado</option>
+            <option value="Almoços Executivos para Grupos">Almoços Executivos para Grupos / Empresas</option>
+            <option value="Mesa de Doces & Salgados Artesanais">Mesa de Doces & Salgados Artesanais</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Data Prevista</label>
+            <input type="date" name="eventDate" class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114]">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Nº de Convidados / Peso</label>
+            <input type="text" name="guestsCount" placeholder="Ex: 35 pessoas ou Bolo 2.5kg" class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114]">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-[#524149] uppercase tracking-wider mb-1">Sabores, Tema ou Pedido Especial</label>
+          <textarea name="details" rows="3" placeholder="Conte-nos os sabores preferidos, horário pretendido, local em Pemba ou inscrição no bolo..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#F0DEE7] focus:border-[#FF70B0] outline-none text-xs bg-[#FAF7F9] focus:bg-white text-[#181114]"></textarea>
+        </div>
+
+        <button type="submit" class="btn-rose-glow w-full min-h-[48px] py-3.5 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2">
+          <i class="fa-brands fa-whatsapp text-base"></i>
+          <span>Solicitar Orçamento no WhatsApp Oficial</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       RODAPÉ INSTITUCIONAL OFICIAL — TOTALLY BAKED PEMBA
+       ===================================================================== -->
+  <footer class="bg-[#FFFBFD] border-t border-[#F0DEE7] pt-14 pb-28 md:pb-14 text-[#524149] text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        
+        <!-- Coluna 1: Identidade Oficial -->
+        <div class="space-y-4">
+          <a href="/" class="flex items-center gap-3 group">
+            <div class="w-10 h-10 rounded-xl bg-[#FFECF5] flex items-center justify-center text-[#D93883] font-moret font-bold text-base border border-[#FFC4DE]">
+              TB
+            </div>
+            <div>
+              <span class="font-moret text-xl font-bold text-[#181114] block leading-none">Totally Baked</span>
+              <span class="font-feline text-base text-[#D93883]">Pemba · Cabo Delgado</span>
+            </div>
+          </a>
+          <p class="text-xs leading-relaxed text-[#524149]">
+            Padaria, pastelaria, cafetaria, sorvetes artesanais, refeições completas e catering em Pemba — uma marca construída com dedicação, consistência e sabor.
+          </p>
+          <div class="flex items-center gap-2.5 pt-1">
+            <a href="https://www.instagram.com/totally_baked_1/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @totally_baked_1" class="w-9 h-9 rounded-full bg-white hover:bg-[#FF70B0] text-[#181114] hover:text-white border border-[#F0DEE7] flex items-center justify-center transition-colors">
+              <i class="fa-brands fa-instagram text-sm"></i>
+            </a>
+            <a href="https://www.facebook.com/p/Totally-Baked-100060917605880/" target="_blank" rel="noopener noreferrer" aria-label="Facebook Totally Baked" class="w-9 h-9 rounded-full bg-white hover:bg-[#FF70B0] text-[#181114] hover:text-white border border-[#F0DEE7] flex items-center justify-center transition-colors">
+              <i class="fa-brands fa-facebook-f text-xs"></i>
+            </a>
+            <a href="https://wa.me/258845958546" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Totally Baked" class="w-9 h-9 rounded-full bg-white hover:bg-[#FF70B0] text-[#181114] hover:text-white border border-[#F0DEE7] flex items-center justify-center transition-colors">
+              <i class="fa-brands fa-whatsapp text-sm"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Coluna 2: Os Nossos Serviços -->
+        <div class="space-y-2.5">
+          <h4 class="font-bold text-[#181114] uppercase tracking-wider text-[11px]">Os Nossos Serviços</h4>
+          <ul class="space-y-2 text-[#524149] font-medium">
+            <li><a href="/menu?category=paes" class="hover:text-[#D93883] transition-colors">Padaria Artesanal & Levain</a></li>
+            <li><a href="/menu?category=bolos" class="hover:text-[#D93883] transition-colors">Pastelaria & Bolos de Festa</a></li>
+            <li><a href="/menu?category=bebidas" class="hover:text-[#D93883] transition-colors">Cafetaria & Sumos Naturais</a></li>
+            <li><a href="/menu?category=sorvetes" class="hover:text-[#D93883] transition-colors">Sorvetes Artesanais</a></li>
+            <li><a href="/menu?category=refeicoes" class="hover:text-[#D93883] transition-colors">Refeições & Almoços</a></li>
+            <li><button type="button" onclick="window.openCateringModal()" class="hover:text-[#D93883] transition-colors text-left">Catering Corporativo & Eventos</button></li>
+          </ul>
+        </div>
+
+        <!-- Coluna 3: Navegação Rápida -->
+        <div class="space-y-2.5">
+          <h4 class="font-bold text-[#181114] uppercase tracking-wider text-[11px]">Plataforma Online</h4>
+          <ul class="space-y-2 text-[#524149] font-medium">
+            <li><a href="/" class="hover:text-[#D93883] transition-colors">Página Inicial</a></li>
+            <li><a href="/menu" class="hover:text-[#D93883] transition-colors">Menu Completo & Encomendas</a></li>
+            <li><a href="/rastreio/ord-01" data-live-tracking-link class="hover:text-[#D93883] transition-colors">Rastreio GPS em Tempo Real</a></li>
+            <li><a href="/#sobre" class="hover:text-[#D93883] transition-colors">A Nossa História</a></li>
+            <li><a href="/admin" class="hover:text-[#D93883] transition-colors text-[#85707A]">Painel da Cozinha (/admin)</a></li>
+          </ul>
+        </div>
+
+        <!-- Coluna 4: Localização Real & Horários -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-[#181114] uppercase tracking-wider text-[11px]">Visite-nos em Pemba</h4>
+          <ul class="space-y-2.5 text-[#524149]">
+            <li class="flex items-start gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-[#FFECF5] text-[#D93883] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i class="fa-solid fa-location-dot text-[10px]"></i>
+              </span>
+              <span>Rua da ANE, Bairro Alto Gingone<br>Pemba, Cabo Delgado (3200)</span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-[#FFECF5] text-[#D93883] flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-phone text-[10px]"></i>
+              </span>
+              <a href="tel:+258845958546" class="hover:text-[#D93883] font-semibold text-[#181114]">+258 84 595 8546</a>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-[#FFECF5] text-[#D93883] flex items-center justify-center flex-shrink-0">
+                <i class="fa-regular fa-clock text-[10px]"></i>
+              </span>
+              <span>Todos os dias: 07h00 — 20h00</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="border-t border-[#F0DEE7] mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center text-[11px] text-[#85707A] gap-3">
+        <p>&copy; <%= new Date().getFullYear() %> Totally Baked Pemba. Todos os direitos reservados.</p>
+        <p>Rua da ANE, Bairro Alto Gingone · Pemba, Moçambique</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Bottom Navigation Dock Mobile (Mobile-Native Safe Area) -->
+  <nav class="md:hidden fixed bottom-3 left-3 right-3 z-40 light-glass-dock rounded-full py-2 px-5 flex items-center justify-around text-[#85707A] shadow-xl mobile-safe-dock" aria-label="Navegação inferior móvel">
+    <a href="/" class="min-w-[52px] py-1 flex flex-col items-center gap-0.5 <%= (typeof activeNav !== 'undefined' && activeNav === 'home') ? 'text-[#D93883] font-bold' : 'hover:text-[#181114]' %>">
+      <i class="fa-solid fa-house text-sm"></i>
+      <span class="text-[10px] font-medium">Início</span>
+    </a>
+    <a href="/menu" class="min-w-[52px] py-1 flex flex-col items-center gap-0.5 <%= (typeof activeNav !== 'undefined' && activeNav === 'menu') ? 'text-[#D93883] font-bold' : 'hover:text-[#181114]' %>">
+      <i class="fa-solid fa-utensils text-sm"></i>
+      <span class="text-[10px] font-medium">Menu</span>
+    </a>
+    <button type="button" onclick="window.Cart.openDrawer()" class="relative min-w-[56px] flex flex-col items-center gap-0.5 text-[#181114] font-semibold">
+      <div class="w-10 h-10 -mt-5 rounded-full bg-gradient-to-tr from-[#FF70B0] to-[#FFA0CA] text-white flex items-center justify-center shadow-[0_6px_16px_rgba(255,112,176,0.45)] border-2 border-white">
+        <i class="fa-solid fa-bag-shopping text-xs"></i>
+      </div>
+      <span class="text-[10px] text-[#D93883] font-bold">Cesta</span>
+      <span id="mobileDockBadge" class="absolute -top-5 right-1 w-4 h-4 rounded-full bg-[#181114] text-white text-[9px] font-bold flex items-center justify-center scale-0 transition-transform">0</span>
+    </button>
+    <a href="/rastreio/ord-01" data-live-tracking-link class="min-w-[52px] py-1 flex flex-col items-center gap-0.5 <%= (typeof activeNav !== 'undefined' && activeNav === 'tracking') ? 'text-[#D93883] font-bold' : 'hover:text-[#181114]' %>">
+      <i class="fa-solid fa-location-crosshairs text-sm"></i>
+      <span class="text-[10px] font-medium">Rastreio</span>
+    </a>
+  </nav>
+
+  <!-- Floating Quick-Cart Pill para Desktop -->
+  <div id="quickCartPill" class="hidden md:block fixed bottom-6 left-1/2 -translate-x-1/2 z-40 hidden-dock">
+    <button 
+      type="button"
+      onclick="window.Cart.openDrawer()"
+      class="light-glass-dock py-2.5 pl-3 pr-6 rounded-full text-[#181114] flex items-center gap-3.5 hover:scale-[1.03] active:scale-[0.98] transition-all border border-[#FF70B0]/40">
+      <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#FF70B0] to-[#FFA0CA] flex items-center justify-center text-xs font-bold text-white shadow-sm">
+        <i class="fa-solid fa-bag-shopping"></i>
+      </div>
+      <div class="text-left">
+        <div class="text-[10px] uppercase font-bold tracking-wider text-[#D93883] flex items-center gap-1.5">
+          <span id="dockItemCount">0 itens</span>
+          <span class="text-[#FFC4DE]">·</span>
+          <span id="dockSubtotal" class="tabular-nums">0 MZN</span>
+        </div>
+        <div class="text-xs font-bold text-[#181114]">
+          Ver Cesta & Finalizar &rarr;
+        </div>
+      </div>
+    </button>
+  </div>
+
+  <!-- Scripts Globais (Carrinho + Motor GSAP Henrietta) -->
+  <script src="/js/cart.js?v=20261028-henrietta"></script>
+  <script src="/js/gsap-transitions.js?v=20261028-henrietta" defer></script>
+</body>
+</html>

@@ -1,0 +1,752 @@
+<%- include('partials/header') %>
+
+<div class="bg-white overflow-x-hidden">
+
+  <!-- =====================================================================
+       1. HERO EDITORIAL MOBILE-FIRST & SIMULADOR DE ENTREGA EM PEMBA
+       ===================================================================== -->
+  <section class="relative border-b border-[#F0DEE7] bg-gradient-to-b from-[#FFFBFD] via-white to-white pt-5 pb-12 sm:pt-10 sm:pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-12 items-center">
+
+        <!-- Coluna Esquerda: Tese Editorial Oficial & CTAs Mobile-Native -->
+        <div class="lg:col-span-7 min-w-0 space-y-5 sm:space-y-6">
+          
+          <!-- Selo Superior Compacto -->
+          <div data-ix-reveal="fade-up" data-ix-trigger="load" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFECF5] border border-[#FFC4DE] text-xs font-medium text-[#181114]">
+            <!-- Animated Scooter/Pin Icon -->
+            <svg class="w-4 h-4 text-[#D93883] svg-scooter flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="7" cy="17" r="2"></circle>
+              <circle cx="17" cy="17" r="2"></circle>
+              <path d="M5 17H3v-4l2-5h9l4 5h3v4h-2"></path>
+              <path d="M9 17h6"></path>
+            </svg>
+            <span>Rua da ANE, Alto Gingone · Entregas em toda Pemba</span>
+          </div>
+
+          <!-- Headline Principal com Split de Palavras GSAP (Henrietta Style) -->
+          <div>
+            <span data-ix-reveal="fade-up" data-ix-trigger="load" data-ix-delay="0.05" class="font-feline text-2xl sm:text-3xl text-[#D93883] block mb-1">
+              Padaria, Pastelaria, Cafetaria & Catering
+            </span>
+            <h1 data-ix-reveal="words" data-ix-trigger="load" class="font-moret text-[34px] leading-[1.08] sm:text-5xl lg:text-[56px] font-bold tracking-tight text-[#181114]">
+              Da pastelaria artesanal às <span class="text-[#D93883] italic font-normal">refeições completas</span> em Pemba.
+            </h1>
+            <p data-ix-reveal="fade-up" data-ix-trigger="load" data-ix-delay="0.14" class="text-[#524149] text-sm sm:text-base max-w-xl font-normal leading-relaxed mt-3.5">
+              A sua experiência completa em pão fresco de fermentação natural, bolos de celebração, sorvetes artesanais, almoços executivos e serviço de catering com qualidade em cada detalhe.
+            </p>
+          </div>
+
+          <!-- Dupla de Ações Táteis (48px Touch Targets para Mobile) -->
+          <div data-ix-reveal="fade-up" data-ix-trigger="load" data-ix-delay="0.2" class="grid grid-cols-1 sm:flex sm:flex-wrap items-center gap-3 pt-1">
+            <a href="/menu" class="btn-rose-glow min-h-[48px] px-7 py-3 text-sm font-semibold inline-flex items-center justify-center gap-2.5">
+              <span>Ver o Menu & Encomendar</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+            <button type="button" onclick="window.openCateringModal()" class="btn-outline-editorial min-h-[48px] px-6 py-3 text-sm font-semibold inline-flex items-center justify-center gap-2">
+              <svg class="w-4 h-4 text-[#D93883]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span>Catering & Bolos de Festa</span>
+            </button>
+          </div>
+
+          <!-- Simulador Compacto de Entrega por Bairro + Levantamento na Loja -->
+          <div data-ix-reveal="fade-up" data-ix-trigger="load" data-ix-delay="0.26" class="bg-[#FAF7F9] p-4 sm:p-5 rounded-2xl border border-[#F0DEE7] space-y-3.5 max-w-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#F0DEE7]">
+              <div class="flex items-center gap-2 text-xs font-medium text-[#524149] flex-wrap">
+                <i class="fa-solid fa-location-dot text-[#FF70B0]"></i>
+                <label for="heroNeighborhoodSelect" class="font-semibold text-[#181114]">Simular entrega:</label>
+                <select 
+                  id="heroNeighborhoodSelect" 
+                  onchange="updateHeroDeliveryEstimate(this.value)"
+                  class="bg-white border border-[#FFC4DE] rounded-xl px-3 py-1.5 text-xs font-semibold text-[#181114] outline-none focus:border-[#FF70B0] cursor-pointer">
+                  <option value="100|20 min|Alto Gingone">Alto Gingone (100 MZN)</option>
+                  <option value="80|20 min|Centro da Cidade">Centro da Cidade (80 MZN)</option>
+                  <option value="150|32 min|Praia do Wimbi">Praia do Wimbi (150 MZN)</option>
+                  <option value="120|25 min|Expansão">Expansão (120 MZN)</option>
+                  <option value="100|25 min|Cariacó">Cariacó (100 MZN)</option>
+                  <option value="120|28 min|Natite">Natite (120 MZN)</option>
+                  <option value="130|30 min|Paquitequete">Paquitequete (130 MZN)</option>
+                  <option value="180|38 min|Maringanha">Maringanha (180 MZN)</option>
+                  <option value="200|42 min|Chuiba">Chuiba (200 MZN)</option>
+                  <option value="0|15 min|Levantamento Rua da ANE">Levantamento na Loja (Grátis)</option>
+                </select>
+              </div>
+              <div id="heroDeliveryResult" class="text-xs font-semibold tabular-nums bg-[#FFECF5] text-[#D93883] px-3 py-1 rounded-full self-start sm:self-auto">
+                Taxa: 100 MZN · ~20 min
+              </div>
+            </div>
+
+            <!-- Pesquisa Rápida no Catálogo -->
+            <form action="/menu" method="GET" class="flex items-center gap-2 min-w-0" role="search">
+              <div class="flex-grow min-w-0 bg-white rounded-xl px-3.5 py-2.5 flex items-center gap-2 border border-[#F0DEE7] focus-within:border-[#FF70B0] transition-colors">
+                <i class="fa-solid fa-magnifying-glass text-[#85707A] text-xs flex-shrink-0"></i>
+                <input 
+                  type="text" 
+                  name="q" 
+                  enterkeyhint="search"
+                  placeholder="Procurar pão, croissant, bolo, sorvete..." 
+                  class="w-full min-w-0 bg-transparent outline-none text-xs text-[#181114] placeholder:text-[#85707A]">
+              </div>
+              <button type="submit" class="px-4 py-2.5 rounded-xl bg-[#181114] hover:bg-[#FF70B0] text-white text-xs font-semibold transition-colors flex-shrink-0">
+                Buscar
+              </button>
+            </form>
+          </div>
+
+        </div>
+
+        <!-- Coluna Direita: Card Visual de Fornada & Combo Matinal (Com Parallax Suave no Desktop) -->
+        <div class="lg:col-span-5 min-w-0" data-parallax-scene>
+          <div data-ix-reveal="image" data-ix-trigger="load" data-ix-delay="0.16" class="bg-white rounded-3xl border border-[#F0DEE7] p-3.5 sm:p-5 shadow-[0_20px_50px_-20px_rgba(24,17,20,0.1)] relative">
+            
+            <div class="relative h-56 sm:h-72 rounded-2xl overflow-hidden bg-[#FAF7F9]">
+              <img 
+                src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=85" 
+                alt="Croissants folhados e café de especialidade da Totally Baked Pemba" 
+                class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent"></div>
+              
+              <div data-parallax-depth="10" class="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-sm text-[11px] font-semibold text-[#181114] flex items-center gap-1.5 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#FF70B0]"></span>
+                <span>Produção Fresca Diária</span>
+              </div>
+
+              <div data-parallax-depth="-12" class="absolute top-3 right-3 px-3 py-1 rounded-full bg-[#FF70B0] text-white text-[11px] font-bold shadow-sm">
+                Poupa 70 MZN
+              </div>
+
+              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
+                <span class="font-medium drop-shadow">★ 4.9 · Favorito em Pemba</span>
+                <span class="px-2.5 py-0.5 rounded-full bg-black/45 backdrop-blur-sm text-[11px]">Entrega grátis ≥ 1.500 MZN</span>
+              </div>
+            </div>
+
+            <div class="pt-4 px-1 space-y-3">
+              <div class="flex items-baseline justify-between gap-2">
+                <span class="text-xs font-semibold text-[#D93883]">A Nossa Sugestão da Manhã</span>
+                <div class="flex items-baseline gap-2 tabular-nums">
+                  <span class="text-xs text-[#85707A] line-through">290 MZN</span>
+                  <span class="font-moret text-2xl font-bold text-[#181114]">220 MZN</span>
+                </div>
+              </div>
+
+              <div>
+                <h2 class="font-moret text-xl sm:text-2xl font-bold text-[#181114] leading-snug">
+                  Combo Croissant Amanteigado & Cappuccino Cremoso
+                </h2>
+                <p class="text-xs text-[#524149] mt-1 leading-relaxed">
+                  Croissant laminado na manteiga recém-saído do forno acompanhado por cappuccino de especialidade moído na hora.
+                </p>
+              </div>
+
+              <div class="pt-1 flex items-center gap-2.5">
+                <button 
+                  type="button"
+                  onclick="window.openProductCustomizer('prod-07', 'Combo Croissant & Cappuccino', 220, 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=85', 'Croissant francês amanteigado acompanhado por Cappuccino Italiano cremoso preparado na hora.')"
+                  class="flex-grow btn-rose-glow min-h-[44px] py-2.5 px-5 text-xs font-semibold flex items-center justify-center gap-2">
+                  <span>Pedir combo agora</span>
+                  <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </button>
+                <button 
+                  type="button"
+                  onclick="window.Cart.addItem('prod-07', 'Croissant Francês Laminado na Manteiga', 140, 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=85')"
+                  class="min-h-[44px] px-4 py-2.5 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] border border-[#F0DEE7] text-xs font-semibold text-[#181114] transition-colors">
+                  + Cesta
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 space-y-20 sm:space-y-24">
+
+    <!-- =====================================================================
+         2. A NOSSA SUGESTÃO: "MUITO MAIS QUE UMA PASTELARIA" (TEXTO OFICIAL ELEVADO)
+         ===================================================================== -->
+    <section id="sugestao" class="bg-[#FAF7F9] rounded-3xl border border-[#F0DEE7] overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 items-center">
+        <div data-ix-reveal="image" class="lg:col-span-5 h-64 sm:h-80 lg:h-full min-h-[280px] overflow-hidden bg-[#FFECF5]">
+          <img 
+            src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=85" 
+            alt="Variedade de pães artesanais, bolos e pastelaria fina na Totally Baked Pemba" 
+            loading="lazy"
+            class="w-full h-full object-cover">
+        </div>
+        <div class="lg:col-span-7 p-6 sm:p-10 lg:p-12 space-y-5">
+          <div>
+            <span class="font-feline text-2xl text-[#D93883] block">Produtos frescos todos os dias</span>
+            <h2 data-ix-reveal="words" class="font-moret text-2xl sm:text-4xl font-bold text-[#181114] mt-0.5">
+              Muito mais que uma pastelaria em Pemba
+            </h2>
+            <p class="text-sm sm:text-base text-[#524149] mt-3 leading-relaxed">
+              Seja para um pequeno-almoço acabado de sair do forno, um almoço rápido e saboroso, um café demorado à tarde ou o bolo central da sua festa, reunimos num só espaço a solução perfeita para cada momento do seu dia.
+            </p>
+          </div>
+
+          <!-- Ícones Animados dos 4 Momentos do Dia -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            <div data-ix-group="moments" class="bg-white rounded-2xl p-3.5 border border-[#F0DEE7] flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-[#FFECF5] text-[#D93883] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 anim-svg-icon svg-sway" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22 16 8"/><path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z"/></svg>
+              </span>
+              <div>
+                <span class="text-xs font-bold text-[#181114] block">Padaria</span>
+                <span class="text-[11px] text-[#85707A]">Levain & Pão</span>
+              </div>
+            </div>
+
+            <div data-ix-group="moments" class="bg-white rounded-2xl p-3.5 border border-[#F0DEE7] flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-[#FFECF5] text-[#D93883] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 anim-svg-icon svg-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></svg>
+              </span>
+              <div>
+                <span class="text-xs font-bold text-[#181114] block">Pastelaria</span>
+                <span class="text-[11px] text-[#85707A]">Bolos & Doces</span>
+              </div>
+            </div>
+
+            <div data-ix-group="moments" class="bg-white rounded-2xl p-3.5 border border-[#F0DEE7] flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-[#FFECF5] text-[#D93883] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 anim-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path class="svg-steam-1" d="M10 2v2"/><path class="svg-steam-2" d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path class="svg-steam-1" d="M6 2v2"/></svg>
+              </span>
+              <div>
+                <span class="text-xs font-bold text-[#181114] block">Cafetaria</span>
+                <span class="text-[11px] text-[#85707A]">Café & Sumos</span>
+              </div>
+            </div>
+
+            <div data-ix-group="moments" class="bg-white rounded-2xl p-3.5 border border-[#F0DEE7] flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-[#FFECF5] text-[#D93883] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 anim-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z"/><path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12"/><path d="M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+              </span>
+              <div>
+                <span class="text-xs font-bold text-[#181114] block">Refeições</span>
+                <span class="text-[11px] text-[#85707A]">Almoço & Gelado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         3. O NOSSO MENU INTERATIVO (ENCOMENDAS ONLINE COM FILTRO INSTANTÂNEO)
+         ===================================================================== -->
+    <section id="menu-destaques" class="space-y-7">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span class="font-feline text-2xl text-[#D93883] block">Encomende sem sair de casa</span>
+          <h2 data-ix-reveal="words" class="font-moret text-3xl sm:text-4xl font-bold text-[#181114]">
+            Escolhas Frescas do Nosso Menu
+          </h2>
+          <p class="text-sm text-[#524149] mt-1">
+            Opções preparadas diariamente para entrega ao domicílio em Pemba ou levantamento rápido na Rua da ANE.
+          </p>
+        </div>
+        <a href="/menu" class="text-xs font-semibold text-[#D93883] hover:text-[#181114] transition-colors inline-flex items-center gap-1.5 self-start sm:self-auto">
+          <span>Abrir carta completa (<%= featured.length %>+ receitas)</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <!-- Pílulas de Categoria Instantâneas -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" role="tablist" aria-label="Filtrar categorias">
+        <button type="button" onclick="filterHomeCategory('todos', this)" class="category-pill active flex-shrink-0">
+          <span>Destaques</span>
+          <span class="pill-count"><%= featured.length %></span>
+        </button>
+        <% categories.forEach((cat) => { %>
+          <button type="button" onclick="filterHomeCategory('<%= cat.id %>', this)" class="category-pill flex-shrink-0">
+            <span><%= cat.name %></span>
+          </button>
+        <% }) %>
+      </div>
+
+      <!-- Grid Editorial de Produtos -->
+      <div id="homeProductsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <% featured.slice(0, 8).forEach(prod => { %>
+          <article 
+            data-ix-group="home-products"
+            class="card-glass-product flex flex-col justify-between group" 
+            data-cat="<%= prod.category %>">
+            
+            <div class="relative h-52 bg-[#FAF7F9] overflow-hidden cursor-pointer"
+                 onclick="window.openProductCustomizer('<%= prod.id %>', '<%= prod.name.replace(/'/g, "\\'") %>', <%= prod.price %>, '<%= prod.imageUrl || prod.image %>', '<%= prod.description ? prod.description.replace(/'/g, "\\'") : '' %>')">
+              <img 
+                src="<%= prod.imageUrl || prod.image %>" 
+                alt="<%= prod.name %>" 
+                loading="lazy" 
+                decoding="async" 
+                class="food-img w-full h-full object-cover">
+
+              <div class="absolute top-3 left-3 z-10">
+                <span class="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-sm text-[#181114] text-[11px] font-medium border border-[#F0DEE7]">
+                  <%= prod.badge || prod.categoryLabel %>
+                </span>
+              </div>
+
+              <button 
+                type="button" 
+                onclick="event.stopPropagation(); window.toggleFavorite(this)" 
+                class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#F0DEE7] flex items-center justify-center text-[#85707A] hover:text-[#FF70B0] transition-colors z-10"
+                aria-label="Guardar nos favoritos">
+                <i class="fa-regular fa-heart text-xs"></i>
+              </button>
+            </div>
+
+            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+              <div>
+                <div class="flex items-center justify-between text-xs text-[#85707A] mb-1">
+                  <span><%= prod.categoryLabel %></span>
+                  <span class="font-medium text-[#524149]">★ <%= prod.rating || '4.9' %></span>
+                </div>
+                <h3 
+                  onclick="window.openProductCustomizer('<%= prod.id %>', '<%= prod.name.replace(/'/g, "\\'") %>', <%= prod.price %>, '<%= prod.imageUrl || prod.image %>', '<%= prod.description ? prod.description.replace(/'/g, "\\'") : '' %>')"
+                  class="font-moret text-xl font-bold text-[#181114] group-hover:text-[#D93883] transition-colors cursor-pointer line-clamp-1">
+                  <%= prod.name %>
+                </h3>
+                <p class="text-xs text-[#524149] mt-1 leading-relaxed line-clamp-2">
+                  <%= prod.description %>
+                </p>
+              </div>
+
+              <div class="pt-3.5 border-t border-[#F0DEE7] flex items-center justify-between">
+                <span class="text-base font-bold text-[#181114] tabular-nums">
+                  <%= prod.price %> <span class="text-xs font-normal text-[#85707A]">MZN</span>
+                </span>
+
+                <div class="flex items-center gap-1.5">
+                  <button 
+                    type="button"
+                    onclick="window.openProductCustomizer('<%= prod.id %>', '<%= prod.name.replace(/'/g, "\\'") %>', <%= prod.price %>, '<%= prod.imageUrl || prod.image %>', '<%= prod.description ? prod.description.replace(/'/g, "\\'") : '' %>')"
+                    class="px-3 py-1.5 rounded-lg bg-[#FAF7F9] hover:bg-[#FFECF5] text-[#524149] hover:text-[#181114] text-xs font-medium border border-[#F0DEE7] transition-colors">
+                    Opções
+                  </button>
+                  <button 
+                    type="button"
+                    onclick="window.Cart.addItem('<%= prod.id %>', '<%= prod.name.replace(/'/g, "\\'") %>', <%= prod.price %>, '<%= prod.imageUrl || prod.image %>')"
+                    class="w-9 h-9 rounded-lg bg-[#FF70B0] hover:bg-[#E85295] text-white flex items-center justify-center transition-colors active:scale-95"
+                    aria-label="Adicionar <%= prod.name %> à cesta">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </article>
+        <% }) %>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         4. OS NOSSOS 6 SERVIÇOS EM PEMBA (COM ÍCONES SVG ANIMADOS)
+         ===================================================================== -->
+    <section id="servicos" class="space-y-8 pt-4 border-t border-[#F0DEE7]">
+      <div class="max-w-2xl">
+        <span class="font-feline text-2xl text-[#D93883] block">Soluções para todos os momentos</span>
+        <h2 data-ix-reveal="words" class="font-moret text-3xl sm:text-4xl font-bold text-[#181114]">
+          Os Nossos Serviços em Pemba
+        </h2>
+        <p class="text-sm sm:text-base text-[#524149] mt-2 leading-relaxed">
+          Da primeira fornada matinal de pão quente aos serviços completos de catering empresarial e bolos personalizados para as suas celebrações.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- 1. Padaria -->
+        <div data-ix-group="services" class="service-card flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="anim-icon-wrap">
+              <svg class="w-6 h-6 anim-svg-icon svg-sway" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 22 16 8"/>
+                <path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/>
+                <path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/>
+                <path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/>
+                <path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-moret text-2xl font-bold text-[#181114]">Padaria Artesanal</h3>
+              <p class="text-xs sm:text-sm text-[#524149] mt-1.5 leading-relaxed">
+                Pães frescos de fermentação natural (sourdough), baguetes crocantes e pães de queijo assados diariamente com ingredientes selecionados para o seu pequeno-almoço ou lanche.
+              </p>
+            </div>
+          </div>
+          <a href="/menu?category=paes" class="text-xs font-semibold text-[#D93883] hover:text-[#181114] inline-flex items-center gap-1.5">
+            <span>Ver pães frescos</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </a>
+        </div>
+
+        <!-- 2. Pastelaria -->
+        <div data-ix-group="services" class="service-card flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="anim-icon-wrap">
+              <svg class="w-6 h-6 anim-svg-icon svg-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/>
+                <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/>
+                <path d="M2 21h20"/>
+                <path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/>
+                <circle cx="7" cy="4" r="1"/><circle cx="12" cy="4" r="1"/><circle cx="17" cy="4" r="1"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-moret text-2xl font-bold text-[#181114]">Pastelaria & Bolos</h3>
+              <p class="text-xs sm:text-sm text-[#524149] mt-1.5 leading-relaxed">
+                Vasta seleção de croissants folhados, pastéis de nata, doces finos e bolos de aniversário personalizados que encantam os olhos e o paladar em qualquer celebração.
+              </p>
+            </div>
+          </div>
+          <a href="/menu?category=bolos" class="text-xs font-semibold text-[#D93883] hover:text-[#181114] inline-flex items-center gap-1.5">
+            <span>Explorar bolos e doces</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </a>
+        </div>
+
+        <!-- 3. Cafetaria -->
+        <div data-ix-group="services" class="service-card flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="anim-icon-wrap">
+              <svg class="w-6 h-6 anim-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path class="svg-steam-1" d="M6 2v3"/>
+                <path class="svg-steam-2" d="M10 2v3"/>
+                <path class="svg-steam-1" d="M14 2v3"/>
+                <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-moret text-2xl font-bold text-[#181114]">Cafetaria</h3>
+              <p class="text-xs sm:text-sm text-[#524149] mt-1.5 leading-relaxed">
+                O ponto de encontro ideal para uma pausa tranquila ou reunião em Pemba. Desfrute do nosso café de especialidade, cappuccinos, chás e sumos 100% naturais.
+              </p>
+            </div>
+          </div>
+          <a href="/menu?category=bebidas" class="text-xs font-semibold text-[#D93883] hover:text-[#181114] inline-flex items-center gap-1.5">
+            <span>Ver cafés e bebidas</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </a>
+        </div>
+
+        <!-- 4. Sorvetes Artesanais -->
+        <div data-ix-group="services" class="service-card flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="anim-icon-wrap">
+              <svg class="w-6 h-6 anim-svg-icon svg-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m7 11 4.08 10.35a1 1 0 0 0 1.84 0L17 11"/>
+                <path d="M17 7A5 5 0 0 0 7 7"/>
+                <path d="M17 7a2 2 0 0 1 0 4H7a2 2 0 0 1 0-4"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-moret text-2xl font-bold text-[#181114]">Sorvetes Artesanais</h3>
+              <p class="text-xs sm:text-sm text-[#524149] mt-1.5 leading-relaxed">
+                Sabores cremosos e refrescantes batidos artesanalmente — incluindo manga madura de Pemba, maracujá e pistácio — perfeitos para o clima tropical de Cabo Delgado.
+              </p>
+            </div>
+          </div>
+          <a href="/menu?category=sorvetes" class="text-xs font-semibold text-[#D93883] hover:text-[#181114] inline-flex items-center gap-1.5">
+            <span>Escolher sabores</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </a>
+        </div>
+
+        <!-- 5. Refeições -->
+        <div data-ix-group="services" class="service-card flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="anim-icon-wrap">
+              <svg class="w-6 h-6 anim-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <g class="svg-cloche-lid">
+                  <path d="M12 5a2 2 0 1 0 0-3 2 2 0 0 0 0 3Z"/>
+                  <path d="M4 15a8 8 0 0 1 16 0Z"/>
+                </g>
+                <line x1="2" y1="18" x2="22" y2="18"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-moret text-2xl font-bold text-[#181114]">Refeições & Almoços</h3>
+              <p class="text-xs sm:text-sm text-[#524149] mt-1.5 leading-relaxed">
+                Pratos do dia equilibrados, quiches douradas, saladas frescas e sanduíches gourmet em pão brioche. Opções rápidas, completas e saborosas para o seu almoço.
+              </p>
+            </div>
+          </div>
+          <a href="/menu?category=refeicoes" class="text-xs font-semibold text-[#D93883] hover:text-[#181114] inline-flex items-center gap-1.5">
+            <span>Ver almoços e lanches</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </a>
+        </div>
+
+        <!-- 6. Catering & Eventos (Destaque Comercial) -->
+        <div data-ix-group="services" class="service-card !bg-[#FFFBFD] !border-[#FFC4DE] flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="anim-icon-wrap !bg-[#FF70B0] !text-white !border-[#FF70B0]">
+              <svg class="w-6 h-6 anim-svg-icon svg-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="font-moret text-2xl font-bold text-[#181114]">Catering & Eventos</h3>
+                <span class="px-2.5 py-0.5 rounded-full bg-[#FFECF5] text-[#D93883] text-[10px] font-bold">Empresas & Festas</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#524149] mt-1.5 leading-relaxed">
+                Levamos a excelência da Totally Baked ao seu evento em Pemba: coffee-breaks corporativos, reuniões institucionais, aniversários, casamentos e celebrações privadas.
+              </p>
+            </div>
+          </div>
+          <button type="button" onclick="window.openCateringModal('Catering Corporativo / Coffee-Break')" class="w-full py-2.5 px-4 rounded-full bg-[#181114] hover:bg-[#FF70B0] text-white text-xs font-semibold transition-colors inline-flex items-center justify-center gap-2">
+            <span>Pedir Orçamento de Catering</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         5. A NOSSA HISTÓRIA ("SOBRE NÓS" — DEDICAÇÃO, CONSISTÊNCIA E SABOR)
+         ===================================================================== -->
+    <section id="sobre" class="pt-4 border-t border-[#F0DEE7]">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        
+        <div class="lg:col-span-6 space-y-5">
+          <span class="font-feline text-2xl sm:text-3xl text-[#D93883] block">A nossa história em Pemba</span>
+          <h2 data-ix-reveal="words" class="font-moret text-3xl sm:text-4xl font-bold text-[#181114] leading-tight">
+            Uma marca construída com dedicação, consistência e sabor.
+          </h2>
+          <p class="text-sm sm:text-base text-[#524149] leading-relaxed">
+            A <strong>Totally Baked</strong> nasceu de um sonho simples: criar um espaço em Pemba onde a qualidade, o cuidado artesanal e o sabor andassem sempre juntos. Ao longo do tempo, crescemos no coração do Bairro Alto Gingone e tornámo-nos uma casa de referência na cidade, unindo padaria, pastelaria, cafetaria, sorvetes, refeições e o serviço de catering mais elogiado da região.
+          </p>
+          <p class="text-sm text-[#524149] leading-relaxed">
+            Trabalhamos todos os dias com ingredientes selecionados, receitas rigorosamente testadas e uma equipa dedicada para garantir frescura, consistência e uma experiência acolhedora — quer nos visite na Rua da ANE, quer receba a nossa caixa na sua porta.
+          </p>
+
+          <!-- Os 3 Pilares Oficiais -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3">
+            <div data-ix-group="pillars" class="p-4 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
+              <span class="w-8 h-8 rounded-lg bg-[#FFECF5] text-[#D93883] flex items-center justify-center mb-2.5">
+                <i class="fa-solid fa-award text-xs"></i>
+              </span>
+              <h3 class="font-moret text-base font-bold text-[#181114]">Qualidade & Consistência</h3>
+              <p class="text-xs text-[#524149] mt-1 leading-relaxed">Ingredientes selecionados e processos cuidados em cada fornada.</p>
+            </div>
+
+            <div data-ix-group="pillars" class="p-4 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
+              <span class="w-8 h-8 rounded-lg bg-[#FFECF5] text-[#D93883] flex items-center justify-center mb-2.5">
+                <i class="fa-solid fa-fire-burner text-xs"></i>
+              </span>
+              <h3 class="font-moret text-base font-bold text-[#181114]">Frescura Diária</h3>
+              <p class="text-xs text-[#524149] mt-1 leading-relaxed">Produção diária na nossa cozinha para garantir sabor em cada momento.</p>
+            </div>
+
+            <div data-ix-group="pillars" class="p-4 rounded-2xl bg-[#FAF7F9] border border-[#F0DEE7]">
+              <span class="w-8 h-8 rounded-lg bg-[#FFECF5] text-[#D93883] flex items-center justify-center mb-2.5">
+                <i class="fa-solid fa-heart text-xs"></i>
+              </span>
+              <h3 class="font-moret text-base font-bold text-[#181114]">Atendimento Próximo</h3>
+              <p class="text-xs text-[#524149] mt-1 leading-relaxed">Serviço atento, simples e focado na satisfação de cada cliente.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 grid grid-cols-2 gap-4">
+          <div data-ix-reveal="image" class="rounded-3xl overflow-hidden h-64 sm:h-80 border border-[#F0DEE7] bg-[#FAF7F9]">
+            <img 
+              src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=700&q=85" 
+              alt="Vitrine de pastelaria artesanal Totally Baked" 
+              loading="lazy"
+              class="w-full h-full object-cover">
+          </div>
+          <div data-ix-reveal="image" class="rounded-3xl overflow-hidden h-64 sm:h-80 border border-[#F0DEE7] bg-[#FAF7F9] mt-6 sm:mt-10">
+            <img 
+              src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=85" 
+              alt="Bolos de celebração e confeitaria fina em Pemba" 
+              loading="lazy"
+              class="w-full h-full object-cover">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         6. TESTEMUNHOS DOS NOSSOS CLIENTES EM PEMBA
+         ===================================================================== -->
+    <section id="testemunhos" class="space-y-8 pt-4 border-t border-[#F0DEE7]">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <span class="font-feline text-2xl text-[#D93883] block">Confiança em cada visita</span>
+          <h2 data-ix-reveal="words" class="font-moret text-3xl sm:text-4xl font-bold text-[#181114]">
+            O Que os Nossos Clientes Dizem
+          </h2>
+          <p class="text-sm text-[#524149] mt-1">
+            A satisfação de quem partilha os seus momentos connosco em Pemba é a nossa maior recompensa.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <blockquote data-ix-group="testimonials" class="bg-[#FAF7F9] rounded-3xl p-6 sm:p-7 border border-[#F0DEE7] flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center gap-1 text-[#FF70B0] text-xs" aria-label="5 de 5 estrelas">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-sm text-[#181114] leading-relaxed">
+              “Os melhores croissants da cidade! A massa é folhada na perfeição e o recheio é delicioso. O atendimento é sempre simpático e acolhedor.”
+            </p>
+          </div>
+          <footer class="pt-3 border-t border-[#F0DEE7] flex items-center justify-between text-xs">
+            <strong class="text-[#181114] font-semibold">Ana Silva</strong>
+            <span class="text-[#85707A]">Pastelaria & Cafetaria</span>
+          </footer>
+        </blockquote>
+
+        <blockquote data-ix-group="testimonials" class="bg-[#FAF7F9] rounded-3xl p-6 sm:p-7 border border-[#F0DEE7] flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center gap-1 text-[#FF70B0] text-xs" aria-label="5 de 5 estrelas">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-sm text-[#181114] leading-relaxed">
+              “Encomendei um bolo de aniversário e superou todas as expectativas. Lindo e delicioso! Todos os convidados elogiaram. Recomendo vivamente.”
+            </p>
+          </div>
+          <footer class="pt-3 border-t border-[#F0DEE7] flex items-center justify-between text-xs">
+            <strong class="text-[#181114] font-semibold">Carlos Mendes</strong>
+            <span class="text-[#85707A]">Bolos de Celebração</span>
+          </footer>
+        </blockquote>
+
+        <blockquote data-ix-group="testimonials" class="bg-[#FAF7F9] rounded-3xl p-6 sm:p-7 border border-[#F0DEE7] flex flex-col justify-between space-y-5">
+          <div class="space-y-3">
+            <div class="flex items-center gap-1 text-[#FF70B0] text-xs" aria-label="5 de 5 estrelas">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-sm text-[#181114] leading-relaxed">
+              “O pão de fermentação natural é incrível. Fresco, saboroso e com uma crosta perfeita. Virou paragem obrigatória no meu dia a dia em Pemba.”
+            </p>
+          </div>
+          <footer class="pt-3 border-t border-[#F0DEE7] flex items-center justify-between text-xs">
+            <strong class="text-[#181114] font-semibold">Mariana Costa</strong>
+            <span class="text-[#85707A]">Padaria Artesanal</span>
+          </footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         7. VISITE-NOS OU FAÇA JÁ O SEU PEDIDO (#CONTACTO)
+         ===================================================================== -->
+    <section id="contacto" class="bg-gradient-to-br from-[#FFECF5]/70 via-[#FFFBFD] to-white rounded-3xl border border-[#FFC4DE] p-6 sm:p-10 lg:p-12 space-y-8">
+      <div class="max-w-2xl">
+        <span class="font-feline text-2xl text-[#D93883] block">Estamos à sua espera em Pemba!</span>
+        <h2 data-ix-reveal="words" class="font-moret text-3xl sm:text-4xl font-bold text-[#181114]">
+          Visite o Nosso Espaço ou Peça Online
+        </h2>
+        <p class="text-sm text-[#524149] mt-2 leading-relaxed">
+          Venha tomar um café connosco na Rua da ANE ou receba a sua encomenda quentinha com acompanhamento GPS em qualquer bairro da cidade.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- Card 1: Morada Real -->
+        <div data-ix-group="contact-cards" class="bg-white rounded-2xl p-6 border border-[#F0DEE7] flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <span class="w-10 h-10 rounded-xl bg-[#FFECF5] text-[#D93883] flex items-center justify-center">
+              <i class="fa-solid fa-location-dot text-sm"></i>
+            </span>
+            <h3 class="font-moret text-xl font-bold text-[#181114]">Visite-nos</h3>
+            <p class="text-xs text-[#524149] leading-relaxed">
+              Rua da ANE, Bairro Alto Gingone<br>
+              Cidade de Pemba, Cabo Delgado (3200)
+            </p>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=-12.9731,40.5178" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-[#D93883] hover:text-[#181114] inline-flex items-center gap-1.5">
+            <span>Abrir localização no Google Maps</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+          </a>
+        </div>
+
+        <!-- Card 2: Telefone & WhatsApp -->
+        <div data-ix-group="contact-cards" class="bg-white rounded-2xl p-6 border border-[#F0DEE7] flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <span class="w-10 h-10 rounded-xl bg-[#FFECF5] text-[#D93883] flex items-center justify-center">
+              <i class="fa-solid fa-phone-volume text-sm"></i>
+            </span>
+            <h3 class="font-moret text-xl font-bold text-[#181114]">Contacte-nos</h3>
+            <p class="text-xs text-[#524149] leading-relaxed">
+              Linha direta para encomendas rápidas, bolos personalizados e informações sobre o menu do dia.
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <a href="tel:+258845958546" class="px-3.5 py-2 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] border border-[#F0DEE7] text-xs font-semibold text-[#181114] transition-colors">
+              Ligar +258 84 595 8546
+            </a>
+            <a href="https://wa.me/258845958546?text=Ol%C3%A1%20Totally%20Baked!%20Vim%20do%20vosso%20site%20e%20gostaria%20de%20fazer%20um%20pedido." target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-full bg-[#FF70B0] hover:bg-[#E85295] text-white text-xs font-semibold transition-colors">
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 3: Redes Sociais -->
+        <div data-ix-group="contact-cards" class="bg-white rounded-2xl p-6 border border-[#F0DEE7] flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <span class="w-10 h-10 rounded-xl bg-[#FFECF5] text-[#D93883] flex items-center justify-center">
+              <i class="fa-brands fa-instagram text-sm"></i>
+            </span>
+            <h3 class="font-moret text-xl font-bold text-[#181114]">Siga-nos</h3>
+            <p class="text-xs text-[#524149] leading-relaxed">
+              Acompanhe as fornadas acabadas de sair, pratos especiais do dia e criações de pastelaria nas nossas redes.
+            </p>
+          </div>
+          <div class="flex items-center gap-2.5 pt-1">
+            <a href="https://www.instagram.com/totally_baked_1/" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] border border-[#F0DEE7] text-xs font-semibold text-[#181114] inline-flex items-center gap-1.5 transition-colors">
+              <i class="fa-brands fa-instagram text-[#D93883]"></i>
+              <span>@totally_baked_1</span>
+            </a>
+            <a href="https://www.facebook.com/p/Totally-Baked-100060917605880/" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-full bg-[#FAF7F9] hover:bg-[#FFECF5] border border-[#F0DEE7] text-xs font-semibold text-[#181114] inline-flex items-center gap-1.5 transition-colors">
+              <i class="fa-brands fa-facebook text-[#D93883]"></i>
+              <span>Facebook</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  window.updateHeroDeliveryEstimate = function(val) {
+    const [fee, eta] = val.split('|');
+    const el = document.getElementById('heroDeliveryResult');
+    if (el) {
+      el.textContent = Number(fee) === 0 ? `Grátis · Pronto em ~${eta}` : `Taxa: ${fee} MZN · ~${eta}`;
+    }
+  };
+
+  window.filterHomeCategory = function(catId, btnEl) {
+    document.querySelectorAll('[role="tablist"] .category-pill').forEach(p => p.classList.remove('active'));
+    btnEl.classList.add('active');
+
+    const cards = document.querySelectorAll('#homeProductsGrid article[data-cat]');
+    cards.forEach(card => {
+      const cardCat = card.getAttribute('data-cat');
+      if (catId === 'todos' || cardCat === catId) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  };
+</script>
+
+<%- include('partials/footer') %>

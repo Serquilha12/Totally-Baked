@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+
+<div class="max-w-2xl mx-auto px-4 py-24 text-center bg-white">
+  <div class="w-14 h-14 rounded-2xl bg-[#FFECF5] border border-[#FFC4DE] text-[#D93883] mx-auto flex items-center justify-center text-lg mb-5">
+    <i class="fa-solid fa-location-crosshairs"></i>
+  </div>
+  <span class="font-feline text-2xl text-[#D93883] block">Rastreio de Encomenda</span>
+  <h1 class="font-moret text-3xl sm:text-4xl font-bold text-[#181114] mt-1">Pedido Não Localizado</h1>
+  <p class="text-sm text-[#524149] mt-3 max-w-md mx-auto leading-relaxed">
+    Não encontrámos nenhum pedido ativo com a referência <span class="tabular-nums font-semibold text-[#D93883] bg-[#FAF7F9] px-2.5 py-0.5 rounded-lg border border-[#F0DEE7]"><%= orderId %></span>. Caso tenha acabado de fazer o seu pedido, fale connosco diretamente no WhatsApp.
+  </p>
+
+  <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+    <a href="/menu" class="btn-rose-glow px-6 py-3 text-xs font-semibold">
+      Ver o Menu & Encomendar
+    </a>
+    <a href="https://wa.me/258845958546" target="_blank" rel="noopener noreferrer" class="btn-outline-editorial px-6 py-3 text-xs font-semibold inline-flex items-center gap-2">
+      <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+      <span>WhatsApp +258 84 595 8546</span>
+    </a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

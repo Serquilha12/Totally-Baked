@@ -1,0 +1,584 @@
+/* 
+  Totally Baked Pemba — White Gallery Editorial & Henrietta Motion System
+  Paleta Oficial: #FF70B0 | #FFA0CA | #FFC4DE | #FFECF5 sobre Galeria Branca #FFFFFF
+  Tipografia: Moret Variable / Fraunces (Display), Feline / Style Script (Assinatura), Plus Jakarta Sans (UI)
+  Mobile-Native + GSAP Transitions + Animated SVG Icons
+*/
+
+:root {
+  /* Superfícies (80% Branco de Galeria para Respiração Editorial) */
+  --surface-canvas: #FFFFFF;
+  --surface-alabaster: #FAF7F9;
+  --surface-tint: #FFECF5;
+  
+  /* Filetes & Bordas */
+  --border-hairline: #F0DEE7;
+  --border-rose-soft: #FFC4DE;
+  --border-focus: #FF70B0;
+
+  /* Paleta Rose Oficial */
+  --rose-primary: #FF70B0;
+  --rose-hover: #E85295;
+  --rose-blossom: #FFA0CA;
+  --rose-pastel: #FFC4DE;
+  --rose-whisper: #FFECF5;
+  --rose-editorial: #D93883;
+
+  /* Hierarquia de Tinta */
+  --ink-primary: #181114;
+  --ink-secondary: #524149;
+  --ink-muted: #85707A;
+
+  /* Famílias Tipográficas */
+  --font-serif: 'Moret', 'Fraunces', 'DM Serif Display', Georgia, serif;
+  --font-script: 'Feline', 'Style Script', cursive;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Curvas Físicas (Emil Kowalski + Henrietta Cubic-Bezier) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-henrietta: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* ================== RESET & MOBILE-NATIVE BASELINE ================== */
+*, *::before, *::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--surface-canvas);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--surface-canvas);
+  color: var(--ink-primary);
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  line-height: 1.55;
+}
+
+::selection {
+  background-color: var(--rose-pastel);
+  color: var(--ink-primary);
+}
+
+/* Evitar auto-zoom do iOS Safari em dispositivos de toque */
+@media (pointer: coarse) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+button, a, [role="button"], select, .category-pill, .segmented-pill {
+  touch-action: manipulation;
+}
+
+button, [role="button"], .category-pill, .segmented-pill {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.sheet-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Safe Areas Mobile (Notch / Home Indicator) */
+.safe-bottom-dock {
+  padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
+}
+.safe-bottom-sheet {
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* ================== TIPOGRAFIA DE MARCA ================== */
+.font-moret, .font-serif {
+  font-family: var(--font-serif);
+  letter-spacing: -0.025em;
+}
+
+.font-feline {
+  font-family: var(--font-script);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Fita Superior de Confeitaria (3px) */
+.patisserie-ribbon {
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #FF70B0 0%, #FFA0CA 40%, #FFC4DE 75%, #FF70B0 100%);
+}
+
+/* ================== HENRIETTA STAGGER LINK HOVER ================== */
+[stagger-link] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+[stagger-link] [stagger-link-text] {
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1.25;
+  text-shadow: 0 1.25em 0 var(--rose-editorial);
+  transition: transform 0.36s var(--ease-henrietta);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [stagger-link]:hover [stagger-link-text] {
+    transform: translateY(-1.25em);
+  }
+}
+
+@media (max-width: 991px) {
+  [stagger-link] [stagger-link-text] {
+    text-shadow: none;
+    overflow: visible;
+  }
+}
+
+/* ================== GSAP SPLIT WORD MASKS & CURTAINS ================== */
+.ix-word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.ix-word {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Cortina Preloader & Transição de Página estilo Henrietta */
+.tb-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(180deg, #FFFBFD 0%, #FFECF5 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid var(--rose-primary);
+  will-change: transform, opacity;
+}
+
+html.tb-skip-preloader .tb-preloader {
+  display: none !important;
+}
+
+.tb-transition-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.tb-curtain-layer-primary {
+  position: absolute;
+  inset: 0;
+  background-color: var(--rose-primary);
+  transform: translateY(102%);
+  will-change: transform;
+}
+
+.tb-curtain-layer-secondary {
+  position: absolute;
+  inset: 0;
+  background-color: var(--rose-whisper);
+  border-top: 2px solid var(--rose-pastel);
+  transform: translateY(102%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+
+/* ================== ÍCONES SVG ANIMADOS ================== */
+.anim-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--surface-tint);
+  border: 1px solid var(--border-rose-soft);
+  color: var(--rose-editorial);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 220ms var(--ease-out), background-color 220ms ease, color 220ms ease, border-color 220ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-card:hover .anim-icon-wrap,
+  .anim-icon-trigger:hover .anim-icon-wrap {
+    background: var(--rose-primary);
+    color: #FFFFFF;
+    border-color: var(--rose-primary);
+    transform: translateY(-3px) scale(1.05);
+  }
+}
+
+/* Micro-animações contínuas leves (Composite GPU: transform & opacity) */
+@keyframes steamRise {
+  0%, 100% { transform: translateY(1px); opacity: 0.35; }
+  50% { transform: translateY(-3.5px); opacity: 1; }
+}
+
+@keyframes gentleSway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes sparklePulse {
+  0%, 100% { transform: scale(0.88); opacity: 0.55; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(10deg); }
+  40% { transform: rotate(-9deg); }
+  60% { transform: rotate(5deg); }
+  80% { transform: rotate(-3deg); }
+}
+
+@keyframes clocheLift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes scooterGlide {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+
+.svg-steam-1 { animation: steamRise 2.4s ease-in-out infinite; }
+.svg-steam-2 { animation: steamRise 2.4s ease-in-out 0.6s infinite; }
+.svg-sway { transform-origin: bottom center; animation: gentleSway 3.6s ease-in-out infinite; }
+.svg-sparkle { transform-origin: center; animation: sparklePulse 2.6s ease-in-out infinite; }
+.svg-scooter { animation: scooterGlide 2.2s ease-in-out infinite; }
+
+@media (hover: hover) and (pointer: fine) {
+  .service-card:hover .svg-bell {
+    transform-origin: top center;
+    animation: bellRing 0.7s var(--ease-out);
+  }
+  .service-card:hover .svg-cloche-lid {
+    animation: clocheLift 0.6s var(--ease-out);
+  }
+}
+
+/* ================== CABEÇALHO & DOCKS ================== */
+.light-glass-header {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.light-glass-dock {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border-rose-soft);
+  box-shadow: 0 12px 32px -8px rgba(24, 17, 20, 0.12);
+}
+
+/* ================== BOTÕES & CONTROLOS ================== */
+.btn-rose-glow {
+  background-color: var(--rose-primary);
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 9999px;
+  border: 1px solid var(--rose-primary);
+  box-shadow: 0 6px 20px -4px rgba(255, 112, 176, 0.42);
+  transition: background-color 160ms ease, transform 140ms var(--ease-out), box-shadow 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-rose-glow:hover {
+    background-color: var(--rose-hover);
+    border-color: var(--rose-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -4px rgba(255, 112, 176, 0.52);
+  }
+}
+
+.btn-rose-glow:active {
+  transform: scale(0.97);
+}
+
+.btn-outline-editorial {
+  background-color: #FFFFFF;
+  color: var(--ink-primary);
+  font-weight: 600;
+  border-radius: 9999px;
+  border: 1px solid var(--border-rose-soft);
+  transition: background-color 160ms ease, border-color 160ms ease, transform 140ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-outline-editorial:hover {
+    background-color: var(--surface-tint);
+    border-color: var(--rose-primary);
+  }
+}
+
+.btn-outline-editorial:active {
+  transform: scale(0.97);
+}
+
+/* ================== PILLS DE CATEGORIA ================== */
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-hairline);
+  color: var(--ink-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .category-pill:hover {
+    border-color: var(--rose-blossom);
+    color: var(--ink-primary);
+    background: var(--surface-alabaster);
+  }
+}
+
+.category-pill:active {
+  transform: scale(0.97);
+}
+
+.category-pill.active {
+  background: var(--ink-primary);
+  border-color: var(--ink-primary);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.category-pill .pill-count {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 9999px;
+  background: var(--surface-tint);
+  color: var(--rose-editorial);
+  font-variant-numeric: tabular-nums;
+}
+
+.category-pill.active .pill-count {
+  background: var(--rose-primary);
+  color: #FFFFFF;
+}
+
+/* ================== CARTÕES DE PRODUTO & SERVIÇOS ================== */
+.card-glass-product {
+  background: #FFFFFF;
+  border: 1px solid var(--border-hairline);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 260ms var(--ease-out), border-color 220ms ease, box-shadow 260ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-glass-product:hover {
+    transform: translateY(-4px);
+    border-color: var(--rose-pastel);
+    box-shadow: 0 18px 36px -14px rgba(24, 17, 20, 0.09);
+  }
+  .card-glass-product:hover .food-img {
+    transform: scale(1.045);
+  }
+}
+
+.card-glass-product .food-img {
+  transition: transform 480ms var(--ease-out);
+}
+
+.service-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-hairline);
+  border-radius: 24px;
+  padding: 28px;
+  transition: transform 260ms var(--ease-out), border-color 220ms ease, box-shadow 260ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--rose-pastel);
+    box-shadow: 0 20px 40px -16px rgba(255, 112, 176, 0.16);
+  }
+}
+
+/* ================== CUSTOMIZADOR & SWITCHES ================== */
+.light-glass-sheet {
+  background: #FFFFFF;
+  box-shadow: 0 -16px 48px rgba(24, 17, 20, 0.14);
+}
+
+.segmented-pill {
+  padding: 6px 13px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  background: transparent;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.segmented-pill.active {
+  background: var(--rose-primary);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.ios-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.ios-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ios-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #EFE5EA;
+  border-radius: 34px;
+  transition: background-color 180ms ease;
+}
+
+.ios-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  transition: transform 200ms var(--ease-out);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
+}
+
+.ios-switch input:checked + .ios-slider {
+  background-color: var(--rose-primary);
+}
+
+.ios-switch input:checked + .ios-slider:before {
+  transform: translateX(20px);
+}
+
+.stepper-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface-alabaster);
+  border: 1px solid var(--border-hairline);
+  padding: 5px 10px;
+  border-radius: 9999px;
+}
+
+.stepper-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-hairline);
+  color: var(--ink-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: background-color 140ms ease, color 140ms ease, transform 120ms var(--ease-out);
+}
+
+.stepper-btn:active {
+  transform: scale(0.92);
+}
+
+/* ================== QUICK CART DOCK & SCROLLBAR ================== */
+#quickCartPill {
+  transition: transform 280ms var(--ease-out), opacity 220ms ease;
+}
+
+#quickCartPill.hidden-dock {
+  transform: translate(-50%, 130%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#quickCartPill.visible-dock {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@keyframes badgeBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.24); }
+  100% { transform: scale(1); }
+}
+
+.badge-bounce {
+  animation: badgeBounce 240ms var(--ease-out);
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ================== REDUCED MOTION ================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 120ms !important;
+    scroll-behavior: auto !important;
+  }
+  .tb-preloader, .tb-transition-curtain {
+    display: none !important;
+  }
+}
